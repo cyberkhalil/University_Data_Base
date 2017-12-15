@@ -384,11 +384,9 @@ end;
 
 
 select * from tab;
-
 select trigger_name from user_triggers;
 
 insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
 insert into Employee values(120100001,'Ahmed','Elnemer','Chinese',123456789,'M','M',300.02,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser','I can eat icecream');
-
 insert into Building values('A','No Desc');
-
+insert into floor values(1,'A','Floor Description');
