@@ -372,10 +372,10 @@ insert into floor_log values (:new.floor_number ,:new.building_code,:new.floor_d
 end;
  /
 
-create trigger ad_floor_trigger after delete on building
+create trigger ad_floor_trigger after delete on floor
 for each row 
 begin 
-insert into floor_log values (:new.floor_number ,:old.building_code,:old.floor_desc,'delete' ,default,default );
+insert into floor_log values (:new.floor_number ,:old.building_code,:old.floor_desc,'delete' , default ,default );
 end;
  /
  
