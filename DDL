@@ -450,6 +450,6 @@ insert into Employee values(120100001,'Ahmed','Elnemer','Chinese',123456789,'M',
 insert into Building values('A','No Desc');
 insert into floor values(1,'A','Floor Description');
 insert into room values(11,1,'A',50);
-insert into department vaules(100,'Enge',11,1,'A');
+insert into department values(100,'Enge',11,1,'A');
 
 
