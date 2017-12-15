@@ -432,13 +432,45 @@ insert into Department_log values (:new.Department_id ,:new.Department_name ,:ne
 end;
  /
 
-create trigger ad_Department_trigger after delete on room
+create trigger ad_Department_trigger after delete on Department
 for each row 
 begin 
 insert into Department_log values (:old.Department_id ,:old.Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'delete',default,default); 
 end;
  /
  
+CREATE TABLE Majors_Department_log (
+Majors_Department_id NUMBER (3),
+Majors_Department_name VARCHAR2(30) NOT NULL UNIQUE,
+room_number NUMBER (2),
+floor_number NUMBER (1),
+building_code CHAR (1),
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_Majors_Department_trigger after insert on Majors_Department
+for each row
+begin
+insert into Majors_Department_log values (:new.Majors_Department_id ,:new.Majors_Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'insert',default,default); 
+end;
+ /
+
+create trigger au_Majors_Department_trigger after update on Majors_Department
+for each row 
+begin
+insert into Majors_Department_log values (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'delete',default,default); 
+insert into Majors_Department_log values (:new.Majors_Department_id ,:new.Majors_Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'insert',default,default); 
+end;
+ /
+
+create trigger ad_Majors_Department_trigger after delete on Majors_Department
+for each row 
+begin 
+insert into Majors_Department_log values (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'delete',default,default); 
+end;
+ /
+
  rem --------------------------------------------------------------------------------------------------------------------
 
 
@@ -447,9 +479,12 @@ select trigger_name from user_triggers;
 
 insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
 insert into Employee values(120100001,'Ahmed','Elnemer','Chinese',123456789,'M','M',300.02,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser','I can eat icecream');
-insert into Building values('A','No Desc');
+insert into Building values('A','Building Desc');
 insert into floor values(1,'A','Floor Description');
-insert into room values(11,1,'A',50);
-insert into department values(100,'Enge',11,1,'A');
-
+insert into Building values('B','Building Desc');
+insert into floor values(2,'B','Floor Description');
+insert into room values(02,2,'B',50);
+insert into room values(01,1,'A',100);
+insert into department values(100,'Enge',02,2,'B');
+insert into Majors_Department values(100,'Admission',01,1,'A');
 
