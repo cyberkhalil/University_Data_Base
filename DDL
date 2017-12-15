@@ -30,8 +30,8 @@ block_name  VARCHAR2(30) NOT NULL,
 street_name  VARCHAR2(30) NOT NULL,
 CONSTRAINT emp_pk Primary key(Employee_id),
 CONSTRAINT emp_sex_chk CHECK (sex IN ('M' , 'F')),
-CONSTRAINT emp_sotial_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
-CONSTRAINT emp_fk_adrs foreign key (area_name,city_name,block_name,street_name) REFERENCES address(area_name,city_name,block_name,street_name));
+CONSTRAINT emp_sotial_status_chk CHECK ( social_status  IN ('S','M','D' ) )
+);
 
 CREATE TABLE building (
 building_code CHAR (1) PRIMARY KEY,
