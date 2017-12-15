@@ -36,10 +36,10 @@ CREATE TABLE building (
 building_code CHAR (1) PRIMARY KEY,
 building_desc VARCHAR2 (100));
 
-CREATE TABLE floors (
+CREATE TABLE floor (
 floor_number NUMBER (1),
 building_code CHAR (1),
-building_desc VARCHAR2 (100),
+floor_desc VARCHAR2 (100),
 FOREIGN KEY (building_code) REFERENCES building,
 PRIMARY KEY (building_code, floor_number));
 
@@ -48,7 +48,7 @@ room_number NUMBER (2),
 floor_number NUMBER (1),
 building_code CHAR (1),
 capacity NUMBER (5) NOT NULL,
-FOREIGN KEY (building_code,floor_number) REFERENCES floors,
+FOREIGN KEY (building_code,floor_number) REFERENCES floor,
 PRIMARY KEY (building_code ,floor_number,room_number)  );
 
 CREATE TABLE Department (
@@ -346,7 +346,41 @@ begin
 insert into building_log values (:old.building_code,:old.building_desc,'delete' ,default,default );
 end;
  /
- 
+
+
+CREATE TABLE floor_log (
+floor_number NUMBER (1),
+building_code CHAR (1),
+floor_desc VARCHAR2 (100),
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL );
+
+
+create trigger ai_floor_trigger after insert on floor
+for each row
+begin
+insert into floor_log values (:new.floor_number ,:new.building_code,:new.floor_desc ,'insert' ,default,default ); 
+end;
+ /
+
+create trigger au_floor_trigger after update on floor
+for each row 
+begin 
+insert into floor_log values (:old.floor_number ,:old.building_code,:old.floor_desc ,'delete' ,default,default );
+insert into floor_log values (:new.floor_number ,:new.building_code,:new.floor_desc ,'insert' ,default,default ); 
+end;
+ /
+
+create trigger ad_floor_trigger after delete on building
+for each row 
+begin 
+insert into floor_log values (:new.floor_number ,:old.building_code,:old.floor_desc,'delete' ,default,default );
+end;
+ /
+ 
+ 
+ rem --------------------------------------------------------------------------------------------------------------------
 
 
 select * from tab;
