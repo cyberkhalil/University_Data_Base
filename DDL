@@ -27,7 +27,7 @@ area_name  VARCHAR2(30) NOT NULL,
 city_name  VARCHAR2(30) NOT NULL,
 block_name  VARCHAR2(30) NOT NULL,
 street_name  VARCHAR2(30) NOT NULL,
-Employee_cv LONG,
+
 CONSTRAINT emp_pk Primary key(Employee_id),
 CONSTRAINT emp_sex_chk CHECK (sex IN ('M' , 'F')),
 CONSTRAINT emp_sotial_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
@@ -505,7 +505,7 @@ select * from tab;
 select trigger_name from user_triggers;
 
 insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
-insert into Employee values(120100001,'Ahmed','Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert into Employee values(120100001,'Ahmed','Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser');
 insert into Building values('A','Building Desc');
 insert into floor values(1,'A','Floor Description');
 insert into Building values('B','Building Desc');
