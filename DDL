@@ -236,8 +236,7 @@ end_time DATE ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES course_sections,
 PRIMARY KEY (section_number ,course_id , year , semester, room_number) );
 
- 
-
+rem --------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
 street_name VARCHAR2(30) NOT NULL,
