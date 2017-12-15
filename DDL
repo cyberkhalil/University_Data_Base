@@ -6,7 +6,7 @@ street_name VARCHAR2(30),
 block_name VARCHAR2(30), 
 city_name VARCHAR2(30),
 area_name VARCHAR2(30), 
-PRIMARY KEY (street_name,block_name,city_name,area_name));
+CONSTRAINT adrs_pk PRIMARY KEY (street_name,block_name,city_name,area_name));
 
 CREATE TABLE employee (
 Employee_id Number(9) Primary key,
