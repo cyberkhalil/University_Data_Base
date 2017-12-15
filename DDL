@@ -129,10 +129,10 @@ CREATE TABLE room_items (
 item_id NUMBER (3) REFERENCES item,
 room_number NUMBER (2),
 floor_number NUMBER (1),
-builFull_name_ending_code CHAR (1),
+building_code CHAR (1),
 FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room,
 quantity NUMBER (5) NOT NULL,
-PRIMARY KEY (item_id , room_number )  );
+PRIMARY KEY (item_id , room_number));
 
 CREATE TABLE study_plan (
 plan_number Number (3),
