@@ -6,14 +6,10 @@ block_name VARCHAR2(30),
 city_name VARCHAR2(30),
 area_name VARCHAR2(30), 
 CONSTRAINT adrs_pk PRIMARY KEY (street_name,block_name,city_name,area_name));
-
 CREATE TABLE employee (
 employee_id NUMBER(9) ,
 Full_name_ar  VARCHAR2(100) NOT NULL,
-first_name_en  VARCHAR2(20) NOT NULL,
-father_name_en  VARCHAR2(30) NOT NULL,
-grand_father_name_en  VARCHAR2(30) NOT NULL,
-last_name_en  VARCHAR2(30) NOT NULL,
+Full_name_en  VARCHAR2(100) NOT NULL,
 nationality  VARCHAR2(20) NOT NULL,
 national_id  NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
 sex CHAR  NOT NULL ,
@@ -133,7 +129,7 @@ CREATE TABLE room_items (
 item_id NUMBER (3) REFERENCES item,
 room_number NUMBER (2),
 floor_number NUMBER (1),
-building_code CHAR (1),
+builFull_name_ending_code CHAR (1),
 FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room,
 quantity NUMBER (5) NOT NULL,
 PRIMARY KEY (item_id , room_number )  );
@@ -156,10 +152,7 @@ PRIMARY KEY (plan_number, major_id, course_id));
 CREATE TABLE student (
 sid NUMBER(9) PRIMARY KEY,
 Full_name_ar  VARCHAR2(100) NOT NULL,
-first_name_en  VARCHAR2(20) NOT NULL,
-father_name_en  VARCHAR2(30) NOT NULL,
-grand_father_name_en  VARCHAR2(30) NOT NULL,
-last_name_en  VARCHAR2(30) NOT NULL,
+Full_name_en  VARCHAR2(100) NOT NULL,
 nationality  VARCHAR2(20) NOT NULL,
 national_id  Number(9) NOT NULL,
 sex  CHAR  NOT NULL CHECK (sex IN ('M' , 'F')) ,
@@ -274,10 +267,7 @@ end;
 CREATE TABLE employee_log (
 employee_id NUMBER(9) ,
 Full_name_ar  VARCHAR2(100) NOT NULL,
-first_name_en  VARCHAR2(20) NOT NULL,
-father_name_en  VARCHAR2(30) NOT NULL,
-grand_father_name_en  VARCHAR2(30) NOT NULL,
-last_name_en  VARCHAR2(30) NOT NULL,
+Full_name_en  VARCHAR2(100) NOT NULL,
 nationality  VARCHAR2(20) NOT NULL,
 national_id  NUMBER(9) NOT NULL,
 sex CHAR  NOT NULL ,
@@ -299,22 +289,22 @@ street_name  VARCHAR2(30) NOT NULL);
 create trigger ai_employee_trigger after insert on employee
 for each row
 begin
-insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.first_name_en  ,:new.father_name_en  ,:new.grand_father_name_en ,:new.last_name_en  ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.Salary  ,:new.birh_place,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default ,default );
+insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.Salary  ,:new.birh_place,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default ,default );
 end;
  /
 
 create trigger au_employee_trigger after update on employee
 for each row 
 begin
-insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.first_name_en  ,:old.father_name_en  ,:old.grand_father_name_en ,:old.last_name_en  ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place,:old.religion  ,:old.health_status ,:old.number_of_family_members ,:old.phone ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default ,default );
-insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.first_name_en  ,:new.father_name_en  ,:new.grand_father_name_en ,:new.last_name_en  ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.Salary  ,:new.birh_place,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default ,default );
+insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place,:old.religion  ,:old.health_status ,:old.number_of_family_members ,:old.phone ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default ,default );
+insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.Salary  ,:new.birh_place,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default ,default );
 end;
  /
 
 create trigger ad_employee_trigger after delete on employee
 for each row 
 begin 
-insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.first_name_en  ,:old.father_name_en  ,:old.grand_father_name_en ,:old.last_name_en  ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default,default );
+insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default,default );
 end;
  /
 CREATE TABLE building_log (
@@ -510,7 +500,7 @@ select * from tab;
 select trigger_name from user_triggers;
 
 insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
-insert into Employee values(120100001,'Ahmed','Arabic Full Name','English First Name','English Father Name','English Grand Father Name','English Last Name','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert into Employee values(120100001,'Ahmed','Arabic Full Name','English Full Name','English Father Name','English Grand Father Name','English Last Name','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
 insert into Building values('A','Building Desc');
 insert into floor values(1,'A','Floor Description');
 insert into Building values('B','Building Desc');
