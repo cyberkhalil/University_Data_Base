@@ -453,7 +453,7 @@ end;
  
 CREATE TABLE Majors_Department_log (
 Majors_Department_id NUMBER (3),
-Majors_Department_name VARCHAR2(30) NOT NULL UNIQUE,
+Majors_Department_name VARCHAR2(30) NOT NULL ,
 room_number NUMBER (2),
 floor_number NUMBER (1),
 building_code CHAR (1),
@@ -484,8 +484,8 @@ end;
  /
  
 CREATE TABLE major_log (
-major_id NUMBER (3) PRIMARY KEY ,
-major_name VARCHAR2(30) NOT NULL UNIQUE ,
+major_id NUMBER (3) ,
+major_name VARCHAR2(30) NOT NULL ,
 Majors_Department_id NUMBER (3) ,
 action_name char(6) NOT NULL , 
 action_date date default sysdate NOT NULL, 
@@ -494,15 +494,15 @@ action_user varchar2(30) default user NOT NULL);
 create trigger ai_major_trigger after insert on major
 for each row
 begin
-insert into major_log values (:new.major_id ,:new.major_name ,:new.Majors_Department ,'insert',default,default); 
+insert into major_log values (:new.major_id ,:new.major_name ,:new.Majors_Department_id ,'insert',default,default); 
 end;
  /
 
 create trigger au_major_trigger after update on major
 for each row 
 begin
-insert into major_log values (:old.major_id ,:old.major_name ,:old.Majors_Department ,'delete',default,default); 
-insert into major_log values (:new.major_id ,:new.major_name ,:new.Majors_Department ,'insert',default,default); 
+insert into major_log values (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'delete',default,default); 
+insert into major_log values (:new.major_id ,:new.major_name ,:new.Majors_Department_id ,'insert',default,default); 
 end;
  /
 
