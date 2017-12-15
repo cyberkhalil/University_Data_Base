@@ -305,7 +305,6 @@ for each row
 begin 
 insert into employee_log values (:new.Employee_id , :new.first_name ,:new.last_name ,:new.nationality ,:new.national_id ,:new.sex  ,:new.social_status  , :new.Salary ,:new.birh_place  ,:new.religion  ,:new.health_status  ,:new.number_of_family_members  ,:new.phone  ,:new.telephone_home  ,:new.email,:new.password  ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default,default ); 
 insert into employee_log values (:old.Employee_id , :old.first_name ,:old.last_name ,:old.nationality  , :old.national_id  ,:old.sex  ,:old.social_status  , :old.Salary ,:old.birh_place  ,:old.religion  ,:old.health_status  ,:old.number_of_family_members  ,:old.phone  ,:old.telephone_home  ,:old.email,:old.password  ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default,default ); 
-end;
 
 end;
  /
