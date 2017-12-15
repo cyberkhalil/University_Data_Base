@@ -8,28 +8,38 @@ area_name VARCHAR2(30),
 CONSTRAINT adrs_pk PRIMARY KEY (street_name,block_name,city_name,area_name));
 
 CREATE TABLE employee (
-Employee_id Number(9) Primary key,
-first_name  VARCHAR2(20) NOT NULL,
-last_name VARCHAR2(40) NOT NULL,
+employee_id NUMBER(9) ,
+first_name_ar  VARCHAR2(30) NOT NULL,
+father_name_ar  VARCHAR2(30) NOT NULL,
+grand_father_name_ar   VARCHAR2(30) NOT NULL,
+last_name_ar  VARCHAR2(30) NOT NULL,
+first_name_en  VARCHAR2(20) NOT NULL,
+father_name_en  VARCHAR2(30) NOT NULL,
+grand_father_name_en  VARCHAR2(30) NOT NULL,
+last_name_en  VARCHAR2(30) NOT NULL,
 nationality  VARCHAR2(20) NOT NULL,
-national_id  Number(9) NOT NULL,
-sex  CHAR  NOT NULL CHECK (sex IN ('M' , 'F')) ,
-social_status  CHAR NOT NULL CHECK ( social_status  IN ('S','M','D' ) ), 
-Salary number (6,2) check ( Salary >=0),
+national_id  NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
+sex CHAR  NOT NULL ,
+social_status CHAR NOT NULL, 
+Salary NUMBER (6,2) CHECK ( Salary >=0),
 birh_place  VARCHAR2(10) NOT NULL ,
-religion  VARCHAR2(20)  NOT NULL,
-health_status  VARCHAR2(40) NOT NULL  ,
-number_of_family_members  NUMBER(2) NOT NULL,
+religion VARCHAR2(20)  NOT NULL,
+health_status  VARCHAR2(40) NOT NULL,
+number_of_family_members NUMBER(2) NOT NULL,
 phone  NUMBER(12) NOT NULL,
-telephone_home  NUMBER(9) ,
+telephone_home  NUMBER(9),
 email VARCHAR2(30) NOT NULL,
 password  VARCHAR2(30) NOT NULL,
 area_name  VARCHAR2(30) NOT NULL,
 city_name  VARCHAR2(30) NOT NULL,
 block_name  VARCHAR2(30) NOT NULL,
 street_name  VARCHAR2(30) NOT NULL,
-Employee_cv LONG ,
-foreign key (area_name,city_name,block_name,street_name) references address);
+Employee_cv LONG,
+
+CONSTRAINT emp_pk Primary key(Employee_id),
+CONSTRAINT emp_sex_chk CHECK (sex IN ('M' , 'F')),
+CONSTRAINT emp_sotial_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
+CONSTRAINT emp_fk_adrs foreign key (area_name,city_name,block_name,street_name) REFERENCES address(area_name,city_name,block_name,street_name));
 
 CREATE TABLE building (
 building_code CHAR (1) PRIMARY KEY,
@@ -268,51 +278,53 @@ insert into ADDRESS_LOG values (:old.street_name ,:old.block_name ,:old.city_nam
 end;
  /
 
-CREATE TABLE employee_log (
-Employee_id Number(9) NOT NULL,
-first_name  VARCHAR2(20) NOT NULL,
-last_name VARCHAR2(40) NOT NULL,
+CREATE TABLE employee (
+employee_id NUMBER(9) ,
+first_name_ar  VARCHAR2(30) NOT NULL,
+father_name_ar  VARCHAR2(30) NOT NULL,
+grand_father_name_ar   VARCHAR2(30) NOT NULL,
+last_name_ar  VARCHAR2(30) NOT NULL,
+first_name_en  VARCHAR2(20) NOT NULL,
+father_name_en  VARCHAR2(30) NOT NULL,
+grand_father_name_en  VARCHAR2(30) NOT NULL,
+last_name_en  VARCHAR2(30) NOT NULL,
 nationality  VARCHAR2(20) NOT NULL,
-national_id  Number(9) NOT NULL,
-sex  CHAR  NOT NULL CHECK (sex IN ('M' , 'F')) ,
-social_status  CHAR NOT NULL CHECK ( social_status  IN ('S','M','D' ) ), 
-Salary number (6,2) check ( Salary >=0),
+national_id  NUMBER(9) NOT NULL,
+sex CHAR  NOT NULL ,
+social_status CHAR NOT NULL, 
+Salary NUMBER (6,2) CHECK ( Salary >=0),
 birh_place  VARCHAR2(10) NOT NULL ,
-religion  VARCHAR2(20)  NOT NULL,
-health_status  VARCHAR2(40) NOT NULL  ,
-number_of_family_members  NUMBER(2) NOT NULL,
+religion VARCHAR2(20)  NOT NULL,
+health_status  VARCHAR2(40) NOT NULL,
+number_of_family_members NUMBER(2) NOT NULL,
 phone  NUMBER(12) NOT NULL,
-telephone_home  NUMBER(9) ,
+telephone_home  NUMBER(9),
 email VARCHAR2(30) NOT NULL,
 password  VARCHAR2(30) NOT NULL,
 area_name  VARCHAR2(30) NOT NULL,
 city_name  VARCHAR2(30) NOT NULL,
 block_name  VARCHAR2(30) NOT NULL,
-street_name  VARCHAR2(30) NOT NULL,
-action_name char(6) NOT NULL , 
-action_date date default sysdate NOT NULL, 
-action_user varchar2(30) default user NOT NULL );
+street_name  VARCHAR2(30) NOT NULL);
 
 create trigger ai_employee_trigger after insert on employee
 for each row
 begin
-insert into employee_log values (:new.Employee_id ,:new.first_name ,:new.last_name ,:new.nationality ,:new.national_id ,:new.sex  ,:new.social_status  ,:new.Salary ,:new.birh_place  ,:new.religion  ,:new.health_status  ,:new.number_of_family_members  ,:new.phone  ,:new.telephone_home  ,:new.email,:new.password  ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default,default ); 
+insert into employee_log values (:new.employee_id ,:new.first_name_ar ,:new.father_name_ar ,:new.grand_father_name_ar ,:new.last_name_ar,:new.first_name_en  ,:new.father_name_en  ,:new.grand_father_name_en ,:new.last_name_en  ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.Salary  ,:new.birh_place,:new.religion  ,:new.health_status ,:new.number_of_family_members,:new.phone  ,:new.telephone_home ,:new.email ,:new.password ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default,default );
 end;
  /
 
 create trigger au_employee_trigger after update on employee
 for each row 
 begin
-insert into employee_log values (:old.Employee_id ,:old.first_name ,:old.last_name ,:old.nationality ,:old.national_id ,:old.sex  ,:old.social_status  ,:old.Salary ,:old.birh_place  ,:old.religion  ,:old.health_status  ,:old.number_of_family_members  ,:old.phone  ,:old.telephone_home  ,:old.email,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default,default ); 
-insert into employee_log values (:new.Employee_id ,:new.first_name ,:new.last_name ,:new.nationality ,:new.national_id ,:new.sex  ,:new.social_status  ,:new.Salary ,:new.birh_place  ,:new.religion  ,:new.health_status  ,:new.number_of_family_members  ,:new.phone  ,:new.telephone_home  ,:new.email,:new.password  ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default,default ); 
-
+insert into employee_log values (:old.employee_id ,:old.first_name_ar ,:old.father_name_ar ,:old.grand_father_name_ar ,:old.last_name_ar,:old.first_name_en  ,:old.father_name_en  ,:old.grand_father_name_en ,:old.last_name_en  ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.password ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'insert' ,default,default );
+insert into employee_log values (:new.employee_id ,:new.first_name_ar ,:new.father_name_ar ,:new.grand_father_name_ar ,:new.last_name_ar,:new.first_name_en  ,:new.father_name_en  ,:new.grand_father_name_en ,:new.last_name_en  ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.Salary  ,:new.birh_place,:new.religion  ,:new.health_status ,:new.number_of_family_members,:new.phone  ,:new.telephone_home ,:new.email ,:new.password ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default,default );
 end;
  /
 
 create trigger ad_employee_trigger after delete on employee
 for each row 
 begin 
-insert into employee_log values (:old.Employee_id ,:old.first_name ,:old.last_name ,:old.nationality  ,:old.national_id  ,:old.sex  ,:old.social_status  ,:old.Salary ,:old.birh_place  ,:old.religion  ,:old.health_status  ,:old.number_of_family_members  ,:old.phone  ,:old.telephone_home  ,:old.email,:old.password  ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default,default ); 
+insert into employee_log values (:old.employee_id ,:old.first_name_ar ,:old.father_name_ar ,:old.grand_father_name_ar ,:old.last_name_ar,:old.first_name_en  ,:old.father_name_en  ,:old.grand_father_name_en ,:old.last_name_en  ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.password ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'insert' ,default,default );
 end;
  /
 CREATE TABLE building_log (
@@ -497,7 +509,7 @@ end;
 create trigger ad_major_trigger after delete on major
 for each row 
 begin 
-insert into major_log values (:old.major_id ,:old.major_name ,:old.Majors_Department ,'delete',default,default); 
+insert into major_log values (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'delete',default,default); 
 end;
  /
 
@@ -508,7 +520,7 @@ select * from tab;
 select trigger_name from user_triggers;
 
 insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
-insert into Employee values(120100001,'Ahmed','Elnemer','Chinese',123456789,'M','M',300.02,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser','I can eat icecream');
+insert into Employee values(120100001,'Ahmed','Arabic First Name','Arabic Father Name','Arabic Grand Father Name','Arabic Last Name','English First Name','English Father Name','English Grand Father Name','English Last Name','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
 insert into Building values('A','Building Desc');
 insert into floor values(1,'A','Floor Description');
 insert into Building values('B','Building Desc');
@@ -517,4 +529,4 @@ insert into room values(02,2,'B',50);
 insert into room values(01,1,'A',100);
 insert into department values(100,'Enge',02,2,'B');
 insert into Majors_Department values(100,'Admission',01,1,'A');
-insert into major values(1,'Information Security',
+insert into major values(1,'Information Security',100);
