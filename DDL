@@ -1,10 +1,10 @@
 rem DDL:
 
 CREATE TABLE Address (
-street_name VARCHAR2(30), 
-block_name VARCHAR2(30), 
+area_name VARCHAR2(30),
 city_name VARCHAR2(30),
-area_name VARCHAR2(30), 
+block_name VARCHAR2(30), 
+street_name VARCHAR2(30), 
 CONSTRAINT adrs_pk PRIMARY KEY (area_name,street_name,block_name,city_name));
 
 CREATE TABLE employee (
