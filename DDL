@@ -579,5 +579,5 @@ insert into department values(100,'Enge',02,2,'B');
 insert into Majors_Department values(100,'Admission',01,1,'A');
 insert into major values(1,'Information Security',100);
 insert into course values('COMP 2113','Data Base 1',1,'DESCRIPTION',100);
-insert into teacher values(120100001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('22/April/2011 8:30:00AM','DD/MON/YY HH:MI:SSAM'),100,499.99);
+insert into teacher values(120100001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),DATE '2017-12-17',100,499.99);
 
