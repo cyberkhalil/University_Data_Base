@@ -646,6 +646,7 @@ end;
 
 CREATE TABLE item_log (
 item_id NUMBER (3) ,
+item_name varchar2(30) ,
 item_description VARCHAR2(200),
 action_name char (6) NOT NULL, 
 action_date date default sysdate NOT NULL, 
@@ -654,20 +655,20 @@ action_user varchar2(30) default user NOT NULL);
 create trigger ai_item_trigger after insert on item 
 for each row
 begin
-insert into item_log values (:new.item_id ,:new.item_description ,'insert' ,default,default ); 
+insert into item_log values (:new.item_id ,:new.item_name ,:new.item_description ,'insert' ,default,default ); 
 end;
  /
 create trigger au_item_trigger after update on item
 for each row 
 begin 
-insert into item_log values (:old.item_id ,:old.item_description ,'delete' ,default,default ); 
-insert into item_log values (:new.item_id ,:new.item_description ,'insert' ,default,default ); 
+insert into item_log values (:old.item_id ,:old.item_name ,:old.item_description ,'delete' ,default,default ); 
+insert into item_log values (:new.item_id ,:new.item_name ,:new.item_description ,'insert' ,default,default ); 
 end;
  /
 create trigger ad_item_trigger after delete on item 
 for each row 
 begin 
-insert into item_log values (:old.item_id ,:old.item_description ,'delete' ,default,default ); 
+insert into item_log values (:old.item_id ,:old.item_name ,:old.item_description ,'delete' ,default,default ); 
 end;
  /
 
