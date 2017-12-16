@@ -55,7 +55,7 @@ PRIMARY KEY (building_code ,floor_number,room_number));
 CREATE TABLE Department (
 Department_id NUMBER (3),
 Department_name VARCHAR2(30) NOT NULL UNIQUE,
-room_number NUMBER (2),
+room_number NUMBER (2) Not Null,
 floor_number NUMBER (2),
 building_code CHAR (1),
 FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room,
@@ -64,7 +64,7 @@ PRIMARY KEY (Department_id));
 CREATE TABLE Majors_Department (
 Majors_Department_id NUMBER (3),
 Majors_Department_name VARCHAR2(30) NOT NULL UNIQUE,
-room_number NUMBER (2),
+room_number NUMBER (2) Not Null,
 floor_number NUMBER (2),
 building_code CHAR (1),
 FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room,
