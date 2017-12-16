@@ -595,6 +595,38 @@ insert into Manager_log values (:old.Manager_id ,:old.Employment_Start_Date ,:ol
 end;
  /
  
+CREATE TABLE Security_log (
+Security_id Number (9) ,
+Employment_Start_Date Date default sysdate,
+Employment_End_Date Date,
+Salary number (6,2) ,
+Department_id number (3),
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_Security_trigger after insert on Security
+for each row
+begin
+insert into Security_log values (:new.Security_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Department_id,'insert' ,default,default ); 
+end;
+ /
+
+create trigger au_Security_trigger after update on Security
+for each row 
+begin
+insert into Security_log values (:old.Security_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Department_id,'delete' ,default,default ); 
+insert into Security_log values (:new.Security_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Department_id,'insert' ,default,default ); 
+end;
+ /
+
+create trigger ad_Security_trigger after delete on Security
+for each row 
+begin 
+insert into Security_log values (:old.Security_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Department_id,'delete' ,default,default ); 
+end;
+ /
+ 
  --------------------------------------------------------------------------------------------------------------------
 
 select * from tab;
@@ -603,6 +635,7 @@ select trigger_name from user_triggers;
 insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
 insert into Nationality values('Nationality');
 insert into Employee values(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert into Employee values(120100002,'Arabic Full Name 2','English Full Name 2','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
 insert into Building values('A','Building Desc');
 insert into floor values(1,'A','Floor Description');
 insert into Building values('B','Building Desc');
@@ -615,3 +648,5 @@ insert into major values(1,'Information Security',100);
 insert into course values('COMP 2113','Data Base 1',1,'DESCRIPTION',100);
 insert into teacher values(120100001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),DATE '2017-12-17',100,499.99);
 insert into manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) values(120100001,Date '2017-12-17',Date '2018-12-17',500.00,'Master',100);
+insert into Security values(120100001,Date '2017-12-17',Date '2018-12-17',500.00,100);
+
