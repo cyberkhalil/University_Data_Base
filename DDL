@@ -81,7 +81,7 @@ course_name VARCHAR2(30) NOT NULL,
 credit NUMBER (1) NOT NULL,
 description LONG, 
 Majors_Department NUMBER (3) REFERENCES Majors_Department,
-PRIMARY KEY (course_id);
+PRIMARY KEY (course_id));
 
 CREATE TABLE teacher (
 Teacher_id Number (9) references employee(Employee_id),
