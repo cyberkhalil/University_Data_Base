@@ -769,5 +769,5 @@ insert into Secretary values(120100003,Date '2013-11-1',Date'2017-10-6',100,null
 insert into item values(001,'Lap TOP','Descriotion');
 insert into room_items values(001,01,1,'A',20);
 insert into study_plan values(101,1);
-insert into study_plan_courses values (101,1,'COMP 2113',Date'2016-10-10');
+insert into study_plan_courses values (101,1,'COMP 2113',Date'2016-10-10',1);
 
