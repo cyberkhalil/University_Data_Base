@@ -124,6 +124,7 @@ PRIMARY KEY (Secretary_id));
 
 CREATE TABLE item (
 item_id NUMBER (3) PRIMARY KEY,
+item_name varchar2(30) NOT NULL,
 item_description VARCHAR2(200) NOT NULL);
 
 CREATE TABLE room_items (
