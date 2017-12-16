@@ -198,7 +198,7 @@ PRIMARY KEY (teacher_id, sid, year, semester));
 
 CREATE TABLE section (
 section_number NUMBER (3),
-course_id VARCHAR2(10),
+course_id VARCHAR2(10) references course,
 year DATE default sysdate,
 semester NUMBER (1) CHECK (semester IN (1,2)),
 teacher_id NUMBER(9) REFERENCES teacher,
