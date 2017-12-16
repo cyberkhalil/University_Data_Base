@@ -1,5 +1,7 @@
 
-
+-- ALERT !!
+-- THIS Code Delete every TABLE , VIEW ,PACKAGE ,PROCEDURE ,FUNCTION ,SEQUENCE ,SYNONYM ,Trigger ,PACKAGE BODY in User !!!
+-- Don't use it if u don't understand the risk .
 BEGIN
    FOR cur_rec IN (SELECT object_name, object_type
                      FROM user_objects
@@ -33,7 +35,7 @@ BEGIN
       EXCEPTION
          WHEN OTHERS
          THEN
-            DBMS_OUTPUT.put_line (   'FAILED: DROP '
+            DBMS_OUTPUT.put_line ('FAILED: DROP '
                                   || cur_rec.object_type
                                   || ' "'
                                   || cur_rec.object_name
