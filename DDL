@@ -144,7 +144,7 @@ CREATE TABLE study_plan_courses (
 plan_number Number (3),
 major_id NUMBER (3),
 course_id VARCHAR2(10),
-year DATE default sysdate,
+year DATE NOT NULL,
 semester NUMBER (1) CHECK (semester IN (1,2)),
 FOREIGN KEY (course_id) REFERENCES course,
 FOREIGN KEY (plan_number, major_id) REFERENCES study_plan,
@@ -179,18 +179,19 @@ telephone_home  NUMBER(8) ,
 emergency_phone   NUMBER(12) NOT NULL,
 email VARCHAR2(30) ,
 password  VARCHAR2(30) NOT NULL,
-tawjihi_GPA  REAL NOT NULL,
-tawjihi_field CHAR NOT NULL CHECK (tawjihi_field  IN ('S' , 'L' )  ) ,
+tawjihi_GPA  number(3,2) NOT NULL,
+tawjihi_field CHAR NOT NULL,
 area_name  VARCHAR2(30) NOT NULL,
 city_name  VARCHAR2(30) NOT NULL,
 block_name  VARCHAR2(30) NOT NULL,
 balance NUMBER(5) NOT NULL,
 street_name  VARCHAR2(30) NOT NULL,
 major_name  NUMBER(3) NOT NULL REFERENCES major ,
-foreign key (area_name,city_name,block_name,street_name) references address(area_name,city_name,block_name,street_name));
+foreign key (area_name,city_name,block_name,street_name) references address(area_name,city_name,block_name,street_name),
+constraint stdnt_twj_fld_chk CHECK (tawjihi_field  IN ('S' , 'L' )));
 
 CREATE TABLE academic_advice (
-teacher_id NUMBER (9),
+teacher_id NUMBER (9) references teacher,
 sid NUMBER(9) REFERENCES student,
 year DATE default sysdate, 
 semester NUMBER (1) CHECK (semester IN (1,2)),
@@ -198,7 +199,7 @@ PRIMARY KEY (teacher_id, sid, year, semester));
 
 CREATE TABLE section (
 section_number NUMBER (3),
-course_id VARCHAR2(10),
+course_id VARCHAR2(10) references course,
 year DATE default sysdate,
 semester NUMBER (1) CHECK (semester IN (1,2)),
 teacher_id NUMBER(9) REFERENCES teacher,
@@ -225,11 +226,11 @@ room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
 FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room,
-day DATE ,
+day DATE NOT Null,
 start_time DATE ,
 end_time DATE ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section,
-PRIMARY KEY (year , semester, room_number, start_time));
+PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
 --------------------------------------------------------------------------------------------------------------------
 
