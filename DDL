@@ -88,7 +88,7 @@ PRIMARY KEY (course_id));
 
 CREATE TABLE teacher (
 Teacher_id Number (9) references employee(Employee_id),
-Employment_Start_Date Date default sysdate unique,
+Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
 Majors_Department_id number (3) references Majors_Department,
 Salary number (6,2) check (salary >=0),
@@ -96,7 +96,7 @@ PRIMARY KEY (teacher_id));
 
 CREATE TABLE Manager (
 Manager_id Number (9) references employee(Employee_id),
-Employment_Start_Date Date default sysdate unique,
+Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
 Salary number (6,2) check (salary >=0),
 Manager_Grade varchar2(15) NOT NULL,
@@ -107,7 +107,7 @@ PRIMARY KEY (Manager_id));
 
 CREATE TABLE Security (
 Security_id Number (9) references employee(Employee_id),
-Employment_Start_Date Date default sysdate unique,
+Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
 Salary number (6,2) check (salary >=0),
 Department_id number (3) references Department,
@@ -115,7 +115,7 @@ PRIMARY KEY (Security_id));
 
 CREATE TABLE Secretary (
 Secretary_id Number (9) references employee(Employee_id),
-Employment_Start_Date Date default sysdate unique,
+Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
 Majors_Department_id number (3) references Majors_Department,
 Department_id number (3) references Department,
@@ -560,6 +560,7 @@ begin
 insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.Salary ,'delete' ,default,default ); 
 end;
  /
+ 
  --------------------------------------------------------------------------------------------------------------------
 
 
