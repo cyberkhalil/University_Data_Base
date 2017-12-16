@@ -1,4 +1,4 @@
-rem DDL:
+-- DDL:-
 
 CREATE TABLE Address (
 area_name VARCHAR2(30),
@@ -7,11 +7,14 @@ block_name VARCHAR2(30),
 street_name VARCHAR2(30), 
 CONSTRAINT adrs_pk PRIMARY KEY (area_name,street_name,block_name,city_name));
 
+CREATE TABLE  Nationality(
+Nationality varchar(20) primary key);
+
 CREATE TABLE employee (
 employee_id NUMBER(9) ,
 Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
-nationality  VARCHAR2(20) NOT NULL,
+Nationality varchar(20) NOT NULL REFERENCES Nationality,
 national_id  NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
 sex CHAR  NOT NULL ,
 social_status CHAR NOT NULL, 
@@ -151,7 +154,7 @@ CREATE TABLE student (
 sid NUMBER(9) PRIMARY KEY,
 Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
-nationality  VARCHAR2(20) NOT NULL,
+Nationality varchar(20) NOT NULL REFERENCES Nationality,
 national_id  Number(9) NOT NULL,
 sex  CHAR  NOT NULL CHECK (sex IN ('M' , 'F')) ,
 social_status  CHAR NOT NULL CHECK ( social_status  IN ('S','M') ), 
@@ -228,7 +231,7 @@ end_time DATE ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section,
 PRIMARY KEY (year , semester, room_number, start_time));
 
-rem --------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
 street_name VARCHAR2(30) NOT NULL,
@@ -265,7 +268,7 @@ CREATE TABLE employee_log (
 employee_id NUMBER(9) ,
 Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
-nationality  VARCHAR2(20) NOT NULL,
+Nationality varchar(20) NOT NULL,
 national_id  NUMBER(9) NOT NULL,
 sex CHAR  NOT NULL ,
 social_status CHAR NOT NULL, 
@@ -495,13 +498,14 @@ insert into major_log values (:old.major_id ,:old.major_name ,:old.Majors_Depart
 end;
  /
 
- rem --------------------------------------------------------------------------------------------------------------------
+ --------------------------------------------------------------------------------------------------------------------
 
 
 select * from tab;
 select trigger_name from user_triggers;
 
 insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
+insert into Nationality values('Nationality');
 insert into Employee values(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
 insert into Building values('A','Building Desc');
 insert into floor values(1,'A','Floor Description');
