@@ -529,6 +529,37 @@ insert into course_log values (:old.course_id ,:old.course_name ,:old.credit ,:o
 end;
  /
 
+CREATE TABLE teacher_log (
+Teacher_id Number (9),
+Employment_Start_Date Date,
+Employment_End_Date Date,
+Majors_Department_id number (3),
+Salary number (6,2) check (salary >=0),
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_teacher_trigger after insert on teacher
+for each row
+begin
+insert into teacher_log values (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.Salary ,'insert' ,default,default ); 
+end;
+ /
+
+create trigger au_course_trigger after update on course
+for each row 
+begin
+insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.Salary ,'delete' ,default,default ); 
+insert into teacher_log values (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.Salary ,'insert' ,default,default ); 
+end;
+ /
+
+create trigger ad_course_trigger after delete on course
+for each row 
+begin 
+insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.Salary ,'delete' ,default,default ); 
+end;
+ /
  --------------------------------------------------------------------------------------------------------------------
 
 
@@ -548,4 +579,5 @@ insert into department values(100,'Enge',02,2,'B');
 insert into Majors_Department values(100,'Admission',01,1,'A');
 insert into major values(1,'Information Security',100);
 insert into course values('COMP 2113','Data Base 1',1,'DESCRIPTION',100);
+insert into teacher values(120100001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),TO_DATE('22/April/2011 8:30:00AM','DD/MON/YY HH:MI:SSAM'),100,499.99);
 
