@@ -191,7 +191,7 @@ foreign key (area_name,city_name,block_name,street_name) references address(area
 constraint stdnt_twj_fld_chk CHECK (tawjihi_field  IN ('S' , 'L' )));
 
 CREATE TABLE academic_advice (
-teacher_id NUMBER (9),
+teacher_id NUMBER (9) references teacher,
 sid NUMBER(9) REFERENCES student,
 year DATE default sysdate, 
 semester NUMBER (1) CHECK (semester IN (1,2)),
