@@ -141,8 +141,8 @@ CREATE TABLE study_plan_courses (
 plan_number Number (3),
 major_id NUMBER (3),
 course_id VARCHAR2(10),
-year DATE,
-semester NUMBER (1),
+year DATE default sysdate,
+semester NUMBER (1) CHECK (semester IN (1,2)),
 FOREIGN KEY (course_id) REFERENCES course,
 FOREIGN KEY (plan_number, major_id) REFERENCES study_plan,
 PRIMARY KEY (plan_number, major_id, course_id));
@@ -189,14 +189,14 @@ foreign key (area_name,city_name,block_name,street_name) references address(area
 CREATE TABLE academic_advice (
 teacher_id NUMBER (9),
 sid NUMBER(9) REFERENCES student,
-year DATE, 
+year DATE default sysdate, 
 semester NUMBER (1) CHECK (semester IN (1,2)),
 PRIMARY KEY (teacher_id, sid, year, semester));
 
 CREATE TABLE course_sections (
 section_number NUMBER (3),
 course_id VARCHAR2(10),
-year DATE,
+year DATE default sysdate,
 semester NUMBER (1) CHECK (semester IN (1,2)),
 teacher_id NUMBER(9) REFERENCES teacher,
 PRIMARY KEY (section_number, course_id, year, semester));
@@ -205,7 +205,7 @@ CREATE TABLE enroll (
 sid NUMBER(9) REFERENCES student,
 course_id VARCHAR2(10) ,
 section_number NUMBER(3) ,
-year DATE , 
+year DATE default sysdate, 
 semester NUMBER(1) ,
 grade_mid NUMBER (3) DEFAULT NULL ,
 grade_final NUMBER (3) DEFAULT NULL,
@@ -216,8 +216,8 @@ CHECK ((grade_final+grade_mid >=40)and (grade_final+grade_mid <=100 )));
 CREATE TABLE section_rooms (
 section_number NUMBER (3) ,
 course_id VARCHAR2 (10) ,
-year DATE , 
-semester NUMBER (1),
+year DATE default sysdate, 
+semester NUMBER (1) CHECK (semester IN (1,2)),
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
