@@ -143,7 +143,7 @@ major_id NUMBER (3),
 course_id VARCHAR2(10),
 year DATE,
 semester NUMBER (1),
-FOREIGN KEY (course_id, year, semester) REFERENCES course,
+FOREIGN KEY (course_id) REFERENCES course,
 FOREIGN KEY (plan_number, major_id) REFERENCES study_plan,
 PRIMARY KEY (plan_number, major_id, course_id));
 
@@ -190,7 +190,7 @@ CREATE TABLE academic_advice (
 teacher_id NUMBER (9),
 sid NUMBER(9) REFERENCES student,
 year DATE, 
-semester NUMBER (1)  ,
+semester NUMBER (1) CHECK (semester IN (1,2)),
 PRIMARY KEY (teacher_id, sid, year, semester));
 
 CREATE TABLE course_sections (
