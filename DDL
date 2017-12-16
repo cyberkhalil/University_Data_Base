@@ -1,4 +1,4 @@
-rem DDL:
+-- DDL:-
 
 CREATE TABLE Address (
 area_name VARCHAR2(30),
@@ -231,7 +231,7 @@ end_time DATE ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section,
 PRIMARY KEY (year , semester, room_number, start_time));
 
-rem --------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
 street_name VARCHAR2(30) NOT NULL,
