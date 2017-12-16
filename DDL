@@ -193,7 +193,7 @@ year DATE default sysdate,
 semester NUMBER (1) CHECK (semester IN (1,2)),
 PRIMARY KEY (teacher_id, sid, year, semester));
 
-CREATE TABLE course_sections (
+CREATE TABLE section (
 section_number NUMBER (3),
 course_id VARCHAR2(10),
 year DATE default sysdate,
@@ -209,7 +209,7 @@ year DATE default sysdate,
 semester NUMBER(1) ,
 grade_mid NUMBER (3) DEFAULT NULL ,
 grade_final NUMBER (3) DEFAULT NULL,
-FOREIGN KEY (section_number , course_id , year , semester) REFERENCES course_sections ,
+FOREIGN KEY (section_number , course_id , year , semester) REFERENCES section ,
 PRIMARY KEY (sid , course_id , section_number , year , semester),
 CHECK ((grade_final+grade_mid >=40)and (grade_final+grade_mid <=100 )));
 
@@ -225,7 +225,7 @@ FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room,
 day DATE ,
 start_time DATE ,
 end_time DATE ,
-FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES course_sections,
+FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section,
 PRIMARY KEY (section_number ,course_id , year , semester, room_number) );
 
 rem --------------------------------------------------------------------------------------------------------------------
