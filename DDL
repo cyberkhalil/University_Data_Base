@@ -230,7 +230,7 @@ day DATE NOT Null,
 start_time DATE ,
 end_time DATE ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section,
-PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time));
+PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
 --------------------------------------------------------------------------------------------------------------------
 
