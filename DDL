@@ -546,7 +546,7 @@ insert into teacher_log values (:new.Teacher_id ,:new.Employment_Start_Date ,:ne
 end;
  /
 
-create trigger au_course_trigger after update on course
+create trigger au_teacher_trigger after update on teacher
 for each row 
 begin
 insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.Salary ,'delete' ,default,default ); 
@@ -554,7 +554,7 @@ insert into teacher_log values (:new.Teacher_id ,:new.Employment_Start_Date ,:ne
 end;
  /
 
-create trigger ad_course_trigger after delete on course
+create trigger ad_teacher_trigger after delete on teacher
 for each row 
 begin 
 insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.Salary ,'delete' ,default,default ); 
