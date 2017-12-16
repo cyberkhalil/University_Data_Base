@@ -628,6 +628,120 @@ insert into Security_log values (:old.Security_id ,:old.Employment_Start_Date ,:
 end;
  /
  
+ CREATE TABLE Secretary_log (
+Secretary_id Number (9) ,
+Employment_Start_Date Date default sysdate,
+Employment_End_Date Date,
+Majors_Department_id number (3) ,
+Department_id number (3),
+action_name char (6) NOT NULL, 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_Secretary_trigger after insert on Secretary 
+for each row
+begin
+insert into Secretary_log values (:new.Secretary_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.Majors_Department_id ,:new.Department_id ,'insert' ,default,default ); 
+end;
+ /
+create trigger au_Secretary_trigger after update on Secretary
+for each row 
+begin 
+insert into Secretary_log values (:old.Secretary_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,default,default ); 
+insert into Secretary_log values (:new.Secretary_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.Majors_Department_id ,:new.Department_id ,'insert' ,default,default ); 
+end;
+ /
+create trigger ad_Secretary_trigger after delete on Secretary 
+for each row 
+begin 
+insert into Secretary_log values (:old.Secretary_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,default,default ); 
+end;
+ /
+
+CREATE TABLE item_log (
+item_id NUMBER (3) ,
+item_description VARCHAR2(200),
+action_name char (6) NOT NULL, 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_item_trigger after insert on item 
+for each row
+begin
+insert into item_log values (:new.item_id ,:new.item_description ,'insert' ,default,default ); 
+end;
+ /
+create trigger au_item_trigger after update on item
+for each row 
+begin 
+insert into item_log values (:old.item_id ,:old.item_description ,'delete' ,default,default ); 
+insert into item_log values (:new.item_id ,:new.item_description ,'insert' ,default,default ); 
+end;
+ /
+create trigger ad_item_trigger after delete on item 
+for each row 
+begin 
+insert into item_log values (:old.item_id ,:old.item_description ,'delete' ,default,default ); 
+end;
+ /
+
+CREATE TABLE room_items_log (
+item_id NUMBER (3) ,
+room_number NUMBER (2),
+floor_number NUMBER (2),
+building_code CHAR (1),
+quantity NUMBER (5),
+action_name char (6) NOT NULL, 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_room_items_trigger after insert on room_items 
+for each row
+begin
+insert into room_items_log values (:new.item_id ,:new.room_number ,:new.floor_number ,:new.building_code ,:new.quantity ,'insert' ,default,default ); 
+end;
+ /
+create trigger au_room_items_trigger after update on room_items
+for each row 
+begin 
+insert into room_items_log values (:old.item_id ,:old.room_number ,:old.floor_number ,:old.building_code ,:old.quantity ,'insert' ,default,default ); 
+insert into room_items_log values (:new.item_id ,:new.room_number ,:new.floor_number ,:new.building_code ,:new.quantity ,'insert' ,default,default ); 
+end;
+ /
+create trigger ad_room_items_trigger after delete on room_items 
+for each row 
+begin 
+insert into room_items_log values (:old.item_id ,:old.room_number ,:old.floor_number ,:old.building_code ,:old.quantity ,'insert' ,default,default ); 
+end;
+ /
+
+CREATE TABLE study_plan_log (
+plan_number Number (3),
+major_id NUMBER (3),
+action_name char (6) NOT NULL, 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_study_plan_trigger after insert on study_plan 
+for each row
+begin
+insert into study_plan_log values (:new.plan_number ,:new.major_id ,'insert' ,default,default ); 
+end;
+ /
+create trigger au_study_plan_trigger after update on study_plan
+for each row 
+begin 
+insert into study_plan_log values (:old.plan_number ,:old.major_id ,'delete' ,default,default ); 
+insert into study_plan_log values (:new.plan_number ,:new.major_id ,'insert' ,default,default ); 
+end;
+ /
+create trigger ad_study_plan_trigger after delete on study_plan 
+for each row 
+begin 
+insert into study_plan_log values (:old.plan_number ,:old.major_id ,'delete' ,default,default ); 
+end;
+ /
+
  --------------------------------------------------------------------------------------------------------------------
 
 select * from tab;
