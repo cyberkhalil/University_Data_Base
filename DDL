@@ -502,8 +502,10 @@ end;
 course_id VARCHAR2(10),
 course_name VARCHAR2(30) NOT NULL,
 credit NUMBER (1) NOT NULL,
-Majors_Department NUMBER (3));
-
+Majors_Department NUMBER (3),
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
 
 create trigger ai_course_trigger after insert on course
 for each row
