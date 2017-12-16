@@ -498,6 +498,34 @@ begin
 insert into major_log values (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'delete',default,default); 
 end;
  /
+ CREATE TABLE course_log (
+course_id VARCHAR2(10),
+course_name VARCHAR2(30) NOT NULL,
+credit NUMBER (1) NOT NULL,
+Majors_Department NUMBER (3));
+
+
+create trigger ai_course_trigger after insert on course
+for each row
+begin
+insert into course_log values (:new.course_id ,:new.course_name ,:new.credit ,:new.Majors_Department ,'insert',default,default); 
+end;
+ /
+
+create trigger au_course_trigger after update on course
+for each row 
+begin
+insert into course_log values (:old.course_id ,:old.course_name ,:old.credit ,:old.Majors_Department ,'Delete',default,default); 
+insert into course_log values (:new.course_id ,:new.course_name ,:new.credit ,:new.Majors_Department ,'insert',default,default); 
+end;
+ /
+
+create trigger ad_course_trigger after delete on course
+for each row 
+begin 
+insert into course_log values (:old.course_id ,:old.course_name ,:old.credit ,:old.Majors_Department ,'Delete',default,default); 
+end;
+ /
 
  --------------------------------------------------------------------------------------------------------------------
 
