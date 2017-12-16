@@ -250,7 +250,6 @@ begin
 insert into address_log values (:new.street_name ,:new.block_name ,:new.city_name ,:new.area_name ,'insert' ,default,default ); 
 end;
  /
-
 create trigger au_address_trigger after update on address
 for each row 
 begin 
@@ -258,7 +257,6 @@ insert into ADDRESS_LOG values (:old.street_name ,:old.block_name ,:old.city_nam
 insert into ADDRESS_LOG values (:new.street_name ,:new.block_name ,:new.city_name ,:new.area_name , 'insert',default,default ); 
 end;
  /
-
 create trigger ad_address_trigger after delete on address 
 for each row 
 begin 
@@ -299,7 +297,6 @@ insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.Full_
 ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name ,'insert' ,default ,default );
 end;
  /
-
 create trigger au_employee_trigger after update on employee
 for each row 
 begin
@@ -307,7 +304,6 @@ insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_
 insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.Salary  ,:new.birh_place,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default ,default );
 end;
  /
-
 create trigger ad_employee_trigger after delete on employee
 for each row 
 begin 
@@ -327,7 +323,6 @@ begin
 insert into building_log values (:new.building_code,:new.building_desc ,'insert' ,default,default ); 
 end;
  /
-
 create trigger au_building_trigger after update on building
 for each row 
 begin 
@@ -335,7 +330,6 @@ insert into building_log values (:old.building_code,:old.building_desc,'delete' 
 insert into building_log values (:new.building_code,:new.building_desc,'insert' ,default,default ); 
 end;
  /
-
 create trigger ad_building_trigger after delete on building
 for each row 
 begin 
@@ -352,14 +346,12 @@ action_name char(6) NOT NULL ,
 action_date date default sysdate NOT NULL, 
 action_user varchar2(30) default user NOT NULL );
 
-
 create trigger ai_floor_trigger after insert on floor
 for each row
 begin
 insert into floor_log values (:new.floor_number ,:new.building_code,:new.floor_desc ,'insert' ,default,default ); 
 end;
  /
-
 create trigger au_floor_trigger after update on floor
 for each row 
 begin 
@@ -367,13 +359,13 @@ insert into floor_log values (:old.floor_number ,:old.building_code,:old.floor_d
 insert into floor_log values (:new.floor_number ,:new.building_code,:new.floor_desc ,'insert' ,default,default ); 
 end;
  /
-
 create trigger ad_floor_trigger after delete on floor
 for each row 
 begin 
 insert into floor_log values (:old.floor_number ,:old.building_code,:old.floor_desc,'delete' , default ,default );
 end;
  /
+ 
  
 CREATE TABLE room_log (
 room_number NUMBER (2),
@@ -390,7 +382,6 @@ begin
 insert into room_log values (:new.room_number ,:new.floor_number ,:new.building_code,:new.capacity ,'insert' ,default,default ); 
 end;
  /
-
 create trigger au_room_trigger after update on room
 for each row 
 begin
@@ -398,13 +389,13 @@ insert into room_log values (:old.room_number ,:old.floor_number ,:old.building_
 insert into room_log values (:new.room_number ,:new.floor_number ,:new.building_code,:new.capacity ,'insert' ,default,default ); 
 end;
  /
-
 create trigger ad_room_trigger after delete on room
 for each row 
 begin 
 insert into room_log values (:old.room_number ,:old.floor_number ,:old.building_code,:old.capacity ,'delete' ,default,default ); 
 end;
  /
+ 
  
 CREATE TABLE Department_log (
 Department_id NUMBER (3),
@@ -422,7 +413,6 @@ begin
 insert into Department_log values (:new.Department_id ,:new.Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'insert',default,default); 
 end;
  /
-
 create trigger au_Department_trigger after update on Department
 for each row 
 begin
@@ -430,13 +420,13 @@ insert into Department_log values (:old.Department_id ,:old.Department_name ,:ol
 insert into Department_log values (:new.Department_id ,:new.Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'insert',default,default); 
 end;
  /
-
 create trigger ad_Department_trigger after delete on Department
 for each row 
 begin 
 insert into Department_log values (:old.Department_id ,:old.Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'delete',default,default); 
 end;
  /
+ 
  
 CREATE TABLE Majors_Department_log (
 Majors_Department_id NUMBER (3),
@@ -454,21 +444,20 @@ begin
 insert into Majors_Department_log values (:new.Majors_Department_id ,:new.Majors_Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'insert',default,default); 
 end;
  /
-
 create trigger au_Majors_Department_trigger after update on Majors_Department
 for each row 
 begin
 insert into Majors_Department_log values (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'delete',default,default); 
 insert into Majors_Department_log values (:new.Majors_Department_id ,:new.Majors_Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'insert',default,default); 
 end;
- /
-
+/
 create trigger ad_Majors_Department_trigger after delete on Majors_Department
 for each row 
 begin 
 insert into Majors_Department_log values (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'delete',default,default); 
 end;
  /
+ 
  
 CREATE TABLE major_log (
 major_id NUMBER (3) ,
@@ -484,7 +473,6 @@ begin
 insert into major_log values (:new.major_id ,:new.major_name ,:new.Majors_Department_id ,'insert',default,default); 
 end;
  /
-
 create trigger au_major_trigger after update on major
 for each row 
 begin
@@ -492,13 +480,14 @@ insert into major_log values (:old.major_id ,:old.major_name ,:old.Majors_Depart
 insert into major_log values (:new.major_id ,:new.major_name ,:new.Majors_Department_id ,'insert',default,default); 
 end;
  /
-
 create trigger ad_major_trigger after delete on major
 for each row 
 begin 
 insert into major_log values (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'delete',default,default); 
 end;
  /
+ 
+ 
  CREATE TABLE course_log (
 course_id VARCHAR2(10),
 course_name VARCHAR2(30) NOT NULL,
@@ -514,7 +503,6 @@ begin
 insert into course_log values (:new.course_id ,:new.course_name ,:new.credit ,:new.Majors_Department_id ,'insert',default,default); 
 end;
  /
-
 create trigger au_course_trigger after update on course
 for each row 
 begin
@@ -522,13 +510,13 @@ insert into course_log values (:old.course_id ,:old.course_name ,:old.credit ,:o
 insert into course_log values (:new.course_id ,:new.course_name ,:new.credit ,:new.Majors_Department_id,'insert',default,default); 
 end;
  /
-
 create trigger ad_course_trigger after delete on course
 for each row 
 begin 
 insert into course_log values (:old.course_id ,:old.course_name ,:old.credit ,:old.Majors_Department_id,'Delete',default,default); 
 end;
  /
+
 
 CREATE TABLE teacher_log (
 Teacher_id Number (9),
@@ -546,7 +534,6 @@ begin
 insert into teacher_log values (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.Salary ,'insert' ,default,default ); 
 end;
  /
-
 create trigger au_teacher_trigger after update on teacher
 for each row 
 begin
@@ -554,13 +541,13 @@ insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:ol
 insert into teacher_log values (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.Salary ,'insert' ,default,default ); 
 end;
  /
-
 create trigger ad_teacher_trigger after delete on teacher
 for each row 
 begin 
 insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.Salary ,'delete' ,default,default ); 
 end;
  /
+ 
  
 CREATE TABLE Manager_log (
 Manager_id Number (9) ,
@@ -580,7 +567,6 @@ begin
 insert into Manager_log values (:new.Manager_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Manager_Grade ,:new.Majors_Department_id ,:new.Department_id ,'insert' ,default,default ); 
 end;
  /
-
 create trigger au_Manager_trigger after update on Manager
 for each row 
 begin
@@ -588,13 +574,13 @@ insert into Manager_log values (:old.Manager_id ,:old.Employment_Start_Date ,:ol
 insert into Manager_log values (:new.Manager_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Manager_Grade ,:new.Majors_Department_id ,:new.Department_id ,'insert' ,default,default ); 
 end;
  /
-
 create trigger ad_Manager_trigger after delete on Manager
 for each row 
 begin 
 insert into Manager_log values (:old.Manager_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Manager_Grade ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,default,default ); 
 end;
  /
+ 
  
 CREATE TABLE Security_log (
 Security_id Number (9) ,
@@ -612,7 +598,6 @@ begin
 insert into Security_log values (:new.Security_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Department_id,'insert' ,default,default ); 
 end;
  /
-
 create trigger au_Security_trigger after update on Security
 for each row 
 begin
@@ -620,7 +605,6 @@ insert into Security_log values (:old.Security_id ,:old.Employment_Start_Date ,:
 insert into Security_log values (:new.Security_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Department_id,'insert' ,default,default ); 
 end;
  /
-
 create trigger ad_Security_trigger after delete on Security
 for each row 
 begin 
@@ -628,7 +612,8 @@ insert into Security_log values (:old.Security_id ,:old.Employment_Start_Date ,:
 end;
  /
  
- CREATE TABLE Secretary_log (
+ 
+CREATE TABLE Secretary_log (
 Secretary_id Number (9) ,
 Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
@@ -658,6 +643,7 @@ insert into Secretary_log values (:old.Secretary_id ,:old.Employment_Start_Date 
 end;
  /
 
+
 CREATE TABLE item_log (
 item_id NUMBER (3) ,
 item_description VARCHAR2(200),
@@ -684,6 +670,7 @@ begin
 insert into item_log values (:old.item_id ,:old.item_description ,'delete' ,default,default ); 
 end;
  /
+
 
 CREATE TABLE room_items_log (
 item_id NUMBER (3) ,
@@ -715,6 +702,7 @@ insert into room_items_log values (:old.item_id ,:old.room_number ,:old.floor_nu
 end;
  /
 
+
 CREATE TABLE study_plan_log (
 plan_number Number (3),
 major_id NUMBER (3),
@@ -742,6 +730,134 @@ insert into study_plan_log values (:old.plan_number ,:old.major_id ,'delete' ,de
 end;
  /
 
+CREATE TABLE academic_advice_log (
+teacher_id NUMBER (9),
+sid NUMBER(9),
+year DATE default sysdate, 
+semester NUMBER (1) CHECK (semester IN (1,2)),
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_academic_advice_trigger after insert on academic_advice
+for each row
+begin
+insert into academic_advice_log values (:new.teacher_id ,:new.sid ,:new.year ,:new.semester,'insert' ,default ,default );
+end;
+ /
+create trigger au_academic_advice_trigger after update on academic_advice
+for each row 
+begin
+insert into academic_advice_log values (:old.teacher_id ,:old.sid ,:old.year ,:old.semester,'delete' ,default ,default );
+insert into academic_advice_log values (:new.teacher_id ,:new.sid ,:new.year ,:new.semester,'insert' ,default ,default );
+end;
+ /
+create trigger ad_academic_advice_trigger after delete on academic_advice
+for each row 
+begin 
+insert into academic_advice_log values (:old.teacher_id ,:old.sid ,:old.year ,:old.semester,'delete' ,default ,default );
+end;
+ /
+
+
+CREATE TABLE section_log (
+section_number NUMBER (3),
+course_id VARCHAR2(10) ,
+year DATE default sysdate,
+semester NUMBER (1),
+teacher_id NUMBER(9),
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_section_trigger after insert on section
+for each row
+begin
+insert into section_log values (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.teacher_id,'insert' ,default ,default );
+end;
+ /
+create trigger au_section_trigger after update on section
+for each row 
+begin
+insert into section_log values (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.teacher_id,'delete' ,default ,default );
+insert into section_log values (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.teacher_id,'insert' ,default ,default );
+end;
+ /
+create trigger ad_section_trigger after delete on section
+for each row 
+begin 
+insert into section_log values (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.teacher_id,'delete' ,default ,default );
+end;
+ /
+
+
+CREATE TABLE enroll_log (
+sid NUMBER(9),
+course_id VARCHAR2(10) ,
+section_number NUMBER(3) ,
+year DATE default sysdate, 
+semester NUMBER(1) ,
+grade_mid NUMBER (3) ,
+grade_final NUMBER (3),
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_enroll_trigger after insert on enroll
+for each row
+begin
+insert into enroll_log values (:new.sid ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'insert' ,default ,default );
+end;
+ /
+create trigger au_enroll_trigger after update on enroll
+for each row 
+begin
+insert into enroll_log values (:old.sid ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'delete' ,default ,default );
+insert into enroll_log values (:new.sid ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'insert' ,default ,default );
+end;
+ /
+create trigger ad_enroll_trigger after delete on enroll
+for each row 
+begin 
+insert into enroll_log values (:old.sid ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'delete' ,default ,default );
+end;
+ /
+
+
+CREATE TABLE section_rooms_log (
+section_number NUMBER (3) ,
+course_id VARCHAR2 (10) ,
+year DATE default sysdate, 
+semester NUMBER (1),
+room_number NUMBER (2),
+floor_number NUMBER (2),
+building_code CHAR (1),
+day DATE ,
+start_time DATE ,
+end_time DATE ,
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_section_rooms_trigger after insert on section_rooms
+for each row
+begin
+insert into section_rooms_log values (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.room_number,:new.floor_number ,:new.building_code ,:new.day ,:new.start_time ,:new.end_time ,'insert' ,default ,default );
+end;
+ /
+create trigger au_section_rooms_trigger after update on section_rooms
+for each row 
+begin
+insert into section_rooms_log values (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.room_number,:old.floor_number ,:old.building_code ,:old.day ,:old.start_time ,:old.end_time ,'delete' ,default ,default );
+insert into section_rooms_log values (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.room_number,:new.floor_number ,:new.building_code ,:new.day ,:new.start_time ,:new.end_time ,'insert' ,default ,default );
+end;
+ /
+create trigger ad_section_rooms_trigger after delete on section_rooms
+for each row 
+begin 
+insert into section_rooms_log values (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.room_number,:old.floor_number ,:old.building_code ,:old.day ,:old.start_time ,:old.end_time ,'delete' ,default ,default );
+end;
+ /
  --------------------------------------------------------------------------------------------------------------------
 
 select * from tab;
