@@ -102,7 +102,7 @@ Salary number (6,2) check (salary >=0),
 Manager_Grade varchar2(15) NOT NULL,
 Majors_Department_id number (3) references Majors_Department,
 Department_id number (3) references Department,
-check (Majors_Department_id = null or Department_id = null),
+check (Majors_Department_id is null or Department_id is null),
 PRIMARY KEY (Manager_id));
 
 CREATE TABLE Security (
@@ -119,7 +119,7 @@ Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
 Majors_Department_id number (3) references Majors_Department,
 Department_id number (3) references Department,
-check (Majors_Department_id = null or Department_id = null),
+check (Majors_Department_id is null or Department_id is null),
 PRIMARY KEY (Secretary_id));
 
 CREATE TABLE item (
