@@ -48,10 +48,45 @@ street_name  VARCHAR2 ,
 major_name  NUMBER )
 IS
 BEGIN
-execute immediate  'INSERT INTO STUDENT VALUES (' ||sid||   ',' ||  Full_name_ar   || ',' ||   Full_name_en   ||','||    Nationality   ||','|| national_id       ||','||   sex     ||','||    social_status    ||','||   guardian_name     ||','||   guardian_national_id     ||','||   guardian_relation    ||','||    birh_place    ||','||   date_of_birth     ||','||   religion     ||','||   health_status     ||','||  mother_name      ||','||   mother_job     ||','||    mother_job_desc    ||','||   father_job     ||','||   father_job_desc     ||','||   parents_status     ||','||   number_of_family_members     ||','||   family_university_students    ||','||    social_affairs    ||','|| phone       ||','||  telephone_home      ||','||    emergency_phone     ||','||    email   ||','||   password     ||','||   tawjihi_GPA     ||','||    tawjihi_field   ||','||   area_name     ||','||    city_name    ||','||    block_name    ||','||    balance   ||','||    street_name    ||','||   major_name || ') ' ;
+execute immediate 'INSERT INTO STUDENT VALUES ('||
+sid  ||','||
+  Full_name_ar   || ',' ||  
+ Full_name_en   ||','||
+    Nationality   ||','|| 
+national_id ||','|| 
+  sex     ||','|| 
+   social_status    ||','|| 
+  guardian_name     ||','|| 
+  guardian_national_id     ||','|| 
+  guardian_relation    ||','||    
+birh_place    ||','||   
+date_of_birth     ||','|| 
+  religion     ||','||   
+health_status     ||','||  
+mother_name      ||','||   
+mother_job     ||','||    
+mother_job_desc    ||','||   
+father_job     ||','||   
+father_job_desc     ||','||   
+parents_status     ||','||   
+number_of_family_members     ||','||   
+family_university_students    ||','||    
+social_affairs    ||','|| 
+phone       ||','||  
+telephone_home      ||','|| 
+emergency_phone     ||','||    
+email   ||','||   
+password     ||','||   
+tawjihi_GPA     ||','||    
+tawjihi_field   ||','||   
+area_name     ||','||    
+city_name    ||','||    
+block_name    ||','||    
+balance   ||','||    
+street_name    ||','||   
+major_name || ')' ;
 END;
 /
-
 
 
 
