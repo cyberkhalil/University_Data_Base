@@ -920,7 +920,33 @@ begin
 insert into student_log values (:old.sid ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality ,:old.national_id ,:old.sex ,:old.social_status ,:old.guardian_name ,:old.guardian_national_id ,:old.guardian_relation ,:old.birh_place ,:old.date_of_birth ,:old.religion,:old.health_status ,:old.mother_name ,:old.mother_job ,:old.mother_job_desc ,:old.father_job ,:old.father_job_desc ,:old.parents_status,:old.number_of_family_members ,:old.family_university_students ,:old.social_affairs ,:old.phone ,:old.telephone_home ,:old.emergency_phone ,:old.email ,:old.password ,:old.tawjihi_GPA ,:old.tawjihi_field ,:old.area_name ,:old.city_name ,:old.block_name  ,:old.street_name ,:old.balance ,:old.major_name ,'delete' ,default ,default );
 end;
  /
- 
+
+CREATE TABLE  Nationality_log(
+Nationality varchar(20),
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_Nationality_trigger after insert on Nationality 
+for each row
+begin
+insert into Nationality_log values (:new.Nationality_name ,'insert' ,default,default ); 
+end;
+ /
+create trigger au_Nationality_trigger after update on Nationality
+for each row 
+begin 
+insert into Nationality_log values (:new.Nationality_name ,'delete' ,default,default ); 
+insert into Nationality_log values (:new.Nationality_name ,'insert' ,default,default ); 
+end;
+ /
+create trigger ad_Nationality_trigger after delete on Nationality 
+for each row 
+begin 
+insert into Nationality_log values (:new.Nationality_name ,'delete' ,default,default ); 
+end;
+ /
+
  --------------------------------------------------------------------------------------------------------------------
 
 select * from tab;
