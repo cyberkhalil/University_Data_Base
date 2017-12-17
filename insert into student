@@ -5,7 +5,10 @@ insert into student values(54100001,'Arabic Full Name','English Full Name','Nati
 
 
 
--- using procedure (not working yet)
+-- using procedure (not working yet)  ------ missing comma at line 40
+--CREATE TABLE log (action_name varchar2(20) , table_name varchar2(30) , description LONG ) ;
+
+
 CREATE OR REPLACE PROCEDURE insert_std(
 sid NUMBER ,
 Full_name_ar  VARCHAR2 ,
@@ -45,7 +48,7 @@ street_name  VARCHAR2 ,
 major_name  NUMBER )
 IS
 BEGIN
-execute immediate  'INSERT INTO STUDENT VALUES ('||sid||   ','||  Full_name_ar   || ','||   Full_name_en   ||','||    Nationality   ||','|| national_id       ||','||   sex     ||','||    social_status    ||','||   guardian_name     ||','||   guardian_national_id     ||','||   guardian_relation    ||','||    birh_place    ||','||   date_of_birth     ||','||   religion     ||','||   health_status     ||','||  mother_name      ||','||   mother_job     ||','||    mother_job_desc    ||','||   father_job     ||','||   father_job_desc     ||','||   parents_status     ||','||   number_of_family_members     ||','||   family_university_students    ||','||    social_affairs    ||','|| phone       ||','||  telephone_home      ||','||    emergency_phone     ||','||    email   ||','||   password     ||','||   tawjihi_GPA     ||','||    tawjihi_field   ||','||   area_name     ||','||    city_name    ||','||    block_name    ||','||    balance   ||','||    street_name    ||','||   major_name || ')' ;
+execute immediate  'INSERT INTO STUDENT VALUES (' ||sid||   ',' ||  Full_name_ar   || ',' ||   Full_name_en   ||','||    Nationality   ||','|| national_id       ||','||   sex     ||','||    social_status    ||','||   guardian_name     ||','||   guardian_national_id     ||','||   guardian_relation    ||','||    birh_place    ||','||   date_of_birth     ||','||   religion     ||','||   health_status     ||','||  mother_name      ||','||   mother_job     ||','||    mother_job_desc    ||','||   father_job     ||','||   father_job_desc     ||','||   parents_status     ||','||   number_of_family_members     ||','||   family_university_students    ||','||    social_affairs    ||','|| phone       ||','||  telephone_home      ||','||    emergency_phone     ||','||    email   ||','||   password     ||','||   tawjihi_GPA     ||','||    tawjihi_field   ||','||   area_name     ||','||    city_name    ||','||    block_name    ||','||    balance   ||','||    street_name    ||','||   major_name || ') ' ;
 END;
 /
 
@@ -64,7 +67,14 @@ show errors
 
 
 begin
-insert_std(12017001,'1','2','3',10,'F','S','1',2,'3','4', sysdate ,'1','2','3','4','5','6','7','8',9,0,'a',4,5,6,'Q','E',4,'W','1','2','3',5,'4',5);
+insert_std(
+100001 ,
+ 'Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
+'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
+ 'FATHER_JOB' , 'FATHER_JOB_DESC' , 
+'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
+0811111 , 'Ahmed@mail.com' , 'ABCD' ,
+5 , 'S' , 'GazaStrip' , 'Gaza' , 'Naser' , 50 , 'Elgesser' , 1);
 end;
 /
 
