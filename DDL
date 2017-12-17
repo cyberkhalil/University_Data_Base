@@ -930,20 +930,20 @@ action_user varchar2(30) default user NOT NULL);
 create trigger ai_Nationality_trigger after insert on Nationality 
 for each row
 begin
-insert into Nationality_log values (:new.Nationality_name ,'insert' ,default,default ); 
+insert into Nationality_log values (:new.Nationality ,'insert' ,default,default ); 
 end;
  /
 create trigger au_Nationality_trigger after update on Nationality
 for each row 
 begin 
-insert into Nationality_log values (:new.Nationality_name ,'delete' ,default,default ); 
-insert into Nationality_log values (:new.Nationality_name ,'insert' ,default,default ); 
+insert into Nationality_log values (:new.Nationality ,'delete' ,default,default ); 
+insert into Nationality_log values (:new.Nationality ,'insert' ,default,default ); 
 end;
  /
 create trigger ad_Nationality_trigger after delete on Nationality 
 for each row 
 begin 
-insert into Nationality_log values (:new.Nationality_name ,'delete' ,default,default ); 
+insert into Nationality_log values (:new.Nationality ,'delete' ,default,default ); 
 end;
  /
 
