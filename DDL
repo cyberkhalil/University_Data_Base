@@ -981,7 +981,7 @@ end;
  --------------------------------------------------------------------------------------------------------------------
 
 select * from tab;
-select trigger_name from user_trgrs;
+select trigger_name from user_triggers;
 
 insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
 insert into Nationality values('Nationality');
