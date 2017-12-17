@@ -936,17 +936,48 @@ end;
 create trigger au_Nationality_trigger after update on Nationality
 for each row 
 begin 
-insert into Nationality_log values (:new.Nationality ,'delete' ,default,default ); 
+insert into Nationality_log values (:old.Nationality ,'delete' ,default,default ); 
 insert into Nationality_log values (:new.Nationality ,'insert' ,default,default ); 
 end;
  /
 create trigger ad_Nationality_trigger after delete on Nationality 
 for each row 
 begin 
-insert into Nationality_log values (:new.Nationality ,'delete' ,default,default ); 
+insert into Nationality_log values (:old.Nationality ,'delete' ,default,default ); 
 end;
  /
 
+CREATE TABLE study_plan_courses_log (
+plan_number Number (3),
+major_id NUMBER (3),
+course_id VARCHAR2(10),
+year DATE ,
+semester NUMBER (1),
+action_name char(6) NOT NULL , 
+action_date date default sysdate NOT NULL, 
+action_user varchar2(30) default user NOT NULL);
+
+create trigger ai_study_plan_courses_trigger after insert on study_plan_courses
+for each row
+begin
+insert into study_plan_courses_log values (:new.plan_number ,:new.major_id  ,:new.course_id,:new.year ,:new.semester ,'insert' ,default ,default );
+end;
+ /
+create trigger au_study_plan_courses_trigger after update on study_plan_courses
+for each row 
+begin
+insert into study_plan_courses_log values (:old.plan_number ,:old.major_id  ,:old.course_id,:old.year ,:old.semester ,'delete' ,default ,default );
+insert into study_plan_courses_log values (:new.plan_number ,:new.major_id  ,:new.course_id,:new.year ,:new.semester ,'insert' ,default ,default );
+end;
+ /
+create trigger ad_study_plan_courses_trigger after delete on study_plan_courses
+for each row 
+begin 
+insert into study_plan_courses_log values (:old.plan_number ,:old.major_id  ,:old.course_id,:old.year ,:old.semester ,'delete' ,default ,default );
+end;
+ /
+ 
+ 
  --------------------------------------------------------------------------------------------------------------------
 
 select * from tab;
