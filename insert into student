@@ -5,7 +5,9 @@ insert into student values(54100001,'Arabic Full Name','English Full Name','Nati
 
 
 
--- using procedure (not working yet)  ------ missing comma at line 40
+-- using procedure
+--CREATE TABLE log (action_name varchar2(20) , table_name varchar2(30) , description LONG ) ;
+
 --CREATE TABLE log (action_name varchar2(20) , table_name varchar2(30) , description LONG ) ;
 
 
@@ -13,7 +15,7 @@ CREATE OR REPLACE PROCEDURE insert_std(
 sid NUMBER ,
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
-Nationality varchar  ,
+Nationality varchar2  ,
 national_id  Number ,
 sex  CHAR ,
 social_status  CHAR , 
@@ -45,46 +47,12 @@ city_name  VARCHAR2 ,
 block_name  VARCHAR2 ,
 balance NUMBER ,
 street_name  VARCHAR2 ,
-major_name  NUMBER )
+major_name  NUMBER ) 
+AUTHID CURRENT_USER
 IS
 BEGIN
-execute immediate 'INSERT INTO STUDENT VALUES ('||
-sid  ||','||
-  Full_name_ar   || ',' ||  
- Full_name_en   ||','||
-    Nationality   ||','|| 
-national_id ||','|| 
-  sex     ||','|| 
-   social_status    ||','|| 
-  guardian_name     ||','|| 
-  guardian_national_id     ||','|| 
-  guardian_relation    ||','||    
-birh_place    ||','||   
-date_of_birth     ||','|| 
-  religion     ||','||   
-health_status     ||','||  
-mother_name      ||','||   
-mother_job     ||','||    
-mother_job_desc    ||','||   
-father_job     ||','||   
-father_job_desc     ||','||   
-parents_status     ||','||   
-number_of_family_members     ||','||   
-family_university_students    ||','||    
-social_affairs    ||','|| 
-phone       ||','||  
-telephone_home      ||','|| 
-emergency_phone     ||','||    
-email   ||','||   
-password     ||','||   
-tawjihi_GPA     ||','||    
-tawjihi_field   ||','||   
-area_name     ||','||    
-city_name    ||','||    
-block_name    ||','||    
-balance   ||','||    
-street_name    ||','||   
-major_name || ')' ;
+execute immediate 'INSERT INTO STUDENT VALUES (' ||sid ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','||balance ||','''||street_name  ||''','||major_name || ')' ;
+execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
 END;
 /
 
@@ -95,15 +63,11 @@ END;
 
 
 
-show errors
-
-
-
-
-
+ ---- sample insert using the procedure
+ 
 begin
 insert_std(
-100001 ,
+11 ,
  'Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
@@ -112,4 +76,3 @@ insert_std(
 5 , 'S' , 'GazaStrip' , 'Gaza' , 'Naser' , 50 , 'Elgesser' , 1);
 end;
 /
-
