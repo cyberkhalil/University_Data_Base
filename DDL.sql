@@ -1029,7 +1029,37 @@ execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
 END;
 /
 
- 
+ CREATE OR REPLACE PROCEDURE insert_emp(
+employee_id NUMBER ,
+Full_name_ar VARCHAR2 ,
+Full_name_en VARCHAR2 ,
+Nationality varchar2 ,
+national_id NUMBER ,
+sex CHAR ,
+social_status CHAR , 
+Salary NUMBER ,
+birh_place VARCHAR2 ,
+date_of_birth DATE ,
+religion VARCHAR2 ,
+health_status VARCHAR2 ,
+number_of_family_members NUMBER ,
+phone NUMBER ,
+telephone_home NUMBER ,
+email VARCHAR2 ,
+password VARCHAR2 ,
+area_name VARCHAR2 ,
+city_name VARCHAR2 ,
+block_name VARCHAR2 ,
+street_name VARCHAR2 ) 
+AUTHID CURRENT_USER
+IS
+BEGIN
+execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| Salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||password  ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''' )' ;
+execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
+END;
+/
+
+
  --------------------------------------------------------------------------------------------------------------------
 
 select * from tab;
@@ -1073,4 +1103,8 @@ insert_std(
 end;
 /
 
+begin
+insert_emp(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza', to_date('1-2-3','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+end;
+/
 
