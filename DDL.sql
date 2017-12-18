@@ -1,37 +1,39 @@
 -- DDL:-
 
-CREATE TABLE Address (
+-- 1
+CREATE TABLE address (
 area_name VARCHAR2(30),
 city_name VARCHAR2(30),
 block_name VARCHAR2(30), 
 street_name VARCHAR2(30), 
 CONSTRAINT adrs_pk PRIMARY KEY (area_name,street_name,block_name,city_name));
 
-CREATE TABLE  Nationality(
-Nationality varchar2(20) primary key);
+-- 2
+CREATE TABLE  nationality(
+nationality varchar2(20) PRIMARY KEY );
 
 CREATE TABLE employee (
 employee_id NUMBER(9) ,
-Full_name_ar  VARCHAR2(100) NOT NULL,
-Full_name_en  VARCHAR2(100) NOT NULL,
+Full_name_ar VARCHAR2(100) NOT NULL,
+Full_name_en VARCHAR2(100) NOT NULL,
 Nationality varchar2(20) NOT NULL REFERENCES Nationality,
-national_id  NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
-sex CHAR  NOT NULL ,
+national_id NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
+sex CHAR NOT NULL ,
 social_status CHAR NOT NULL, 
 Salary NUMBER (6,2) CHECK ( Salary >=0),
 birh_place  VARCHAR2(10) NOT NULL ,
 date_of_birth DATE NOT NULL,
 religion VARCHAR2(20)  NOT NULL,
-health_status  VARCHAR2(40) NOT NULL,
+health_status VARCHAR2(40) NOT NULL,
 number_of_family_members NUMBER(2) NOT NULL,
-phone  NUMBER(12) NOT NULL,
+phone NUMBER(12) NOT NULL,
 telephone_home  NUMBER(9),
 email VARCHAR2(30) NOT NULL,
-password  VARCHAR2(30) NOT NULL,
-area_name  VARCHAR2(30) NOT NULL,
-city_name  VARCHAR2(30) NOT NULL,
-block_name  VARCHAR2(30) NOT NULL,
-street_name  VARCHAR2(30) NOT NULL,
+password VARCHAR2(30) NOT NULL,
+area_name VARCHAR2(30) NOT NULL,
+city_name VARCHAR2(30) NOT NULL,
+block_name VARCHAR2(30) NOT NULL,
+street_name VARCHAR2(30) NOT NULL,
 CONSTRAINT emp_pk Primary key(Employee_id),
 CONSTRAINT emp_sex_chk CHECK (sex IN ('M' , 'F')),
 CONSTRAINT emp_sotial_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
@@ -1035,7 +1037,7 @@ select trigger_name from user_triggers;
 
 insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
 insert into Nationality values('Nationality');
-insert into Employee values(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert into Employee values(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
 insert into Employee values(120100002,'Arabic Full Name 2','English Full Name 2','Nationality',123456789,'M','S',500,'Gaza', to_date('1-1-10','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
 insert into Employee values(120100003,'Arabic Full Name 3','English Full Name 3','Nationality',123456789,'M','S',500,'Gaza',to_date('2-2-03','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
 insert into Building values('A','Building Desc');
