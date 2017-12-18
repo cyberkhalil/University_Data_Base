@@ -8,13 +8,13 @@ street_name VARCHAR2(30),
 CONSTRAINT adrs_pk PRIMARY KEY (area_name,street_name,block_name,city_name));
 
 CREATE TABLE  Nationality(
-Nationality varchar(20) primary key);
+Nationality varchar2(20) primary key);
 
 CREATE TABLE employee (
 employee_id NUMBER(9) ,
 Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
-Nationality varchar(20) NOT NULL REFERENCES Nationality,
+Nationality varchar2(20) NOT NULL REFERENCES Nationality,
 national_id  NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
 sex CHAR  NOT NULL ,
 social_status CHAR NOT NULL, 
@@ -156,7 +156,7 @@ CREATE TABLE student (
 sid NUMBER(9) PRIMARY KEY,
 Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
-Nationality varchar(20) NOT NULL REFERENCES Nationality,
+Nationality varchar2(20) NOT NULL REFERENCES Nationality,
 national_id  Number(9) NOT NULL,
 sex  CHAR  NOT NULL CHECK (sex IN ('M' , 'F')) ,
 social_status  CHAR NOT NULL CHECK ( social_status  IN ('S','D','M') ), 
@@ -269,7 +269,7 @@ CREATE TABLE employee_log (
 employee_id NUMBER(9) ,
 Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
-Nationality varchar(20) NOT NULL,
+Nationality varchar2(20) NOT NULL,
 national_id  NUMBER(9) NOT NULL,
 sex CHAR  NOT NULL ,
 social_status CHAR NOT NULL, 
@@ -866,7 +866,7 @@ CREATE TABLE student_log (
 sid NUMBER(9),
 Full_name_ar  VARCHAR2(100) ,
 Full_name_en  VARCHAR2(100) ,
-Nationality varchar(20) ,
+Nationality varchar2(20) ,
 national_id  Number(9) ,
 sex  CHAR ,
 social_status  CHAR , 
@@ -924,7 +924,7 @@ end;
  /
 
 CREATE TABLE  Nationality_log(
-Nationality varchar(20),
+Nationality varchar2(20),
 action_name char(6) NOT NULL , 
 action_date date default sysdate NOT NULL, 
 action_user varchar2(30) default user NOT NULL);
