@@ -981,6 +981,54 @@ end;
  
  
  --------------------------------------------------------------------------------------------------------------------
+ -- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
+ CREATE OR REPLACE PROCEDURE insert_std(
+sid NUMBER ,
+Full_name_ar  VARCHAR2 ,
+Full_name_en  VARCHAR2 ,
+Nationality varchar2  ,
+national_id  Number ,
+sex  CHAR ,
+social_status  CHAR , 
+guardian_name  VARCHAR2 ,
+guardian_national_id  Number ,
+guardian_relation VARCHAR2 , 
+birh_place  VARCHAR2  ,
+date_of_birth  DATE ,
+religion  VARCHAR2 ,
+health_status  VARCHAR2   ,
+mother_name  VARCHAR2 ,
+mother_job  VARCHAR2  , 
+mother_job_desc  VARCHAR2 ,
+father_job  VARCHAR2 , 
+father_job_desc  VARCHAR2 ,
+parents_status  VARCHAR2   ,
+number_of_family_members  NUMBER ,
+family_university_students NUMBER , 
+social_affairs  VARCHAR2  ,
+phone  NUMBER ,
+telephone_home  NUMBER ,
+emergency_phone   NUMBER ,
+email VARCHAR2 ,
+password  VARCHAR2 ,
+tawjihi_GPA  number ,
+tawjihi_field CHAR ,
+area_name  VARCHAR2 ,
+city_name  VARCHAR2 ,
+block_name  VARCHAR2 ,
+balance NUMBER ,
+street_name  VARCHAR2 ,
+major_name  NUMBER ) 
+AUTHID CURRENT_USER
+IS
+BEGIN
+execute immediate 'INSERT INTO STUDENT VALUES (' ||sid ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','||balance ||','''||street_name  ||''','||major_name || ')' ;
+execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
+END;
+/
+
+ 
+ --------------------------------------------------------------------------------------------------------------------
 
 select * from tab;
 select trigger_name from user_triggers;
@@ -1008,4 +1056,19 @@ insert into item values(001,'Lap TOP','Descriotion');
 insert into room_items values(001,01,1,'A',20);
 insert into study_plan values(101,1);
 insert into study_plan_courses values (101,1,'COMP 2113',Date'2016-10-10',1);
+
+--------------------------------------------------------------------------------------------------------------------
+
+begin
+insert_std(
+11 ,
+ 'Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
+'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
+ 'FATHER_JOB' , 'FATHER_JOB_DESC' , 
+'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
+0811111 , 'Ahmed@mail.com' , 'ABCD' ,
+5 , 'S' , 'GazaStrip' , 'Gaza' , 'Naser' , 50 , 'Elgesser' , 1);
+end;
+/
+
 
