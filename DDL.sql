@@ -306,14 +306,14 @@ end;
 create trigger au_employee_trgr after update on employee
 for each row 
 begin
-insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place,:old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members ,:old.phone ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default ,default );
-insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.Salary  ,:new.birh_place,:new.date_of_birth ,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default ,default );
+insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.salary  ,:old.birh_place,:old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members ,:old.phone ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default ,default );
+insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.salary  ,:new.birh_place,:new.date_of_birth ,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default ,default );
 end;
  /
 create trigger ad_employee_trgr after delete on employee
 for each row 
 begin 
-insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place, :old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default ,default );
+insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.salary  ,:old.birh_place, :old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default ,default );
 end;
  /
 CREATE TABLE building_log (
@@ -529,7 +529,7 @@ Teacher_id Number (9),
 Employment_Start_Date Date,
 Employment_End_Date Date,
 Majors_Department_id number (3),
-Salary number (6,2) check (salary >=0),
+salary number (6,2) check (salary >=0),
 action_name char(6) NOT NULL , 
 action_date date default sysdate NOT NULL, 
 action_user varchar2(30) default user NOT NULL);
@@ -537,20 +537,20 @@ action_user varchar2(30) default user NOT NULL);
 create trigger ai_teacher_trgr after insert on teacher
 for each row
 begin
-insert into teacher_log values (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.Salary ,'insert' ,default,default ); 
+insert into teacher_log values (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.salary ,'insert' ,default,default ); 
 end;
  /
 create trigger au_teacher_trgr after update on teacher
 for each row 
 begin
-insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.Salary ,'delete' ,default,default ); 
-insert into teacher_log values (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.Salary ,'insert' ,default,default ); 
+insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.salary ,'delete' ,default,default ); 
+insert into teacher_log values (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.salary ,'insert' ,default,default ); 
 end;
  /
 create trigger ad_teacher_trgr after delete on teacher
 for each row 
 begin 
-insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.Salary ,'delete' ,default,default ); 
+insert into teacher_log values (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.salary ,'delete' ,default,default ); 
 end;
  /
  
@@ -559,7 +559,7 @@ CREATE TABLE Manager_log (
 Manager_id Number (9) ,
 Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
-Salary number (6,2) check (salary >=0),
+salary number (6,2) check (salary >=0),
 Manager_Grade varchar2(15) NOT NULL,
 Majors_Department_id number (3) ,
 Department_id number (3) ,
@@ -592,7 +592,7 @@ CREATE TABLE Security_log (
 Security_id Number (9) ,
 Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
-Salary number (6,2) ,
+salary number (6,2) ,
 Department_id number (3),
 action_name char(6) NOT NULL , 
 action_date date default sysdate NOT NULL, 
@@ -1039,7 +1039,7 @@ Nationality varchar2 ,
 national_id NUMBER ,
 sex CHAR ,
 social_status CHAR , 
-Salary NUMBER ,
+salary NUMBER ,
 birh_place VARCHAR2 ,
 date_of_birth DATE ,
 religion VARCHAR2 ,
@@ -1056,7 +1056,7 @@ street_name VARCHAR2 )
 AUTHID CURRENT_USER
 IS
 BEGIN
-execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| Salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||password  ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''' )' ;
+execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||password  ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
 END;
 /
