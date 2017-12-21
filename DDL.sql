@@ -14,13 +14,13 @@ nationality varchar2(20) PRIMARY KEY );
 
 CREATE TABLE employee (
 employee_id NUMBER(9) ,
-Full_name_ar VARCHAR2(100) NOT NULL,
-Full_name_en VARCHAR2(100) NOT NULL,
-Nationality varchar2(20) NOT NULL REFERENCES Nationality,
+full_name_ar VARCHAR2(100) NOT NULL,
+full_name_en VARCHAR2(100) NOT NULL,
+nationality varchar2(20) NOT NULL REFERENCES Nationality,
 national_id NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
 sex CHAR NOT NULL ,
 social_status CHAR NOT NULL, 
-Salary NUMBER (6,2) CHECK ( Salary >=0),
+salary NUMBER (8,2) CHECK ( salary >=0),
 birh_place  VARCHAR2(10) NOT NULL ,
 date_of_birth DATE NOT NULL,
 religion VARCHAR2(20)  NOT NULL,
@@ -94,14 +94,14 @@ Teacher_id Number (9) references employee(Employee_id),
 Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
 Majors_Department_id number (3) references Majors_Department,
-Salary number (6,2) check (salary >=0),
+salary number (8,2) check (salary >=0),
 PRIMARY KEY (teacher_id));
 
 CREATE TABLE Manager (
 Manager_id Number (9) references employee(Employee_id),
 Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
-Salary number (6,2) check (salary >=0),
+salary number (8,2) check (salary >=0),
 Manager_Grade varchar2(15) NOT NULL,
 Majors_Department_id number (3) references Majors_Department,
 Department_id number (3) references Department,
@@ -112,7 +112,7 @@ CREATE TABLE Security (
 Security_id Number (9) references employee(Employee_id),
 Employment_Start_Date Date default sysdate,
 Employment_End_Date Date,
-Salary number (6,2) check (salary >=0),
+salary number (8,2) check (salary >=0),
 Department_id number (3) references Department,
 PRIMARY KEY (Security_id));
 
@@ -277,7 +277,7 @@ Nationality varchar2(20) NOT NULL,
 national_id  NUMBER(9) NOT NULL,
 sex CHAR  NOT NULL ,
 social_status CHAR NOT NULL, 
-Salary NUMBER (6,2) CHECK ( Salary >=0),
+salary NUMBER (8,2) CHECK ( salary >=0),
 birh_place  VARCHAR2(10) NOT NULL ,
 date_of_birth DATE NOT NULL,
 religion VARCHAR2(20)  NOT NULL,
@@ -299,7 +299,7 @@ create trigger ai_employee_trgr after insert on employee
 for each row
 begin
 insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality ,:new.national_id 
-,:new.sex ,:new.social_status ,:new.Salary ,:new.birh_place , :new.date_of_birth ,:new.religion ,:new.health_status ,:new.number_of_family_members 
+,:new.sex ,:new.social_status ,:new.salary ,:new.birh_place , :new.date_of_birth ,:new.religion ,:new.health_status ,:new.number_of_family_members 
 ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name ,'insert' ,default ,default );
 end;
  /
