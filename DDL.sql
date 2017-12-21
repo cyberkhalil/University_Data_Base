@@ -160,7 +160,7 @@ Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
 Nationality varchar2(20) NOT NULL REFERENCES Nationality,
 national_id  Number(9) NOT NULL,
-sex  CHAR  NOT NULL CHECK (sex IN ('M' , 'F')) ,
+sex  CHAR  NOT NULL ,
 social_status  CHAR NOT NULL , 
 guardian_name  VARCHAR2(30) NOT NULL,
 guardian_national_id  Number(9) NOT NULL,
@@ -192,8 +192,9 @@ balance NUMBER(5) NOT NULL,
 street_name  VARCHAR2(30) NOT NULL,
 major_name  NUMBER(3) NOT NULL REFERENCES major ,
 foreign key (area_name,city_name,block_name,street_name) references address(area_name,city_name,block_name,street_name),
-CONSTRAINT std_social_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
-constraint stdnt_twj_fld_chk CHECK (tawjihi_field  IN ('S' , 'L' )));
+CONSTRAINT stdnt_sex_chk CHECK (sex IN ('M' , 'F')),
+CONSTRAINT stdnt_social_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
+CONSTRAINT stdnt_twj_fld_chk CHECK (tawjihi_field  IN ('S' , 'L' )));
 
 CREATE TABLE academic_advice (
 teacher_id NUMBER (9) references teacher,
