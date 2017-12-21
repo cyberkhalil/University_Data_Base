@@ -85,6 +85,7 @@ CREATE TABLE course (
 course_id VARCHAR2(10),
 course_name VARCHAR2(30) NOT NULL,
 credit NUMBER (1) NOT NULL,
+clevel NUMBER(1) NOT NULL,
 description LONG, 
 Majors_Department_id NUMBER (3) REFERENCES Majors_Department,
 PRIMARY KEY (course_id));
@@ -501,6 +502,7 @@ end;
 course_id VARCHAR2(10),
 course_name VARCHAR2(30) NOT NULL,
 credit NUMBER (1) NOT NULL,
+clevel NUMBER (1) NOT NULL,
 Majors_Department_id NUMBER (3),
 action_name char(6) NOT NULL , 
 action_date date default sysdate NOT NULL, 
@@ -509,20 +511,20 @@ action_user varchar2(30) default user NOT NULL);
 CREATE OR REPLACE TRIGGER ai_course_trgr after insert on course
 for each row
 begin
-insert into course_log values (:new.course_id ,:new.course_name ,:new.credit ,:new.Majors_Department_id ,'insert',default,default); 
+insert into course_log values (:new.course_id ,:new.course_name ,:new.credit , :new.clevel ,:new.Majors_Department_id ,'insert',default,default); 
 end;
  /
 CREATE OR REPLACE TRIGGER au_course_trgr after update on course
 for each row 
 begin
-insert into course_log values (:old.course_id ,:old.course_name ,:old.credit ,:old.Majors_Department_id,'Delete',default,default); 
-insert into course_log values (:new.course_id ,:new.course_name ,:new.credit ,:new.Majors_Department_id,'insert',default,default); 
+insert into course_log values (:old.course_id ,:old.course_name ,:old.credit , :old.clevel ,:old.Majors_Department_id,'Delete',default,default); 
+insert into course_log values (:new.course_id ,:new.course_name ,:new.credit , :new.clevel ,:new.Majors_Department_id,'insert',default,default); 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_course_trgr after delete on course
 for each row 
 begin 
-insert into course_log values (:old.course_id ,:old.course_name ,:old.credit ,:old.Majors_Department_id,'Delete',default,default); 
+insert into course_log values (:old.course_id ,:old.course_name ,:old.credit , :old.clevel ,:old.Majors_Department_id,'Delete',default,default); 
 end;
  /
 
