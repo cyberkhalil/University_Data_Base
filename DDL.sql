@@ -149,10 +149,11 @@ plan_number Number (3),
 major_id NUMBER (3),
 course_id VARCHAR2(10),
 year DATE NOT NULL,
-semester NUMBER (1) CHECK (semester IN (1,2)),
+semester NUMBER (1) ,
 FOREIGN KEY (course_id) REFERENCES course,
 FOREIGN KEY (plan_number, major_id) REFERENCES study_plan,
-PRIMARY KEY (plan_number, major_id, course_id));
+PRIMARY KEY (plan_number, major_id, course_id),
+CONSTRAINT stdy_pln_smstr_chk CHECK (semester IN (1,2,3)));
 
 CREATE TABLE student (
 sid NUMBER(9) PRIMARY KEY,
@@ -200,16 +201,18 @@ CREATE TABLE academic_advice (
 teacher_id NUMBER (9) references teacher,
 sid NUMBER(9) REFERENCES student,
 year DATE default sysdate, 
-semester NUMBER (1) CHECK (semester IN (1,2)),
-PRIMARY KEY (teacher_id, sid, year, semester));
+semester NUMBER (1),
+PRIMARY KEY (teacher_id, sid, year, semester),
+CONSTRAINT stdy_pln_smstr_chk CHECK (semester IN (1,2,3)));
 
 CREATE TABLE section (
 section_number NUMBER (3),
 course_id VARCHAR2(10) references course,
 year DATE default sysdate,
-semester NUMBER (1) CHECK (semester IN (1,2)),
+semester NUMBER (1) ,
 teacher_id NUMBER(9) REFERENCES teacher,
-PRIMARY KEY (section_number, course_id, year, semester));
+PRIMARY KEY (section_number, course_id, year, semester),
+CONSTRAINT stdy_pln_smstr_chk CHECK (semester IN (1,2,3)));
 
 CREATE TABLE enroll (
 sid NUMBER(9) REFERENCES student,
@@ -221,13 +224,13 @@ grade_mid NUMBER (3) DEFAULT NULL ,
 grade_final NUMBER (3) DEFAULT NULL,
 FOREIGN KEY (section_number , course_id , year , semester) REFERENCES section ,
 PRIMARY KEY (sid , course_id , section_number , year , semester),
-CHECK ((grade_final+grade_mid >=40)and (grade_final+grade_mid <=100 )));
+CONSTRAINT eroll_grade_chk CHECK ((grade_final+grade_mid >=40)and (grade_final+grade_mid <=100 )));
 
 CREATE TABLE section_rooms (
 section_number NUMBER (3) ,
 course_id VARCHAR2 (10) ,
 year DATE default sysdate, 
-semester NUMBER (1) CHECK (semester IN (1,2)),
+semester NUMBER (1) ,
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
@@ -741,7 +744,7 @@ CREATE TABLE academic_advice_log (
 teacher_id NUMBER (9),
 sid NUMBER(9),
 year DATE default sysdate, 
-semester NUMBER (1) CHECK (semester IN (1,2)),
+semester NUMBER (1) ,
 action_name char(6) NOT NULL , 
 action_date date default sysdate NOT NULL, 
 action_user varchar2(30) default user NOT NULL);
