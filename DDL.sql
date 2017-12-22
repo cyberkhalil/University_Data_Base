@@ -211,6 +211,7 @@ CONSTRAINT stdnt_sex_chk CHECK (sex IN ('M' , 'F')),
 CONSTRAINT stdnt_social_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
 CONSTRAINT stdnt_twj_fld_chk CHECK (tawjihi_field  IN ('S' , 'L' )));
 
+-- 21
 CREATE TABLE academic_advice (
 teacher_id NUMBER (9) REFERENCES teacher (teacher_id) ,
 sid NUMBER(9) REFERENCES student (sid) ,
@@ -219,6 +220,7 @@ semester NUMBER (1),
 PRIMARY KEY (teacher_id, sid, year, semester),
 CONSTRAINT acdmic_advc_smstr_chk CHECK (semester IN (1,2,3)));
 
+-- 22
 CREATE TABLE section (
 section_number NUMBER (3),
 course_id VARCHAR2(10) REFERENCES course (course_id) ,
@@ -228,13 +230,14 @@ teacher_id NUMBER(9) REFERENCES teacher (teacher_id) ,
 PRIMARY KEY (section_number, course_id, year, semester),
 CONSTRAINT section_smstr_chk CHECK (semester IN (1,2,3)));
 
+-- 23
 CREATE TABLE enroll (
 sid NUMBER(9) REFERENCES student (sid) ,
 course_id VARCHAR2(10) ,
 section_number NUMBER(3) ,
 year DATE DEFAULT sysdate, 
 semester NUMBER(1) ,
-grade_mid NUMBER (3) DEFAULT NULL ,
+grade_mid NUMBER (2) DEFAULT NULL ,
 grade_final NUMBER (3) DEFAULT NULL,
 FOREIGN KEY (section_number , course_id , year , semester) REFERENCES section (section_number , course_id , year , semester) ,
 PRIMARY KEY (sid , course_id , section_number , year , semester),
@@ -827,7 +830,7 @@ course_id VARCHAR2(10) ,
 section_number NUMBER(3) ,
 year DATE DEFAULT sysdate, 
 semester NUMBER(1) ,
-grade_mid NUMBER (3) ,
+grade_mid NUMBER (2) ,
 grade_final NUMBER (3),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
