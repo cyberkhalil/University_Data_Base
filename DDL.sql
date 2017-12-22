@@ -100,14 +100,13 @@ course_id VARCHAR2(10) REFERENCES course(course_id) ,
 pre_required_course_id VARCHAR2(10) REFERENCES course(course_id),
 PRIMARY KEY (course_id,pre_required_course_id));
 
-
+-- 12
 CREATE TABLE teacher (
-Teacher_id Number (9) references employee(Employee_id),
-Employment_Start_Date Date default sysdate,
-Employment_End_Date Date,
-Majors_Department_id number (3) references Majors_Department,
-salary number (8,2) check (salary >=0),
-PRIMARY KEY (teacher_id));
+teacher_id Number (9) REFERENCES employee(Employee_id) PRIMARY KEY,
+employment_Start_Date Date DEFAULT sysdate,
+employment_End_Date Date,
+majors_department_id NUMBER (3) REFERENCES Majors_Department (majors_department_id),
+salary number (8,2) check (salary >=0) );
 
 CREATE TABLE Manager (
 Manager_id Number (9) references employee(Employee_id),
