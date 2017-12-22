@@ -103,20 +103,20 @@ PRIMARY KEY (course_id,pre_required_course_id));
 CREATE TABLE teacher (
 teacher_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
 employment_start_date DATE DEFAULT sysdate,
-employment_End_Date DATE,
+employment_end_date DATE,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id),
 salary NUMBER (8,2) check (salary >=0) );
 
-CREATE TABLE Manager (
+CREATE TABLE manager (
 manager_id NUMBER (9) REFERENCES employee(employee_id),
-employment_Start_Date DATE DEFAULT sysdate,
-employment_End_Date DATE,
+employment_start_date DATE DEFAULT sysdate,
+employment_end_date DATE,
 salary NUMBER (8,2) check (salary >=0),
 manager_grade varchar2(15) NOT NULL,
-majors_department_id NUMBER (3) REFERENCES Majors_Department (majors_department_id) ,
-department_id NUMBER (3) REFERENCES Department (department_id) ,
+majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) ,
+department_id NUMBER (3) REFERENCES department (department_id) ,
 check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ),
-PRIMARY KEY (Manager_id));
+PRIMARY KEY (manager_id));
 
 CREATE TABLE Security (
 Security_id NUMBER (9) REFERENCES employee(Employee_id),
