@@ -101,14 +101,14 @@ PRIMARY KEY (course_id,pre_required_course_id));
 
 -- 12
 CREATE TABLE teacher (
-teacher_id Number (9) REFERENCES employee(Employee_id) PRIMARY KEY,
+teacher_id NUMBER (9) REFERENCES employee(Employee_id) PRIMARY KEY,
 employment_Start_Date Date DEFAULT sysdate,
 employment_End_Date Date,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id),
 salary NUMBER (8,2) check (salary >=0) );
 
 CREATE TABLE Manager (
-manager_id Number (9) REFERENCES employee(employee_id),
+manager_id NUMBER (9) REFERENCES employee(employee_id),
 employment_Start_Date Date DEFAULT sysdate,
 employment_End_Date Date,
 salary NUMBER (8,2) check (salary >=0),
@@ -119,7 +119,7 @@ check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (depart
 PRIMARY KEY (Manager_id));
 
 CREATE TABLE Security (
-Security_id Number (9) REFERENCES employee(Employee_id),
+Security_id NUMBER (9) REFERENCES employee(Employee_id),
 Employment_Start_Date Date DEFAULT sysdate,
 Employment_End_Date Date,
 salary NUMBER (8,2) check (salary >=0),
@@ -127,7 +127,7 @@ department_id NUMBER (3) REFERENCES department (department_id) ,
 PRIMARY KEY (Security_id));
 
 CREATE TABLE secretary (
-secretary_id Number (9) REFERENCES employee(Employee_id),
+secretary_id NUMBER (9) REFERENCES employee(Employee_id),
 employment_Start_Date Date DEFAULT sysdate,
 employment_End_Date Date,
 majors_department_id NUMBER (3) REFERENCES Majors_Department (majors_department_id) ,
@@ -150,7 +150,7 @@ quantity NUMBER (5) NOT NULL,
 PRIMARY KEY (item_id , room_number));
 
 CREATE TABLE study_plan (
-plan_number Number (3),
+plan_number NUMBER (3),
 major_id NUMBER (3) REFERENCES major (major_id) ,
 PRIMARY KEY (plan_number, major_id));
 
@@ -169,11 +169,11 @@ sid NUMBER(9) PRIMARY KEY,
 full_name_ar  VARCHAR2(100) NOT NULL,
 full_name_en  VARCHAR2(100) NOT NULL,
 nationality varchar2(20) NOT NULL REFERENCES nationality (nationality) ,
-national_id  Number(9) NOT NULL,
+national_id  NUMBER(9) NOT NULL,
 sex  CHAR  NOT NULL ,
 social_status  CHAR NOT NULL , 
 guardian_name  VARCHAR2(30) NOT NULL,
-guardian_national_id  Number(9) NOT NULL,
+guardian_national_id  NUMBER(9) NOT NULL,
 guardian_relation VARCHAR2(10) NOT NULL, 
 birh_place VARCHAR2(10) NOT NULL ,
 date_of_birth DATE NOT NULL,
@@ -540,7 +540,7 @@ end;
 
 
 CREATE TABLE teacher_log (
-Teacher_id Number (9),
+Teacher_id NUMBER (9),
 Employment_Start_Date Date,
 Employment_End_Date Date,
 majors_department_id NUMBER (3),
@@ -571,7 +571,7 @@ end;
  
  
 CREATE TABLE Manager_log (
-Manager_id Number (9) ,
+Manager_id NUMBER (9) ,
 Employment_Start_Date Date DEFAULT sysdate,
 Employment_End_Date Date,
 salary NUMBER (8,2) check (salary >=0),
@@ -604,7 +604,7 @@ end;
  
  
 CREATE TABLE Security_log (
-Security_id Number (9) ,
+Security_id NUMBER (9) ,
 Employment_Start_Date Date DEFAULT sysdate,
 Employment_End_Date Date,
 salary NUMBER (8,2) ,
@@ -637,7 +637,7 @@ end;
  
  
 CREATE TABLE Secretary_log (
-Secretary_id Number (9) ,
+Secretary_id NUMBER (9) ,
 Employment_Start_Date Date DEFAULT sysdate,
 Employment_End_Date Date,
 Majors_Department_id NUMBER (3) ,
@@ -729,7 +729,7 @@ end;
 
 
 CREATE TABLE study_plan_log (
-plan_number Number (3),
+plan_number NUMBER (3),
 major_id NUMBER (3),
 action_name char (6) NOT NULL, 
 action_date date DEFAULT sysdate NOT NULL, 
@@ -889,11 +889,11 @@ sid NUMBER(9),
 Full_name_ar  VARCHAR2(100) ,
 Full_name_en  VARCHAR2(100) ,
 Nationality varchar2(20) ,
-national_id  Number(9) ,
+national_id  NUMBER(9) ,
 sex  CHAR ,
 social_status  CHAR , 
 guardian_name  VARCHAR2(30),
-guardian_national_id  Number(9),
+guardian_national_id  NUMBER(9),
 guardian_relation VARCHAR2(10) , 
 birh_place  VARCHAR2(10) ,
 date_of_birth  DATE ,
@@ -972,7 +972,7 @@ end;
  /
 
 CREATE TABLE study_plan_courses_log (
-plan_number Number (3),
+plan_number NUMBER (3),
 major_id NUMBER (3),
 course_id VARCHAR2(10),
 year DATE ,
@@ -1009,11 +1009,11 @@ sid NUMBER ,
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
 Nationality varchar2  ,
-national_id  Number ,
+national_id  NUMBER ,
 sex  CHAR ,
 social_status  CHAR , 
 guardian_name  VARCHAR2 ,
-guardian_national_id  Number ,
+guardian_national_id  NUMBER ,
 guardian_relation VARCHAR2 , 
 birh_place  VARCHAR2  ,
 date_of_birth  DATE ,
