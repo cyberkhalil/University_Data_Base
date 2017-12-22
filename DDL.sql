@@ -498,7 +498,7 @@ end;
  /
  
  
- CREATE TABLE course_log (
+CREATE TABLE course_log (
 course_id VARCHAR2(10),
 course_name VARCHAR2(30) NOT NULL,
 credit NUMBER (1) NOT NULL,
@@ -1113,6 +1113,6 @@ insert_std(
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
 0811111 , 'Ahmed@mail.com' , 'ABCD' ,
-5 , 'S' , 'GazaStrip' , 'Gaza' , 'Naser' , 50 , 'Elgesser' , 1);
+5 , 'S' , 'GazaStrip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
 end;
 /
