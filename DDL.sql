@@ -36,6 +36,7 @@ block_name VARCHAR2(30) NOT NULL,
 street_name VARCHAR2(30) NOT NULL,
 CONSTRAINT emp_pk Primary key(Employee_id),
 CONSTRAINT emp_sex_chk CHECK (sex IN ('M' , 'F')),
+
 CONSTRAINT emp_social_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
 CONSTRAINT EMP_FK_ADRES foreign key(area_name,city_name,block_name,street_name) references Address(area_name,city_name,block_name,street_name));
 
@@ -85,7 +86,9 @@ CREATE TABLE course (
 course_id VARCHAR2(10),
 course_name VARCHAR2(30) NOT NULL,
 credit NUMBER (1) NOT NULL,
+
 clevel NUMBER(1) NOT NULL,
+
 description LONG, 
 Majors_Department_id NUMBER (3) REFERENCES Majors_Department,
 PRIMARY KEY (course_id));
@@ -162,6 +165,7 @@ Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
 Nationality varchar2(20) NOT NULL REFERENCES Nationality,
 national_id  Number(9) NOT NULL,
+
 sex  CHAR  NOT NULL ,
 social_status  CHAR NOT NULL , 
 guardian_name  VARCHAR2(30) NOT NULL,
@@ -266,6 +270,7 @@ insert into ADDRESS_LOG values (:old.street_name ,:old.block_name ,:old.city_nam
 insert into ADDRESS_LOG values (:new.street_name ,:new.block_name ,:new.city_name ,:new.area_name , 'insert',default,default ); 
 end;
  /
+ 
 CREATE OR REPLACE TRIGGER ad_address_trgr after delete on address 
 for each row 
 begin 
@@ -416,6 +421,7 @@ building_code CHAR (1),
 action_name char(6) NOT NULL , 
 action_date date default sysdate NOT NULL, 
 action_user varchar2(30) default user NOT NULL);
+
 
 CREATE OR REPLACE TRIGGER ai_Department_trgr after insert on Department
 for each row
@@ -609,6 +615,7 @@ begin
 insert into Security_log values (:new.Security_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Department_id,'insert' ,default,default ); 
 end;
  /
+
 CREATE OR REPLACE TRIGGER au_Security_trgr after update on Security
 for each row 
 begin
@@ -616,6 +623,7 @@ insert into Security_log values (:old.Security_id ,:old.Employment_Start_Date ,:
 insert into Security_log values (:new.Security_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Department_id,'insert' ,default,default ); 
 end;
  /
+
 CREATE OR REPLACE TRIGGER ad_Security_trgr after delete on Security
 for each row 
 begin 
@@ -633,6 +641,7 @@ Department_id NUMBER (3),
 action_name char (6) NOT NULL, 
 action_date date default sysdate NOT NULL, 
 action_user varchar2(30) default user NOT NULL);
+
 
 CREATE OR REPLACE TRIGGER ai_Secretary_trgr after insert on Secretary 
 for each row
