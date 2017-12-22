@@ -141,37 +141,35 @@ item_name varchar2(30) NOT NULL,
 item_description VARCHAR2(200) NOT NULL);
 
 CREATE TABLE room_items (
-item_id NUMBER (3) REFERENCES item,
+item_id NUMBER (3) REFERENCES item (item_id) ,
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
-FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room,
+FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_code,floor_number,room_number) ,
 quantity NUMBER (5) NOT NULL,
 PRIMARY KEY (item_id , room_number));
 
 CREATE TABLE study_plan (
 plan_number Number (3),
-major_id NUMBER (3) REFERENCES major,
+major_id NUMBER (3) REFERENCES major (major_id) ,
 PRIMARY KEY (plan_number, major_id));
 
 CREATE TABLE study_plan_courses (
-plan_number Number (3),
+plan_number NUMBER (3),
 major_id NUMBER (3),
-course_id VARCHAR2(10),
+course_id VARCHAR2(10) REFERENCES course (course_id),
 year DATE NOT NULL,
 semester NUMBER (1) ,
-FOREIGN KEY (course_id) REFERENCES course,
 FOREIGN KEY (plan_number, major_id) REFERENCES study_plan,
 PRIMARY KEY (plan_number, major_id, course_id),
 CONSTRAINT stdy_pln_smstr_chk CHECK (semester IN (1,2,3)));
 
 CREATE TABLE student (
 sid NUMBER(9) PRIMARY KEY,
-Full_name_ar  VARCHAR2(100) NOT NULL,
-Full_name_en  VARCHAR2(100) NOT NULL,
-Nationality varchar2(20) NOT NULL REFERENCES Nationality,
+full_name_ar  VARCHAR2(100) NOT NULL,
+full_name_en  VARCHAR2(100) NOT NULL,
+nationality varchar2(20) NOT NULL REFERENCES nationality (nationality) ,
 national_id  Number(9) NOT NULL,
-
 sex  CHAR  NOT NULL ,
 social_status  CHAR NOT NULL , 
 guardian_name  VARCHAR2(30) NOT NULL,
@@ -209,8 +207,8 @@ CONSTRAINT stdnt_social_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
 CONSTRAINT stdnt_twj_fld_chk CHECK (tawjihi_field  IN ('S' , 'L' )));
 
 CREATE TABLE academic_advice (
-teacher_id NUMBER (9) REFERENCES teacher,
-sid NUMBER(9) REFERENCES student,
+teacher_id NUMBER (9) REFERENCES teacher (teacher_id) ,
+sid NUMBER(9) REFERENCES student (sid) ,
 year DATE DEFAULT sysdate, 
 semester NUMBER (1),
 PRIMARY KEY (teacher_id, sid, year, semester),
@@ -218,22 +216,22 @@ CONSTRAINT acdmic_advc_smstr_chk CHECK (semester IN (1,2,3)));
 
 CREATE TABLE section (
 section_number NUMBER (3),
-course_id VARCHAR2(10) REFERENCES course,
+course_id VARCHAR2(10) REFERENCES course (course_id) ,
 year DATE DEFAULT sysdate,
 semester NUMBER (1) ,
-teacher_id NUMBER(9) REFERENCES teacher,
+teacher_id NUMBER(9) REFERENCES teacher (teacher_id) ,
 PRIMARY KEY (section_number, course_id, year, semester),
 CONSTRAINT section_smstr_chk CHECK (semester IN (1,2,3)));
 
 CREATE TABLE enroll (
-sid NUMBER(9) REFERENCES student,
+sid NUMBER(9) REFERENCES student (sid) ,
 course_id VARCHAR2(10) ,
 section_number NUMBER(3) ,
 year DATE DEFAULT sysdate, 
 semester NUMBER(1) ,
 grade_mid NUMBER (3) DEFAULT NULL ,
 grade_final NUMBER (3) DEFAULT NULL,
-FOREIGN KEY (section_number , course_id , year , semester) REFERENCES section ,
+FOREIGN KEY (section_number , course_id , year , semester) REFERENCES section (section_number , course_id , year , semester) ,
 PRIMARY KEY (sid , course_id , section_number , year , semester),
 CONSTRAINT eroll_grade_chk CHECK ((grade_final+grade_mid >=40)and (grade_final+grade_mid <=100 )));
 
@@ -245,11 +243,11 @@ semester NUMBER (1) ,
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
-FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room,
+FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_code,floor_number,room_number) ,
 day DATE NOT Null,
 start_time DATE ,
 end_time DATE ,
-FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section,
+FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section (section_number , course_id , year , semester ) ,
 PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
 --------------------------------------------------------------------------------------------------------------------
