@@ -1118,6 +1118,6 @@ insert_std(
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
 0811111 , 'Ahmed@mail.com' , 'ABCD' ,
-5 , 'S' , 'GazaStrip' , 'Gaza' , 'Naser' 'Elgesser' , 1 , 50 , );
+5 , 'S' , 'GazaStrip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50);
 end;
 /
