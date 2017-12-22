@@ -113,7 +113,7 @@ manager_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
 employment_start_date DATE DEFAULT sysdate,
 employment_end_date DATE,
 salary NUMBER (8,2) check (salary >=0),
-manager_grade varchar2(15) NOT NULL,
+manager_grade VARCHAR2(15) NOT NULL,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) ,
 department_id NUMBER (3) REFERENCES department (department_id) ,
 check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) )  );
@@ -135,11 +135,13 @@ majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_
 department_id NUMBER (3) REFERENCES department (department_id) ,
 check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ) );
 
+-- 16
 CREATE TABLE item (
 item_id NUMBER (3) PRIMARY KEY,
-item_name varchar2(30) NOT NULL,
+item_name VARCHAR2(30) NOT NULL,
 item_description VARCHAR2(200) NOT NULL);
 
+-- 17
 CREATE TABLE room_items (
 item_id NUMBER (3) REFERENCES item (item_id) ,
 room_number NUMBER (2),
@@ -149,18 +151,20 @@ FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_c
 quantity NUMBER (5) NOT NULL,
 PRIMARY KEY (item_id , room_number));
 
+-- 18
 CREATE TABLE study_plan (
 plan_number NUMBER (3),
 major_id NUMBER (3) REFERENCES major (major_id) ,
 PRIMARY KEY (plan_number, major_id));
 
+-- 19
 CREATE TABLE study_plan_courses (
 plan_number NUMBER (3),
 major_id NUMBER (3),
 course_id VARCHAR2(10) REFERENCES course (course_id),
 year DATE NOT NULL,
 semester NUMBER (1) ,
-FOREIGN KEY (plan_number, major_id) REFERENCES study_plan,
+FOREIGN KEY (plan_number, major_id) REFERENCES study_plan (plan_number, major_id),
 PRIMARY KEY (plan_number, major_id, course_id),
 CONSTRAINT stdy_pln_smstr_chk CHECK (semester IN (1,2,3)));
 
@@ -168,7 +172,7 @@ CREATE TABLE student (
 sid NUMBER(9) PRIMARY KEY,
 full_name_ar  VARCHAR2(100) NOT NULL,
 full_name_en  VARCHAR2(100) NOT NULL,
-nationality varchar2(20) NOT NULL REFERENCES nationality (nationality) ,
+nationality VARCHAR2(20) NOT NULL REFERENCES nationality (nationality) ,
 national_id  NUMBER(9) NOT NULL,
 sex  CHAR  NOT NULL ,
 social_status  CHAR NOT NULL , 
@@ -259,7 +263,7 @@ city_name VARCHAR2(30) NOT NULL,
 area_name VARCHAR2(30) NOT NULL, 
 action_name char (6) NOT NULL, 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_address_trgr after insert on address 
 for each row
@@ -286,7 +290,7 @@ CREATE TABLE employee_log (
 employee_id NUMBER(9) ,
 Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
-Nationality varchar2(20) NOT NULL,
+Nationality VARCHAR2(20) NOT NULL,
 national_id  NUMBER(9) NOT NULL,
 sex CHAR  NOT NULL ,
 social_status CHAR NOT NULL, 
@@ -306,7 +310,7 @@ block_name  VARCHAR2(30) NOT NULL,
 street_name  VARCHAR2(30) NOT NULL,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_employee_trgr after insert on employee
 for each row
@@ -334,7 +338,7 @@ building_code CHAR (1) ,
 building_desc VARCHAR2 (100),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL );
+action_user VARCHAR2(30) DEFAULT user NOT NULL );
 
 CREATE OR REPLACE TRIGGER ai_building_trgr after insert on building
 for each row
@@ -363,7 +367,7 @@ building_code CHAR (1),
 floor_desc VARCHAR2 (100),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL );
+action_user VARCHAR2(30) DEFAULT user NOT NULL );
 
 CREATE OR REPLACE TRIGGER ai_floor_trgr after insert on floor
 for each row
@@ -393,7 +397,7 @@ building_code CHAR (1),
 capacity NUMBER (5) NOT NULL,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_room_trgr after insert on room
 for each row
@@ -424,7 +428,7 @@ floor_number NUMBER (2),
 building_code CHAR (1),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 
 CREATE OR REPLACE TRIGGER ai_Department_trgr after insert on Department
@@ -456,7 +460,7 @@ floor_number NUMBER (2),
 building_code CHAR (1),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_Majors_Department_trgr after insert on Majors_Department
 for each row
@@ -485,7 +489,7 @@ major_name VARCHAR2(30) NOT NULL ,
 Majors_Department_id NUMBER (3) ,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_major_trgr after insert on major
 for each row
@@ -516,7 +520,7 @@ clevel NUMBER (1) NOT NULL,
 Majors_Department_id NUMBER (3),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_course_trgr after insert on course
 for each row
@@ -547,7 +551,7 @@ majors_department_id NUMBER (3),
 salary NUMBER (8,2) check (salary >=0),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_teacher_trgr after insert on teacher
 for each row
@@ -575,12 +579,12 @@ Manager_id NUMBER (9) ,
 Employment_Start_Date DATE DEFAULT sysdate,
 Employment_End_Date DATE,
 salary NUMBER (8,2) check (salary >=0),
-Manager_Grade varchar2(15) NOT NULL,
+Manager_Grade VARCHAR2(15) NOT NULL,
 Majors_Department_id NUMBER (3) ,
 Department_id NUMBER (3) ,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_Manager_trgr after insert on Manager
 for each row
@@ -611,7 +615,7 @@ salary NUMBER (8,2) ,
 Department_id NUMBER (3),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_Security_trgr after insert on Security
 for each row
@@ -644,7 +648,7 @@ Majors_Department_id NUMBER (3) ,
 Department_id NUMBER (3),
 action_name char (6) NOT NULL, 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 
 CREATE OR REPLACE TRIGGER ai_Secretary_trgr after insert on Secretary 
@@ -670,11 +674,11 @@ end;
 
 CREATE TABLE item_log (
 item_id NUMBER (3) ,
-item_name varchar2(30) ,
+item_name VARCHAR2(30) ,
 item_description VARCHAR2(200),
 action_name char (6) NOT NULL, 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_item_trgr after insert on item 
 for each row
@@ -705,7 +709,7 @@ building_code CHAR (1),
 quantity NUMBER (5),
 action_name char (6) NOT NULL, 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_room_items_trgr after insert on room_items 
 for each row
@@ -733,7 +737,7 @@ plan_number NUMBER (3),
 major_id NUMBER (3),
 action_name char (6) NOT NULL, 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_study_plan_trgr after insert on study_plan 
 for each row
@@ -762,7 +766,7 @@ year DATE DEFAULT sysdate,
 semester NUMBER (1) ,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_academic_advice_trgr after insert on academic_advice
 for each row
@@ -793,7 +797,7 @@ semester NUMBER (1),
 teacher_id NUMBER(9),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_section_trgr after insert on section
 for each row
@@ -826,7 +830,7 @@ grade_mid NUMBER (3) ,
 grade_final NUMBER (3),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_enroll_trgr after insert on enroll
 for each row
@@ -862,7 +866,7 @@ start_time DATE ,
 end_time DATE ,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_section_rooms_trgr after insert on section_rooms
 for each row
@@ -888,7 +892,7 @@ CREATE TABLE student_log (
 sid NUMBER(9),
 Full_name_ar  VARCHAR2(100) ,
 Full_name_en  VARCHAR2(100) ,
-Nationality varchar2(20) ,
+Nationality VARCHAR2(20) ,
 national_id  NUMBER(9) ,
 sex  CHAR ,
 social_status  CHAR , 
@@ -923,7 +927,7 @@ major_id NUMBER(3),
 balance NUMBER(5) ,
 action_name char (6) NOT NULL, 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_student_trgr after insert on student
 for each row
@@ -946,10 +950,10 @@ end;
  /
 
 CREATE TABLE  Nationality_log(
-Nationality varchar2(20),
+Nationality VARCHAR2(20),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_Nationality_trgr after insert on Nationality 
 for each row
@@ -979,7 +983,7 @@ year DATE ,
 semester NUMBER (1),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
-action_user varchar2(30) DEFAULT user NOT NULL);
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 CREATE OR REPLACE TRIGGER ai_study_plan_courses_trgr after insert on study_plan_courses
 for each row
@@ -1008,7 +1012,7 @@ end;
 sid NUMBER ,
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
-Nationality varchar2  ,
+Nationality VARCHAR2  ,
 national_id  NUMBER ,
 sex  CHAR ,
 social_status  CHAR , 
@@ -1053,7 +1057,7 @@ CREATE OR REPLACE PROCEDURE insert_emp(
 employee_id NUMBER ,
 Full_name_ar VARCHAR2 ,
 Full_name_en VARCHAR2 ,
-Nationality varchar2 ,
+Nationality VARCHAR2 ,
 national_id NUMBER ,
 sex CHAR ,
 social_status CHAR , 
