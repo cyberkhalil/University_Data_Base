@@ -14,7 +14,7 @@ nationality VARCHAR2(20) PRIMARY KEY);
 
 -- 3
 CREATE TABLE employee (
-employee_id NUMBER(9) ,
+employee_id NUMBER(9) PRIMARY KEY,
 full_name_ar VARCHAR2(100) NOT NULL,
 full_name_en VARCHAR2(100) NOT NULL,
 nationality VARCHAR2(20) NOT NULL REFERENCES nationality,
@@ -35,7 +35,6 @@ area_name VARCHAR2(30) NOT NULL,
 city_name VARCHAR2(30) NOT NULL,
 block_name VARCHAR2(30) NOT NULL,
 street_name VARCHAR2(30) NOT NULL,
-CONSTRAINT emp_pk Primary key(Employee_id),
 CONSTRAINT emp_sex_chk CHECK (sex IN ('M' , 'F')),
 CONSTRAINT emp_social_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
 CONSTRAINT EMP_FK_ADRES FOREIGN KEY (area_name,city_name,block_name,street_name) REFERENCES Address(area_name,city_name,block_name,street_name));
