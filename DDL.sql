@@ -12,11 +12,12 @@ CONSTRAINT adrs_pk PRIMARY KEY (area_name,street_name,block_name,city_name));
 CREATE TABLE  nationality(
 nationality varchar2(20) PRIMARY KEY );
 
+-- 3
 CREATE TABLE employee (
 employee_id NUMBER(9) ,
 full_name_ar VARCHAR2(100) NOT NULL,
 full_name_en VARCHAR2(100) NOT NULL,
-nationality varchar2(20) NOT NULL REFERENCES Nationality,
+nationality VARCHAR2(20) NOT NULL REFERENCES nationality,
 national_id NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
 sex CHAR NOT NULL ,
 social_status CHAR NOT NULL, 
@@ -27,7 +28,7 @@ religion VARCHAR2(20)  NOT NULL,
 health_status VARCHAR2(40) NOT NULL,
 number_of_family_members NUMBER(2) NOT NULL,
 phone NUMBER(12) NOT NULL,
-telephone_home  NUMBER(9),
+telephone_home NUMBER(9),
 email VARCHAR2(30) NOT NULL,
 password VARCHAR2(30) NOT NULL,
 area_name VARCHAR2(30) NOT NULL,
@@ -36,9 +37,8 @@ block_name VARCHAR2(30) NOT NULL,
 street_name VARCHAR2(30) NOT NULL,
 CONSTRAINT emp_pk Primary key(Employee_id),
 CONSTRAINT emp_sex_chk CHECK (sex IN ('M' , 'F')),
-
 CONSTRAINT emp_social_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
-CONSTRAINT EMP_FK_ADRES foreign key(area_name,city_name,block_name,street_name) references Address(area_name,city_name,block_name,street_name));
+CONSTRAINT EMP_FK_ADRES FOREIGN KEY (area_name,city_name,block_name,street_name) REFERENCES Address(area_name,city_name,block_name,street_name));
 
 CREATE TABLE building (
 building_code CHAR (1) PRIMARY KEY,
