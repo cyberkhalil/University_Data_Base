@@ -1,36 +1,39 @@
 -- DDL:-
 
-CREATE TABLE Address (
+-- 1
+CREATE TABLE address (
 area_name VARCHAR2(30),
 city_name VARCHAR2(30),
 block_name VARCHAR2(30), 
 street_name VARCHAR2(30), 
 CONSTRAINT adrs_pk PRIMARY KEY (area_name,street_name,block_name,city_name));
 
-CREATE TABLE  Nationality(
-Nationality varchar(20) primary key);
+-- 2
+CREATE TABLE  nationality(
+nationality varchar2(20) PRIMARY KEY );
 
 CREATE TABLE employee (
 employee_id NUMBER(9) ,
-Full_name_ar  VARCHAR2(100) NOT NULL,
-Full_name_en  VARCHAR2(100) NOT NULL,
-Nationality varchar(20) NOT NULL REFERENCES Nationality,
-national_id  NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
-sex CHAR  NOT NULL ,
+Full_name_ar VARCHAR2(100) NOT NULL,
+Full_name_en VARCHAR2(100) NOT NULL,
+Nationality varchar2(20) NOT NULL REFERENCES Nationality,
+national_id NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
+sex CHAR NOT NULL ,
 social_status CHAR NOT NULL, 
 Salary NUMBER (6,2) CHECK ( Salary >=0),
 birh_place  VARCHAR2(10) NOT NULL ,
+date_of_birth DATE NOT NULL,
 religion VARCHAR2(20)  NOT NULL,
-health_status  VARCHAR2(40) NOT NULL,
+health_status VARCHAR2(40) NOT NULL,
 number_of_family_members NUMBER(2) NOT NULL,
-phone  NUMBER(12) NOT NULL,
+phone NUMBER(12) NOT NULL,
 telephone_home  NUMBER(9),
 email VARCHAR2(30) NOT NULL,
-password  VARCHAR2(30) NOT NULL,
-area_name  VARCHAR2(30) NOT NULL,
-city_name  VARCHAR2(30) NOT NULL,
-block_name  VARCHAR2(30) NOT NULL,
-street_name  VARCHAR2(30) NOT NULL,
+password VARCHAR2(30) NOT NULL,
+area_name VARCHAR2(30) NOT NULL,
+city_name VARCHAR2(30) NOT NULL,
+block_name VARCHAR2(30) NOT NULL,
+street_name VARCHAR2(30) NOT NULL,
 CONSTRAINT emp_pk Primary key(Employee_id),
 CONSTRAINT emp_sex_chk CHECK (sex IN ('M' , 'F')),
 CONSTRAINT emp_sotial_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
@@ -155,15 +158,15 @@ CREATE TABLE student (
 sid NUMBER(9) PRIMARY KEY,
 Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
-Nationality varchar(20) NOT NULL REFERENCES Nationality,
+Nationality varchar2(20) NOT NULL REFERENCES Nationality,
 national_id  Number(9) NOT NULL,
 sex  CHAR  NOT NULL CHECK (sex IN ('M' , 'F')) ,
 social_status  CHAR NOT NULL CHECK ( social_status  IN ('S','D','M') ), 
 guardian_name  VARCHAR2(30) NOT NULL,
 guardian_national_id  Number(9) NOT NULL,
 guardian_relation VARCHAR2(10) NOT NULL, 
-birh_place  VARCHAR2(10) NOT NULL ,
-date_of_birth  DATE NOT NULL,
+birh_place VARCHAR2(10) NOT NULL ,
+date_of_birth DATE NOT NULL,
 religion  VARCHAR2(20)  NOT NULL,
 health_status  VARCHAR2(40) NOT NULL  ,
 mother_name  VARCHAR2(30) NOT NULL,
@@ -268,12 +271,13 @@ CREATE TABLE employee_log (
 employee_id NUMBER(9) ,
 Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
-Nationality varchar(20) NOT NULL,
+Nationality varchar2(20) NOT NULL,
 national_id  NUMBER(9) NOT NULL,
 sex CHAR  NOT NULL ,
 social_status CHAR NOT NULL, 
 Salary NUMBER (6,2) CHECK ( Salary >=0),
 birh_place  VARCHAR2(10) NOT NULL ,
+date_of_birth DATE NOT NULL,
 religion VARCHAR2(20)  NOT NULL,
 health_status  VARCHAR2(40) NOT NULL,
 number_of_family_members NUMBER(2) NOT NULL,
@@ -293,21 +297,21 @@ create trigger ai_employee_trgr after insert on employee
 for each row
 begin
 insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality ,:new.national_id 
-,:new.sex ,:new.social_status ,:new.Salary ,:new.birh_place ,:new.religion ,:new.health_status ,:new.number_of_family_members 
+,:new.sex ,:new.social_status ,:new.Salary ,:new.birh_place , :new.date_of_birth ,:new.religion ,:new.health_status ,:new.number_of_family_members 
 ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name ,'insert' ,default ,default );
 end;
  /
 create trigger au_employee_trgr after update on employee
 for each row 
 begin
-insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place,:old.religion  ,:old.health_status ,:old.number_of_family_members ,:old.phone ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default ,default );
-insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.Salary  ,:new.birh_place,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default ,default );
+insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place,:old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members ,:old.phone ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default ,default );
+insert into employee_log values (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.Salary  ,:new.birh_place,:new.date_of_birth ,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email ,:new.password ,:new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,'insert' ,default ,default );
 end;
  /
 create trigger ad_employee_trgr after delete on employee
 for each row 
 begin 
-insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default ,default );
+insert into employee_log values (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.Salary  ,:old.birh_place, :old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.password ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,'delete' ,default ,default );
 end;
  /
 CREATE TABLE building_log (
@@ -864,7 +868,7 @@ CREATE TABLE student_log (
 sid NUMBER(9),
 Full_name_ar  VARCHAR2(100) ,
 Full_name_en  VARCHAR2(100) ,
-Nationality varchar(20) ,
+Nationality varchar2(20) ,
 national_id  Number(9) ,
 sex  CHAR ,
 social_status  CHAR , 
@@ -922,7 +926,7 @@ end;
  /
 
 CREATE TABLE  Nationality_log(
-Nationality varchar(20),
+Nationality varchar2(20),
 action_name char(6) NOT NULL , 
 action_date date default sysdate NOT NULL, 
 action_user varchar2(30) default user NOT NULL);
@@ -979,15 +983,93 @@ end;
  
  
  --------------------------------------------------------------------------------------------------------------------
+ -- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
+ CREATE OR REPLACE PROCEDURE insert_std(
+sid NUMBER ,
+Full_name_ar  VARCHAR2 ,
+Full_name_en  VARCHAR2 ,
+Nationality varchar2  ,
+national_id  Number ,
+sex  CHAR ,
+social_status  CHAR , 
+guardian_name  VARCHAR2 ,
+guardian_national_id  Number ,
+guardian_relation VARCHAR2 , 
+birh_place  VARCHAR2  ,
+date_of_birth  DATE ,
+religion  VARCHAR2 ,
+health_status  VARCHAR2   ,
+mother_name  VARCHAR2 ,
+mother_job  VARCHAR2  , 
+mother_job_desc  VARCHAR2 ,
+father_job  VARCHAR2 , 
+father_job_desc  VARCHAR2 ,
+parents_status  VARCHAR2   ,
+number_of_family_members  NUMBER ,
+family_university_students NUMBER , 
+social_affairs  VARCHAR2  ,
+phone  NUMBER ,
+telephone_home  NUMBER ,
+emergency_phone   NUMBER ,
+email VARCHAR2 ,
+password  VARCHAR2 ,
+tawjihi_GPA  number ,
+tawjihi_field CHAR ,
+area_name  VARCHAR2 ,
+city_name  VARCHAR2 ,
+block_name  VARCHAR2 ,
+balance NUMBER ,
+street_name  VARCHAR2 ,
+major_name  NUMBER ) 
+AUTHID CURRENT_USER
+IS
+BEGIN
+execute immediate 'INSERT INTO STUDENT VALUES (' ||sid ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','||balance ||','''||street_name  ||''','||major_name || ')' ;
+execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
+END;
+/
+
+ CREATE OR REPLACE PROCEDURE insert_emp(
+employee_id NUMBER ,
+Full_name_ar VARCHAR2 ,
+Full_name_en VARCHAR2 ,
+Nationality varchar2 ,
+national_id NUMBER ,
+sex CHAR ,
+social_status CHAR , 
+Salary NUMBER ,
+birh_place VARCHAR2 ,
+date_of_birth DATE ,
+religion VARCHAR2 ,
+health_status VARCHAR2 ,
+number_of_family_members NUMBER ,
+phone NUMBER ,
+telephone_home NUMBER ,
+email VARCHAR2 ,
+password VARCHAR2 ,
+area_name VARCHAR2 ,
+city_name VARCHAR2 ,
+block_name VARCHAR2 ,
+street_name VARCHAR2 ) 
+AUTHID CURRENT_USER
+IS
+BEGIN
+execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| Salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||password  ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''' )' ;
+execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
+END;
+/
+
+
+ --------------------------------------------------------------------------------------------------------------------
 
 select * from tab;
 select trigger_name from user_triggers;
 
 insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
 insert into Nationality values('Nationality');
-insert into Employee values(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
-insert into Employee values(120100002,'Arabic Full Name 2','English Full Name 2','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
-insert into Employee values(120100003,'Arabic Full Name 3','English Full Name 3','Nationality',123456789,'M','S',500,'Gaza','Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert into Employee values(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert into Employee values(120100002,'Arabic Full Name 2','English Full Name 2','Nationality',123456789,'M','S',500,'Gaza', to_date('1-1-10','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert into Employee values(120100003,'Arabic Full Name 3','English Full Name 3','Nationality',123456789,'M','S',500,'Gaza',to_date('2-2-03','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
 insert into Building values('A','Building Desc');
 insert into floor values(1,'A','Floor Description');
 insert into room values(01,1,'A',100);
@@ -1006,4 +1088,23 @@ insert into item values(001,'Lap TOP','Descriotion');
 insert into room_items values(001,01,1,'A',20);
 insert into study_plan values(101,1);
 insert into study_plan_courses values (101,1,'COMP 2113',Date'2016-10-10',1);
+
+--------------------------------------------------------------------------------------------------------------------
+
+begin
+insert_std(
+11 ,
+ 'Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
+'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
+ 'FATHER_JOB' , 'FATHER_JOB_DESC' , 
+'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
+0811111 , 'Ahmed@mail.com' , 'ABCD' ,
+5 , 'S' , 'GazaStrip' , 'Gaza' , 'Naser' , 50 , 'Elgesser' , 1);
+end;
+/
+
+begin
+insert_emp(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza', to_date('1-2-3','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+end;
+/
 
