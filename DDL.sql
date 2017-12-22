@@ -126,14 +126,14 @@ employment_end_date DATE,
 salary NUMBER (8,2) check (salary >=0),
 department_id NUMBER (3) REFERENCES department (department_id) );
 
+-- 15
 CREATE TABLE secretary (
-secretary_id NUMBER (9) REFERENCES employee(Employee_id),
-employment_Start_Date DATE DEFAULT sysdate,
-employment_End_Date DATE,
-majors_department_id NUMBER (3) REFERENCES Majors_Department (majors_department_id) ,
+secretary_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
+employment_start_date DATE DEFAULT sysdate,
+employment_end_date DATE,
+majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) ,
 department_id NUMBER (3) REFERENCES department (department_id) ,
-check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ),
-PRIMARY KEY (Secretary_id));
+check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ) );
 
 CREATE TABLE item (
 item_id NUMBER (3) PRIMARY KEY,
