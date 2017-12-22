@@ -118,13 +118,13 @@ majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_
 department_id NUMBER (3) REFERENCES department (department_id) ,
 check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) )  );
 
-CREATE TABLE Security (
-Security_id NUMBER (9) REFERENCES employee(Employee_id),
-Employment_Start_Date DATE DEFAULT sysdate,
-Employment_End_Date DATE,
+-- 14
+CREATE TABLE security (
+security_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY ,
+employment_start_date DATE DEFAULT sysdate,
+employment_end_date DATE,
 salary NUMBER (8,2) check (salary >=0),
-department_id NUMBER (3) REFERENCES department (department_id) ,
-PRIMARY KEY (Security_id));
+department_id NUMBER (3) REFERENCES department (department_id) );
 
 CREATE TABLE secretary (
 secretary_id NUMBER (9) REFERENCES employee(Employee_id),
