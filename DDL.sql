@@ -1083,7 +1083,7 @@ insert into room values(02,2,'B',50);
 insert into department values(100,'Enge',02,2,'B');
 insert into Majors_Department values(100,'Admission',01,1,'A');
 insert into major values(1,'Information Security',100);
-insert into course values('COMP 2113','Data Base 1',1,'DESCRIPTION',100);
+insert into course values('COMP 2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
 
 begin
 insert_emp(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
