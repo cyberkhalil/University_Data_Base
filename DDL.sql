@@ -85,13 +85,21 @@ major_id NUMBER (3) PRIMARY KEY,
 major_name VARCHAR2(30) NOT NULL UNIQUE,
 majors_department_id NUMBER (3) REFERENCES majors_department );
 
+-- 10
 CREATE TABLE course (
 course_id VARCHAR2(10) PRIMARY KEY ,
 course_name VARCHAR2(30) NOT NULL,
 credit NUMBER (1) NOT NULL,
 clevel NUMBER(1) NOT NULL,
 description LONG, 
-majors_department_id NUMBER (3) REFERENCES Majors_Department );
+majors_department_id NUMBER (3) REFERENCES Majors_Department (majors_department_id) );
+
+-- 11
+CREATE TABLE pre_required_courses (
+course_id VARCHAR2(10) REFERENCES course(course_id) ,
+pre_required_course_id VARCHAR2(10) REFERENCES course(course_id),
+PRIMARY KEY (course_id,pre_required_course_id));
+
 
 CREATE TABLE teacher (
 Teacher_id Number (9) references employee(Employee_id),
