@@ -36,7 +36,6 @@ block_name VARCHAR2(30) NOT NULL,
 street_name VARCHAR2(30) NOT NULL,
 CONSTRAINT emp_pk Primary key(Employee_id),
 CONSTRAINT emp_sex_chk CHECK (sex IN ('M' , 'F')),
-
 CONSTRAINT emp_social_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
 CONSTRAINT EMP_FK_ADRES foreign key(area_name,city_name,block_name,street_name) references Address(area_name,city_name,block_name,street_name));
 
