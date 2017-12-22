@@ -10,7 +10,8 @@ CONSTRAINT adrs_pk PRIMARY KEY (area_name,street_name,block_name,city_name));
 
 -- 2
 CREATE TABLE  nationality(
-nationality varchar2(20) PRIMARY KEY );
+nationality varchar2(20) ,
+CONSTRAINT nationality_pk PRIMARY KEY (nationality));
 
 -- 3
 CREATE TABLE employee (
