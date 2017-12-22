@@ -1112,7 +1112,7 @@ insert into study_plan_courses values (101,1,'COMP 2113',Date'2016-10-10',1);
 
 begin
 insert_std(
-11 ,
+120170001 ,
  'Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
