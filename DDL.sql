@@ -85,9 +85,7 @@ CREATE TABLE course (
 course_id VARCHAR2(10),
 course_name VARCHAR2(30) NOT NULL,
 credit NUMBER (1) NOT NULL,
-
 clevel NUMBER(1) NOT NULL,
-
 description LONG, 
 Majors_Department_id NUMBER (3) REFERENCES Majors_Department,
 PRIMARY KEY (course_id));
@@ -164,7 +162,6 @@ Full_name_ar  VARCHAR2(100) NOT NULL,
 Full_name_en  VARCHAR2(100) NOT NULL,
 Nationality varchar2(20) NOT NULL REFERENCES Nationality,
 national_id  Number(9) NOT NULL,
-
 sex  CHAR  NOT NULL ,
 social_status  CHAR NOT NULL , 
 guardian_name  VARCHAR2(30) NOT NULL,
