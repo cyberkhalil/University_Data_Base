@@ -107,16 +107,16 @@ employment_end_date DATE,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id),
 salary NUMBER (8,2) check (salary >=0) );
 
+-- 13
 CREATE TABLE manager (
-manager_id NUMBER (9) REFERENCES employee(employee_id),
+manager_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
 employment_start_date DATE DEFAULT sysdate,
 employment_end_date DATE,
 salary NUMBER (8,2) check (salary >=0),
 manager_grade varchar2(15) NOT NULL,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) ,
 department_id NUMBER (3) REFERENCES department (department_id) ,
-check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ),
-PRIMARY KEY (manager_id));
+check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) )  );
 
 CREATE TABLE Security (
 Security_id NUMBER (9) REFERENCES employee(Employee_id),
