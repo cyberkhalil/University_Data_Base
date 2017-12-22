@@ -79,21 +79,19 @@ floor_number NUMBER (2),
 building_code CHAR (1),
 FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room );
 
+-- 9
 CREATE TABLE major (
 major_id NUMBER (3) PRIMARY KEY,
 major_name VARCHAR2(30) NOT NULL UNIQUE,
-Majors_Department_id NUMBER (3) REFERENCES Majors_Department);
+majors_department_id NUMBER (3) REFERENCES majors_department );
 
 CREATE TABLE course (
-course_id VARCHAR2(10),
+course_id VARCHAR2(10) PRIMARY KEY ,
 course_name VARCHAR2(30) NOT NULL,
 credit NUMBER (1) NOT NULL,
-
 clevel NUMBER(1) NOT NULL,
-
 description LONG, 
-Majors_Department_id NUMBER (3) REFERENCES Majors_Department,
-PRIMARY KEY (course_id));
+majors_department_id NUMBER (3) REFERENCES Majors_Department );
 
 CREATE TABLE teacher (
 Teacher_id Number (9) references employee(Employee_id),
