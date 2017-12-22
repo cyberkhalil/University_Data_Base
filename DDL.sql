@@ -101,16 +101,16 @@ PRIMARY KEY (course_id,pre_required_course_id));
 
 -- 12
 CREATE TABLE teacher (
-teacher_id NUMBER (9) REFERENCES employee(Employee_id) PRIMARY KEY,
-employment_Start_Date Date DEFAULT sysdate,
-employment_End_Date Date,
+teacher_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
+employment_start_date DATE DEFAULT sysdate,
+employment_End_Date DATE,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id),
 salary NUMBER (8,2) check (salary >=0) );
 
 CREATE TABLE Manager (
 manager_id NUMBER (9) REFERENCES employee(employee_id),
-employment_Start_Date Date DEFAULT sysdate,
-employment_End_Date Date,
+employment_Start_Date DATE DEFAULT sysdate,
+employment_End_Date DATE,
 salary NUMBER (8,2) check (salary >=0),
 manager_grade varchar2(15) NOT NULL,
 majors_department_id NUMBER (3) REFERENCES Majors_Department (majors_department_id) ,
@@ -120,16 +120,16 @@ PRIMARY KEY (Manager_id));
 
 CREATE TABLE Security (
 Security_id NUMBER (9) REFERENCES employee(Employee_id),
-Employment_Start_Date Date DEFAULT sysdate,
-Employment_End_Date Date,
+Employment_Start_Date DATE DEFAULT sysdate,
+Employment_End_Date DATE,
 salary NUMBER (8,2) check (salary >=0),
 department_id NUMBER (3) REFERENCES department (department_id) ,
 PRIMARY KEY (Security_id));
 
 CREATE TABLE secretary (
 secretary_id NUMBER (9) REFERENCES employee(Employee_id),
-employment_Start_Date Date DEFAULT sysdate,
-employment_End_Date Date,
+employment_Start_Date DATE DEFAULT sysdate,
+employment_End_Date DATE,
 majors_department_id NUMBER (3) REFERENCES Majors_Department (majors_department_id) ,
 department_id NUMBER (3) REFERENCES department (department_id) ,
 check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ),
@@ -541,8 +541,8 @@ end;
 
 CREATE TABLE teacher_log (
 Teacher_id NUMBER (9),
-Employment_Start_Date Date,
-Employment_End_Date Date,
+Employment_Start_Date DATE,
+Employment_End_Date DATE,
 majors_department_id NUMBER (3),
 salary NUMBER (8,2) check (salary >=0),
 action_name char(6) NOT NULL , 
@@ -572,8 +572,8 @@ end;
  
 CREATE TABLE Manager_log (
 Manager_id NUMBER (9) ,
-Employment_Start_Date Date DEFAULT sysdate,
-Employment_End_Date Date,
+Employment_Start_Date DATE DEFAULT sysdate,
+Employment_End_Date DATE,
 salary NUMBER (8,2) check (salary >=0),
 Manager_Grade varchar2(15) NOT NULL,
 Majors_Department_id NUMBER (3) ,
@@ -605,8 +605,8 @@ end;
  
 CREATE TABLE Security_log (
 Security_id NUMBER (9) ,
-Employment_Start_Date Date DEFAULT sysdate,
-Employment_End_Date Date,
+Employment_Start_Date DATE DEFAULT sysdate,
+Employment_End_Date DATE,
 salary NUMBER (8,2) ,
 Department_id NUMBER (3),
 action_name char(6) NOT NULL , 
@@ -638,8 +638,8 @@ end;
  
 CREATE TABLE Secretary_log (
 Secretary_id NUMBER (9) ,
-Employment_Start_Date Date DEFAULT sysdate,
-Employment_End_Date Date,
+Employment_Start_Date DATE DEFAULT sysdate,
+Employment_End_Date DATE,
 Majors_Department_id NUMBER (3) ,
 Department_id NUMBER (3),
 action_name char (6) NOT NULL, 
@@ -1108,13 +1108,13 @@ end;
 
 
 insert into teacher values(120100001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),DATE '2017-12-17',100,499.99);
-insert into manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) values(120100001,Date '2017-12-17',Date '2018-12-17',500.00,'Master',100);
-insert into Security values(120100001,Date '2017-12-17',Date '2018-12-17',500.00,100);
-insert into Secretary values(120100003,Date '2013-11-1',Date'2017-10-6',100,null);
+insert into manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) values(120100001,DATE '2017-12-17',DATE '2018-12-17',500.00,'Master',100);
+insert into Security values(120100001,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
+insert into Secretary values(120100003,DATE '2013-11-1',DATE'2017-10-6',100,null);
 insert into item values(001,'Lap TOP','Descriotion');
 insert into room_items values(001,01,1,'A',20);
 insert into study_plan values(101,1);
-insert into study_plan_courses values (101,1,'COMP 2113',Date'2016-10-10',1);
+insert into study_plan_courses values (101,1,'COMP 2113',DATE'2016-10-10',1);
 
 --------------------------------------------------------------------------------------------------------------------
 
