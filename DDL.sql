@@ -243,6 +243,7 @@ FOREIGN KEY (section_number , course_id , year , semester) REFERENCES section (s
 PRIMARY KEY (sid , course_id , section_number , year , semester),
 CONSTRAINT eroll_grade_chk CHECK ((grade_final+grade_mid >=40)and (grade_final+grade_mid <=100 )));
 
+-- 24
 CREATE TABLE section_rooms (
 section_number NUMBER (3) ,
 course_id VARCHAR2 (10) ,
@@ -252,7 +253,7 @@ room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
 FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_code,floor_number,room_number) ,
-day DATE NOT Null,
+day DATE NOT NULL,
 start_time DATE ,
 end_time DATE ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section (section_number , course_id , year , semester ) ,
@@ -262,7 +263,7 @@ PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_tim
 
 CREATE TABLE Address_log (
 street_name VARCHAR2(30) NOT NULL,
- block_name VARCHAR2(30) NOT NULL, 
+block_name VARCHAR2(30) NOT NULL, 
 city_name VARCHAR2(30) NOT NULL, 
 area_name VARCHAR2(30) NOT NULL, 
 action_name char (6) NOT NULL, 
@@ -921,7 +922,7 @@ telephone_home NUMBER(8) ,
 emergency_phone NUMBER(12) ,
 email VARCHAR2(30) ,
 password  VARCHAR2(30) ,
-tawjihi_GPA  NUMBER(3,2) ,
+tawjihi_GPA  NUMBER(4,2) ,
 tawjihi_field CHAR ,
 area_name  VARCHAR2(30) ,
 city_name  VARCHAR2(30) ,
