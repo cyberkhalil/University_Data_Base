@@ -39,17 +39,20 @@ CONSTRAINT emp_sex_chk CHECK (sex IN ('M' , 'F')),
 CONSTRAINT emp_social_status_chk CHECK ( social_status  IN ('S','M','D' ) ),
 CONSTRAINT EMP_FK_ADRES FOREIGN KEY (area_name,city_name,block_name,street_name) REFERENCES Address(area_name,city_name,block_name,street_name));
 
+-- 4
 CREATE TABLE building (
 building_code CHAR (1) PRIMARY KEY,
-building_desc VARCHAR2 (100));
+building_desc VARCHAR2(100) );
 
+-- 5
 CREATE TABLE floor (
-floor_number NUMBER (2),
-building_code CHAR (1),
-floor_desc VARCHAR2 (100),
+floor_number NUMBER(2),
+building_code CHAR(1),
+floor_desc VARCHAR2(100),
 FOREIGN KEY (building_code) REFERENCES building,
 PRIMARY KEY (building_code, floor_number));
 
+-- 6
 CREATE TABLE room (
 room_number NUMBER (2),
 floor_number NUMBER (2),
@@ -58,14 +61,14 @@ capacity NUMBER (5) NOT NULL,
 FOREIGN KEY (building_code,floor_number) REFERENCES floor,
 PRIMARY KEY (building_code ,floor_number,room_number));
 
-CREATE TABLE Department (
-Department_id NUMBER (3),
-Department_name VARCHAR2(30) NOT NULL UNIQUE,
+-- 7
+CREATE TABLE department (
+department_id NUMBER (3) PRIMARY KEY,
+department_name VARCHAR2(30) NOT NULL UNIQUE,
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
-FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room,
-PRIMARY KEY (Department_id));
+FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room );
 
 CREATE TABLE Majors_Department (
 Majors_Department_id NUMBER (3),
