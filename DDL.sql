@@ -70,14 +70,14 @@ floor_number NUMBER (2),
 building_code CHAR (1),
 FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room );
 
-CREATE TABLE Majors_Department (
-Majors_Department_id NUMBER (3),
-Majors_Department_name VARCHAR2(30) NOT NULL UNIQUE,
+-- 8
+CREATE TABLE majors_department (
+majors_department_id NUMBER (3) PRIMARY KEY ,
+majors_department_name VARCHAR2(30) NOT NULL UNIQUE,
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
-FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room,
-PRIMARY KEY (Majors_Department_id));
+FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room );
 
 CREATE TABLE major (
 major_id NUMBER (3) PRIMARY KEY,
