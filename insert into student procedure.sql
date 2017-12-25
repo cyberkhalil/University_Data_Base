@@ -1,4 +1,3 @@
--- still under test
 CREATE OR REPLACE PROCEDURE insert_std(
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
@@ -62,9 +61,28 @@ end if;
 
 execute immediate 'select '||seq_name||'.nextval from dual' into SID;
 
- execute immediate 'INSERT INTO STUDENT VALUES ('''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
+ execute immediate 'INSERT INTO STUDENT VALUES ('||sid||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
  --execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
 END;
 /
 
-show errors
+begin
+insert_std(
+ 'Arabic Full Name' , 'English Full Name' , 
+
+'Nationality',12345789 , 'M' , 'S' , 'Gardian Name' , 
+
+500, 'Father' , 
+'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' 
+
+, 'Mother' , 'Mother job' , 'Mother job desc' ,
+ 'FATHER_JOB' , 'FATHER_JOB_DESC' , 
+'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 
+
+70555555555 , 082876543 , 
+0811111 , 'Ahmed@mail.com' , 'ABCD' ,
+5 , 'S' , 'GazaStrip' , 'Gaza' , 'Naser' , 'Elgesser' , 
+
+1 , 50 );
+end;
+/
