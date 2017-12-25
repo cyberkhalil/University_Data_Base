@@ -194,7 +194,7 @@ number_of_family_members NUMBER(2) NOT NULL,
 family_university_students NUMBER(2) NOT NULL, 
 social_affairs VARCHAR2(40) NOT NULL ,
 phone NUMBER(12) ,
-telephone_home NUMBER(8) ,
+telephone_home NUMBER(9) ,
 emergency_phone NUMBER(12) NOT NULL,
 email VARCHAR2(30) ,
 password VARCHAR2(30) NOT NULL,
@@ -1118,18 +1118,18 @@ END;
 -- select * from tab;
 -- select trigger_name from user_triggers;
 
-insert into Address values('GazaStrip','Gaza','Naser','Elgesser');
-insert into Nationality values('Nationality');
-insert into Building values('A','Building Desc');
-insert into floor values(1,'A','Floor Description');
-insert into room values(01,1,'A',100);
-insert into Building values('B','Building Desc');
-insert into floor values(2,'B','Floor Description');
-insert into room values(02,2,'B',50);
-insert into department values(100,'Enge',02,2,'B');
-insert into Majors_Department values(100,'Admission',01,1,'A');
-insert into major values(1,'Information Security',100);
-insert into course values('COMP 2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
+INSERT INTO Address values('GazaStrip','Gaza','Naser','Elgesser');
+INSERT INTO Nationality values('Nationality');
+INSERT INTO Building values('A','Building Desc');
+INSERT INTO floor values(1,'A','Floor Description');
+INSERT INTO room values(01,1,'A',100);
+INSERT INTO Building values('B','Building Desc');
+INSERT INTO floor values(2,'B','Floor Description');
+INSERT INTO room values(02,2,'B',50);
+INSERT INTO department values(100,'Enge',02,2,'B');
+INSERT INTO Majors_Department values(100,'Admission',01,1,'A');
+INSERT INTO major values(1,'Information Security',100);
+INSERT INTO course values('COMP 2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
 
 begin
 insert_emp(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
@@ -1140,14 +1140,14 @@ end;
 /
 
 
-insert into teacher values(120100001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),DATE '2017-12-17',100,499.99);
-insert into manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) values(120100001,DATE '2017-12-17',DATE '2018-12-17',500.00,'Master',100);
-insert into Security values(120100001,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
-insert into Secretary values(120100003,DATE '2013-11-1',DATE'2017-10-6',100,null);
-insert into item values(001,'Lap TOP','Descriotion');
-insert into room_items values(001,01,1,'A',20);
-insert into study_plan values(101,1);
-insert into study_plan_courses values (101,1,'COMP 2113',DATE'2016-10-10',1);
+INSERT INTO teacher values(120100001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),DATE '2017-12-17',100,499.99);
+INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) values(120100001,DATE '2017-12-17',DATE '2018-12-17',500.00,'Master',100);
+INSERT INTO Security values(120100001,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
+INSERT INTO Secretary values(120100003,DATE '2013-11-1',DATE'2017-10-6',100,null);
+INSERT INTO item values(001,'Lap TOP','Descriotion');
+INSERT INTO room_items values(001,01,1,'A',20);
+INSERT INTO study_plan values(101,1);
+INSERT INTO study_plan_courses values (101,1,'COMP 2113',DATE'2016-10-10',1);
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -1192,3 +1192,4 @@ insert_std('Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , '
 5 , 'S' , 'GazaStrip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
 end;
 /
+
