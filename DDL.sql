@@ -1134,7 +1134,10 @@ INSERT INTO address VALUES('Gaza Strip','Gaza','Naser','Elgesser');
 INSERT INTO address VALUES('Gaza North','Jabalia','Al Nazlah','Al Saftawy');
 INSERT INTO address VALUES('Rafah','Rafah','Yebna','Kir');
 
-INSERT INTO Nationality VALUES('Nationality');
+INSERT INTO nationality VALUES('Palestinian');
+INSERT INTO nationality VALUES('egyptian');
+INSERT INTO nationality VALUES('jordanian');
+
 INSERT INTO Building VALUES('A','Building Desc');
 INSERT INTO floor VALUES(1,'A','Floor Description');
 INSERT INTO room VALUES(01,1,'A',100);
@@ -1147,10 +1150,10 @@ INSERT INTO major VALUES(1,'Information Security',100);
 INSERT INTO course VALUES('COMP 2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
 
 begin
-insert_emp('Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
-insert_emp('Arabic Full Name 2','English Full Name 2','Nationality',123456789,'M','S',500,'Gaza', to_date('1-1-10','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
-insert_emp('Arabic Full Name 3','English Full Name 3','Nationality',123456789,'M','S',500,'Gaza',to_date('2-2-03','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
-insert_emp('Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza', to_date('1-2-3','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name','English Full Name','Palestinian',123456789,'M','S',500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name 2','English Full Name 2','Palestinian',123456789,'M','S',500,'Gaza', to_date('1-1-10','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name 3','English Full Name 3','Palestinian',123456789,'M','S',500,'Gaza',to_date('2-2-03','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name','English Full Name','Palestinian',123456789,'M','S',500,'Gaza', to_date('1-2-3','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
 end;
 /
 
@@ -1167,7 +1170,7 @@ INSERT INTO study_plan_courses VALUES (101,1,'COMP 2113',DATE'2016-10-10',1);
 --------------------------------------------------------------------------------------------------------------------
 
 begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
+insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
@@ -1177,7 +1180,7 @@ end;
 /
 
 begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
+insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
@@ -1189,7 +1192,7 @@ end;
 -- chage sex attribute from Male to Female
 
 begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
+insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
@@ -1199,7 +1202,7 @@ end;
 /
 
 begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
+insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
