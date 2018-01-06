@@ -1138,7 +1138,10 @@ INSERT INTO nationality VALUES('Palestinian');
 INSERT INTO nationality VALUES('egyptian');
 INSERT INTO nationality VALUES('jordanian');
 
-INSERT INTO Building VALUES('A','Building Desc');
+INSERT INTO building VALUES('A','Management building.');
+INSERT INTO building VALUES('B','Male Students building.');
+INSERT INTO building VALUES('W','Female Students building.');
+
 INSERT INTO floor VALUES(1,'A','Floor Description');
 INSERT INTO room VALUES(01,1,'A',100);
 INSERT INTO Building VALUES('B','Building Desc');
