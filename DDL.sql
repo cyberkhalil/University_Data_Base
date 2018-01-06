@@ -1166,9 +1166,6 @@ INSERT INTO room VALUES(01,2,'W',15);
 INSERT INTO room VALUES(01,3,'W',30);
 INSERT INTO room VALUES(02,3,'W',65);
 
-INSERT INTO Building VALUES('B','Building Desc');
-INSERT INTO floor VALUES(2,'B','Floor Description');
-INSERT INTO room VALUES(02,2,'B',50);
 INSERT INTO department VALUES(100,'Enge',02,2,'B');
 INSERT INTO Majors_Department VALUES(100,'Admission',01,1,'A');
 INSERT INTO major VALUES(1,'Information Security',100);
