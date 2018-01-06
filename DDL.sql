@@ -1052,10 +1052,9 @@ major_id  NUMBER ,
 balance NUMBER )
 AUTHID CURRENT_USER
 IS
-
 sex_number NUMBER(1);
-year NUMBER(4) := extract (year from sysdate);
-seq_count number(2);
+year NUMBER(4) := EXTRACT (YEAR FROM sysdate);
+seq_count NUMBER(1);
 seq_name VARCHAR2(30);
 sid NUMBER(9);
 
@@ -1071,8 +1070,8 @@ seq_name := 'S'||sex_number||year||'_SEQ';
 
 select count(*) into seq_count from user_sequences where SEQUENCE_NAME =seq_name;
 
- if seq_count = 0 then
- execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
+if seq_count = 0 then
+execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
 end if;
 
 execute immediate 'select '||seq_name||'.nextval from dual' into SID;
@@ -1083,7 +1082,6 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE insert_emp(
-employee_id NUMBER ,
 Full_name_ar VARCHAR2 ,
 Full_name_en VARCHAR2 ,
 Nationality VARCHAR2 ,
@@ -1106,12 +1104,26 @@ block_name VARCHAR2 ,
 street_name VARCHAR2 ) 
 AUTHID CURRENT_USER
 IS
+year NUMBER(4) := extract (year from sysdate);
+seq_count NUMBER(1);
+seq_name VARCHAR2(30);
+employee_id NUMBER(9);
+
 BEGIN
+seq_name := 'E3'||year||'_SEQ';
+select count(*) into seq_count from user_sequences where SEQUENCE_NAME =seq_name;
+
+if seq_count = 0 then
+execute immediate 'create sequence '||seq_name|| ' start with 3'||year ||'0001 maxvalue 3'||year ||'9999' ;
+end if;
+
+execute immediate 'select '||seq_name||'.nextval from dual' into employee_id;
+
+
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||password  ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
 END;
 /
-
 
  --------------------------------------------------------------------------------------------------------------------
 
@@ -1132,10 +1144,10 @@ INSERT INTO major values(1,'Information Security',100);
 INSERT INTO course values('COMP 2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
 
 begin
-insert_emp(120100001,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
-insert_emp(120100002,'Arabic Full Name 2','English Full Name 2','Nationality',123456789,'M','S',500,'Gaza', to_date('1-1-10','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
-insert_emp(120100003,'Arabic Full Name 3','English Full Name 3','Nationality',123456789,'M','S',500,'Gaza',to_date('2-2-03','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
-insert_emp(120100004,'Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza', to_date('1-2-3','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name 2','English Full Name 2','Nationality',123456789,'M','S',500,'Gaza', to_date('1-1-10','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name 3','English Full Name 3','Nationality',123456789,'M','S',500,'Gaza',to_date('2-2-03','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza', to_date('1-2-3','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'GazaStrip','Gaza','Naser','Elgesser');
 end;
 /
 
