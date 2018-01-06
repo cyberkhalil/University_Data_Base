@@ -1154,7 +1154,18 @@ INSERT INTO floor VALUES(1,'W','Female First floor.');
 INSERT INTO floor VALUES(2,'W','Female Computer labs.');
 INSERT INTO floor VALUES(3,'W','Female Electroincs labs.');
 
-INSERT INTO room VALUES(01,1,'A',100);
+INSERT INTO room VALUES(01,1,'A',30);
+INSERT INTO room VALUES(01,2,'A',20);
+INSERT INTO room VALUES(02,2,'A',45);
+
+INSERT INTO room VALUES(01,1,'B',10);
+INSERT INTO room VALUES(02,1,'B',50);
+INSERT INTO room VALUES(01,2,'B',25);
+
+INSERT INTO room VALUES(01,2,'W',15);
+INSERT INTO room VALUES(01,3,'W',30);
+INSERT INTO room VALUES(02,3,'W',65);
+
 INSERT INTO Building VALUES('B','Building Desc');
 INSERT INTO floor VALUES(2,'B','Floor Description');
 INSERT INTO room VALUES(02,2,'B',50);
