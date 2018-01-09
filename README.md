@@ -19,4 +19,13 @@ University_Data_Base
 [MahmoudLink]: https://www.facebook.com/Mahmoud.khalil2535
 
 ## Introduction ##
-This is a database project made with the sql (DDL , DML) & pl\sql languages (for oracle DBMS) -so may not usefull in others-
+This is a database project made with the sql (DDL , DML) & pl\sql languages (for oracle DBMS) & Its designed as the ERD (Entity Relationship Diagram) which is provided as jpg file in the project files [link][ERDLink]
+
+[ERDLink]: https://github.com/khalil2535/University_Data_Base/blob/master/final.jpg
+
+## Contents ##
+  ### DDL ###
+  1.  #### Tables :- #####
+  There are 24 tables (without the log ones) in this data base which conatain all the data that we need to store as records (rows)
+  those tables can descripe the relation between the students , teachers , courses , and even more than another 15 object ..
+  
