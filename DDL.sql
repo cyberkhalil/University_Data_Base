@@ -1157,6 +1157,10 @@ INSERT INTO floor VALUES(3,'W','Female Electroincs labs.');
 INSERT INTO room VALUES(01,1,'A',30);
 INSERT INTO room VALUES(01,2,'A',20);
 INSERT INTO room VALUES(02,2,'A',45);
+INSERT INTO room VALUES(03,1,'A',30);
+INSERT INTO room VALUES(03,2,'A',20);
+INSERT INTO room VALUES(04,1,'A',45);
+INSERT INTO room VALUES(05,1,'A',45);
 
 INSERT INTO room VALUES(01,1,'B',10);
 INSERT INTO room VALUES(02,1,'B',50);
@@ -1167,15 +1171,23 @@ INSERT INTO room VALUES(01,3,'W',30);
 INSERT INTO room VALUES(02,3,'W',65);
 
 INSERT INTO department VALUES(100,'Acceptance and Registration',01,1,'A');
-INSERT INTO department VALUES(101,'Academic Affairs',01,2,'A');
-INSERT INTO department VALUES(102,'Studnents Affairs',02,2,'A');
+INSERT INTO department VALUES(102,'Studnents Affairs',01,2,'A');
+INSERT INTO department VALUES(101,'Academic Affairs',05,1,'A');
 
-INSERT INTO majors_department VALUES(100,'Admission',01,1,'A');
+INSERT INTO majors_department VALUES(100,'Engineering',03,1,'A');
+INSERT INTO majors_department VALUES(101,'Languages',03,2,'A');
+INSERT INTO majors_department VALUES(102,'Nursing',04,1,'A');
+
 INSERT INTO major VALUES(1,'Information Security',100);
-INSERT INTO course VALUES('COMP 2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
+INSERT INTO major VALUES(2,'English Translator',101);
+INSERT INTO major VALUES(3,'Arabic Teacher',101);
+
+INSERT INTO course VALUES('COMP2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
+INSERT INTO course VALUES('UNIV1122','English',1, 2 ,'DESCRIPTION',100);
+INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'DESCRIPTION',100);
 
 begin
-insert_emp('Arabic Full Name','English Full Name','Palestinian',123456789,'M','S',500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('رامي لبد','Ramy Lubbad','Palestinian',388123456,'M','M',1500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
 insert_emp('Arabic Full Name 2','English Full Name 2','Palestinian',123456789,'M','S',500,'Gaza', to_date('1-1-10','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
 insert_emp('Arabic Full Name 3','English Full Name 3','Palestinian',123456789,'M','S',500,'Gaza',to_date('2-2-03','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
 insert_emp('Arabic Full Name','English Full Name','Palestinian',123456789,'M','S',500,'Gaza', to_date('1-2-3','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
@@ -1190,7 +1202,7 @@ INSERT INTO Secretary VALUES(320180004,DATE '2013-11-1',DATE'2017-10-6',100,null
 INSERT INTO item VALUES(001,'Lap TOP','Descriotion');
 INSERT INTO room_items VALUES(001,01,1,'A',20);
 INSERT INTO study_plan VALUES(101,1);
-INSERT INTO study_plan_courses VALUES (101,1,'COMP 2113',DATE'2016-10-10',1);
+INSERT INTO study_plan_courses VALUES (101,1,'COMP2113',DATE'2016-10-10',1);
 
 --------------------------------------------------------------------------------------------------------------------
 
