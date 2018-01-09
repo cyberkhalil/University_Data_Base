@@ -259,6 +259,8 @@ end_time DATE ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section (section_number , course_id , year , semester ) ,
 PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
+select count(*) from tab;
+-- should be 24 if every thing went right
 --------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
@@ -427,7 +429,7 @@ end;
  
 CREATE TABLE Department_log (
 Department_id NUMBER (3),
-Department_name VARCHAR2(30) NOT NULL UNIQUE,
+Department_name VARCHAR2(30) NOT NULL,
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
@@ -1013,7 +1015,7 @@ end;
  
  --------------------------------------------------------------------------------------------------------------------
 
--- a Procedure to insert a student and create a user for him as 'S123' where 123 is the SID of the student
+-- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
 CREATE OR REPLACE PROCEDURE insert_std(
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
@@ -1054,8 +1056,8 @@ AUTHID CURRENT_USER
 IS
 
 sex_number NUMBER(1);
-year NUMBER(4) := extract (year from sysdate);
-seq_count number(2);
+year NUMBER(4) := EXTRACT (YEAR FROM sysdate);
+seq_count NUMBER(1);
 seq_name VARCHAR2(30);
 sid NUMBER(9);
 
@@ -1071,19 +1073,18 @@ seq_name := 'S'||sex_number||year||'_SEQ';
 
 select count(*) into seq_count from user_sequences where SEQUENCE_NAME =seq_name;
 
- if seq_count = 0 then
- execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
+if seq_count = 0 then
+execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
 end if;
 
-execute immediate 'select '||seq_name||'.nextval from dual' into SID;
+execute immediate 'select '||seq_name||'.nextval from dual' into sid;
 
- execute immediate 'INSERT INTO STUDENT VALUES ('||SID||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
- --execute immediate 'CREATE USER S' ||SID|| ' IDENTIFIED BY 123456';
+ execute immediate 'INSERT INTO STUDENT VALUES ('||sid||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
+ execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
 END;
 /
 
 CREATE OR REPLACE PROCEDURE insert_emp(
-employee_id NUMBER ,
 Full_name_ar VARCHAR2 ,
 Full_name_en VARCHAR2 ,
 Nationality VARCHAR2 ,
@@ -1106,7 +1107,21 @@ block_name VARCHAR2 ,
 street_name VARCHAR2 ) 
 AUTHID CURRENT_USER
 IS
+year NUMBER(4) := extract (year from sysdate);		
+seq_count NUMBER(1);		
+seq_name VARCHAR2(30);		
+employee_id NUMBER(9);
+
 BEGIN
+seq_name := 'E3'||year||'_SEQ';		
+select count(*) into seq_count from user_sequences where SEQUENCE_NAME =seq_name;		
+		
+if seq_count = 0 then		
+execute immediate 'create sequence '||seq_name|| ' start with 3'||year ||'0001 maxvalue 3'||year ||'9999' ;		
+end if;		
+		
+execute immediate 'select '||seq_name||'.nextval from dual' into employee_id;
+
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||password  ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
 END;
@@ -1115,47 +1130,84 @@ END;
 
  --------------------------------------------------------------------------------------------------------------------
 
--- select * from tab;
--- select trigger_name from user_triggers;
-
 INSERT INTO address VALUES('Gaza Strip','Gaza','Naser','Elgesser');
 INSERT INTO address VALUES('Gaza North','Jabalia','Al Nazlah','Al Saftawy');
 INSERT INTO address VALUES('Rafah','Rafah','Yebna','Kir');
 
-INSERT INTO Nationality VALUES('Nationality');
-INSERT INTO Building VALUES('A','Building Desc');
-INSERT INTO floor VALUES(1,'A','Floor Description');
-INSERT INTO room VALUES(01,1,'A',100);
-INSERT INTO Building VALUES('B','Building Desc');
-INSERT INTO floor VALUES(2,'B','Floor Description');
-INSERT INTO room VALUES(02,2,'B',50);
-INSERT INTO department VALUES(100,'Enge',02,2,'B');
-INSERT INTO Majors_Department VALUES(100,'Admission',01,1,'A');
+INSERT INTO nationality VALUES('Palestinian');
+INSERT INTO nationality VALUES('egyptian');
+INSERT INTO nationality VALUES('jordanian');
+
+INSERT INTO building VALUES('A','Management building.');
+INSERT INTO building VALUES('B','Male Students building.');
+INSERT INTO building VALUES('W','Female Students building.');
+
+INSERT INTO floor VALUES(1,'A','Management First floor.');
+INSERT INTO floor VALUES(2,'A','Management Computer labs.');
+INSERT INTO floor VALUES(3,'A','Management Electroincs labs.');
+
+INSERT INTO floor VALUES(1,'B','Male First floor.');
+INSERT INTO floor VALUES(2,'B','Male Computer labs.');
+INSERT INTO floor VALUES(3,'B','Male Electroincs labs.');
+
+INSERT INTO floor VALUES(1,'W','Female First floor.');
+INSERT INTO floor VALUES(2,'W','Female Computer labs.');
+INSERT INTO floor VALUES(3,'W','Female Electroincs labs.');
+
+INSERT INTO room VALUES(01,1,'A',30);
+INSERT INTO room VALUES(01,2,'A',20);
+INSERT INTO room VALUES(02,2,'A',45);
+INSERT INTO room VALUES(03,1,'A',30);
+INSERT INTO room VALUES(03,2,'A',20);
+INSERT INTO room VALUES(04,1,'A',45);
+INSERT INTO room VALUES(05,1,'A',45);
+
+INSERT INTO room VALUES(01,1,'B',10);
+INSERT INTO room VALUES(02,1,'B',50);
+INSERT INTO room VALUES(01,2,'B',25);
+
+INSERT INTO room VALUES(01,2,'W',15);
+INSERT INTO room VALUES(01,3,'W',30);
+INSERT INTO room VALUES(02,3,'W',65);
+
+INSERT INTO department VALUES(100,'Acceptance and Registration',01,1,'A');
+INSERT INTO department VALUES(102,'Studnents Affairs',01,2,'A');
+INSERT INTO department VALUES(101,'Academic Affairs',05,1,'A');
+
+INSERT INTO majors_department VALUES(100,'Engineering',03,1,'A');
+INSERT INTO majors_department VALUES(101,'Languages',03,2,'A');
+INSERT INTO majors_department VALUES(102,'Nursing',04,1,'A');
+
 INSERT INTO major VALUES(1,'Information Security',100);
-INSERT INTO course VALUES('COMP 2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
+INSERT INTO major VALUES(2,'English Translator',101);
+INSERT INTO major VALUES(3,'Arabic Teacher',101);
+
+INSERT INTO course VALUES('COMP2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
+INSERT INTO course VALUES('UNIV1122','English',1, 2 ,'DESCRIPTION',100);
+INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'DESCRIPTION',100);
 
 begin
-insert_emp('Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
-insert_emp('Arabic Full Name 2','English Full Name 2','Nationality',123456789,'M','S',500,'Gaza', to_date('1-1-10','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
-insert_emp('Arabic Full Name 3','English Full Name 3','Nationality',123456789,'M','S',500,'Gaza',to_date('2-2-03','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
-insert_emp('Arabic Full Name','English Full Name','Nationality',123456789,'M','S',500,'Gaza', to_date('1-2-3','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('رامي لبد','Ramy Lubbad','Palestinian',388123456,'M','M',1500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name 2','English Full Name 2','Palestinian',123456789,'M','S',500,'Gaza', to_date('1-1-10','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name 3','English Full Name 3','Palestinian',123456789,'M','S',500,'Gaza',to_date('2-2-03','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('Arabic Full Name','English Full Name','Palestinian',123456789,'M','S',500,'Gaza', to_date('1-2-3','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
 end;
 /
 
 
-INSERT INTO teacher VALUES(120100001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),DATE '2017-12-17',100,499.99);
-INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(120100001,DATE '2017-12-17',DATE '2018-12-17',500.00,'Master',100);
-INSERT INTO Security VALUES(120100001,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
-INSERT INTO Secretary VALUES(120100003,DATE '2013-11-1',DATE'2017-10-6',100,null);
+INSERT INTO teacher VALUES(320180001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),DATE '2017-12-17',100,499.99);
+INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(320180002,DATE '2017-12-17',DATE '2018-12-17',500.00,'Master',100);
+INSERT INTO Security VALUES(320180003,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
+INSERT INTO Secretary VALUES(320180004,DATE '2013-11-1',DATE'2017-10-6',100,null);
 INSERT INTO item VALUES(001,'Lap TOP','Descriotion');
 INSERT INTO room_items VALUES(001,01,1,'A',20);
 INSERT INTO study_plan VALUES(101,1);
-INSERT INTO study_plan_courses VALUES (101,1,'COMP 2113',DATE'2016-10-10',1);
+INSERT INTO study_plan_courses VALUES (101,1,'COMP2113',DATE'2016-10-10',1);
 
 --------------------------------------------------------------------------------------------------------------------
 
 begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
+insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
@@ -1165,7 +1217,7 @@ end;
 /
 
 begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
+insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
@@ -1177,7 +1229,7 @@ end;
 -- change sex attribute from Male to Female
 
 begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
+insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
@@ -1187,7 +1239,7 @@ end;
 /
 
 begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Nationality',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
+insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
