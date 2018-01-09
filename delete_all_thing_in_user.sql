@@ -52,9 +52,10 @@ drop user E320180003;
 drop user E320180004;
 drop user E320180005;
 
-drop user S120180001
-drop user S120180002
-drop user S220180001
-drop user S220180002
+drop user S120180001;
+drop user S120180002;
+
+drop user S220180001;
+drop user S220180002;
 
 clear scr
