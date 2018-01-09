@@ -259,6 +259,8 @@ end_time DATE ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section (section_number , course_id , year , semester ) ,
 PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
+select count(*) from tab;
+-- should be 24 if every thing went right
 --------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
@@ -427,7 +429,7 @@ end;
  
 CREATE TABLE Department_log (
 Department_id NUMBER (3),
-Department_name VARCHAR2(30) NOT NULL UNIQUE,
+Department_name VARCHAR2(30) NOT NULL,
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
@@ -1128,9 +1130,6 @@ END;
 
  --------------------------------------------------------------------------------------------------------------------
 
--- select * from tab;
--- select trigger_name from user_triggers;
-
 INSERT INTO address VALUES('Gaza Strip','Gaza','Naser','Elgesser');
 INSERT INTO address VALUES('Gaza North','Jabalia','Al Nazlah','Al Saftawy');
 INSERT INTO address VALUES('Rafah','Rafah','Yebna','Kir');
@@ -1167,8 +1166,11 @@ INSERT INTO room VALUES(01,2,'W',15);
 INSERT INTO room VALUES(01,3,'W',30);
 INSERT INTO room VALUES(02,3,'W',65);
 
-INSERT INTO department VALUES(100,'Enge',02,2,'B');
-INSERT INTO Majors_Department VALUES(100,'Admission',01,1,'A');
+INSERT INTO department VALUES(100,'Acceptance and Registration',02,2,'A');
+INSERT INTO department VALUES(101,'GIS',02,2,'A');
+INSERT INTO department VALUES(102,'',02,2,'A');
+
+INSERT INTO majors_department VALUES(100,'Admission',01,1,'A');
 INSERT INTO major VALUES(1,'Information Security',100);
 INSERT INTO course VALUES('COMP 2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
 
@@ -1181,10 +1183,10 @@ end;
 /
 
 
-INSERT INTO teacher VALUES(120100001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),DATE '2017-12-17',100,499.99);
-INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(120100001,DATE '2017-12-17',DATE '2018-12-17',500.00,'Master',100);
-INSERT INTO Security VALUES(120100001,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
-INSERT INTO Secretary VALUES(120100003,DATE '2013-11-1',DATE'2017-10-6',100,null);
+INSERT INTO teacher VALUES(320180001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),DATE '2017-12-17',100,499.99);
+INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(320180002,DATE '2017-12-17',DATE '2018-12-17',500.00,'Master',100);
+INSERT INTO Security VALUES(320180003,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
+INSERT INTO Secretary VALUES(320180004,DATE '2013-11-1',DATE'2017-10-6',100,null);
 INSERT INTO item VALUES(001,'Lap TOP','Descriotion');
 INSERT INTO room_items VALUES(001,01,1,'A',20);
 INSERT INTO study_plan VALUES(101,1);
