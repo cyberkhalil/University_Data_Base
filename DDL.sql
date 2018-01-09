@@ -1080,7 +1080,7 @@ end if;
 execute immediate 'select '||seq_name||'.nextval from dual' into sid;
 
  execute immediate 'INSERT INTO STUDENT VALUES ('||sid||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
- --execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
+ execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
 END;
 /
 
@@ -1166,9 +1166,9 @@ INSERT INTO room VALUES(01,2,'W',15);
 INSERT INTO room VALUES(01,3,'W',30);
 INSERT INTO room VALUES(02,3,'W',65);
 
-INSERT INTO department VALUES(100,'Acceptance and Registration',02,2,'A');
-INSERT INTO department VALUES(101,'GIS',02,2,'A');
-INSERT INTO department VALUES(102,'',02,2,'A');
+INSERT INTO department VALUES(100,'Acceptance and Registration',01,1,'A');
+INSERT INTO department VALUES(101,'Academic Affairs',01,2,'A');
+INSERT INTO department VALUES(102,'Studnents Affairs',02,2,'A');
 
 INSERT INTO majors_department VALUES(100,'Admission',01,1,'A');
 INSERT INTO major VALUES(1,'Information Security',100);
