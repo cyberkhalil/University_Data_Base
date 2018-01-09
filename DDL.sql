@@ -1013,7 +1013,7 @@ end;
  
  --------------------------------------------------------------------------------------------------------------------
 
--- a Procedure to insert a student and create a user for him as 'S123' where 123 is the SID of the student
+-- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
 CREATE OR REPLACE PROCEDURE insert_std(
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
@@ -1054,8 +1054,8 @@ AUTHID CURRENT_USER
 IS
 
 sex_number NUMBER(1);
-year NUMBER(4) := extract (year from sysdate);
-seq_count number(2);
+year NUMBER(4) := EXTRACT (YEAR FROM sysdate);
+seq_count NUMBER(1);
 seq_name VARCHAR2(30);
 sid NUMBER(9);
 
@@ -1071,19 +1071,18 @@ seq_name := 'S'||sex_number||year||'_SEQ';
 
 select count(*) into seq_count from user_sequences where SEQUENCE_NAME =seq_name;
 
- if seq_count = 0 then
- execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
+if seq_count = 0 then
+execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
 end if;
 
-execute immediate 'select '||seq_name||'.nextval from dual' into SID;
+execute immediate 'select '||seq_name||'.nextval from dual' into sid;
 
- execute immediate 'INSERT INTO STUDENT VALUES ('||SID||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
- --execute immediate 'CREATE USER S' ||SID|| ' IDENTIFIED BY 123456';
+ execute immediate 'INSERT INTO STUDENT VALUES ('||sid||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
+ --execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
 END;
 /
 
 CREATE OR REPLACE PROCEDURE insert_emp(
-employee_id NUMBER ,
 Full_name_ar VARCHAR2 ,
 Full_name_en VARCHAR2 ,
 Nationality VARCHAR2 ,
@@ -1106,7 +1105,21 @@ block_name VARCHAR2 ,
 street_name VARCHAR2 ) 
 AUTHID CURRENT_USER
 IS
+year NUMBER(4) := extract (year from sysdate);		
+seq_count NUMBER(1);		
+seq_name VARCHAR2(30);		
+employee_id NUMBER(9);
+
 BEGIN
+seq_name := 'E3'||year||'_SEQ';		
+select count(*) into seq_count from user_sequences where SEQUENCE_NAME =seq_name;		
+		
+if seq_count = 0 then		
+execute immediate 'create sequence '||seq_name|| ' start with 3'||year ||'0001 maxvalue 3'||year ||'9999' ;		
+end if;		
+		
+execute immediate 'select '||seq_name||'.nextval from dual' into employee_id;
+
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||password  ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
 END;
