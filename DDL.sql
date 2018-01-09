@@ -1220,10 +1220,10 @@ INSERT INTO study_plan VALUES(101,1);
 INSERT INTO study_plan VALUES(101,2);
 INSERT INTO study_plan VALUES(101,3);
 
-    INSERT INTO study_plan_courses VALUES (101,1,'COMP2113',2018,1);
-    INSERT INTO study_plan_courses VALUES (101,1,'UNIV1122',2018,2);
-    INSERT INTO study_plan_courses VALUES (101,2,'UNIV1122',2016,2);
-    INSERT INTO study_plan_courses VALUES (101,3,'UNIV1125',2015,1);
+INSERT INTO study_plan_courses VALUES (101,1,'COMP2113',2018,1);
+INSERT INTO study_plan_courses VALUES (101,1,'UNIV1122',2018,2);
+INSERT INTO study_plan_courses VALUES (101,2,'UNIV1122',2016,2);
+INSERT INTO study_plan_courses VALUES (101,3,'UNIV1125',2015,1);
 
 --------------------------------------------------------------------------------------------------------------------
 
