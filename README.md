@@ -9,8 +9,14 @@ University_Data_Base
 |            |                           |  
 | ---------- | ------------------------- |  
 | Title:     |  University_Data_Base  |  
-| Authors:   |  Eyad AL-‘Amawi  -- Waleed Mortaja -- Mahmoud el-skiekh Khalil|  
+| DBMS :     |  [Oracle DBMS][oracleLink]  |  
+| Authors:   |  [Eyad AL-‘Amawi][EyadLink]  - [Waleed Mortaja][WaleedLink] - [Mahmoud el-skiekh Khalil][MahmoudLink]|  
 | Version:   | 1.0.1      |  
 
+[oracleLink]: 	https://www.oracle.com/engineered-systems/database-appliance/index.html
+[EyadLink]: https://www.facebook.com/ZOIX0
+[WaleedLink]: https://www.facebook.com/del432
+[MahmoudLink]: https://www.facebook.com/Mahmoud.khalil2535
+
 ## Introduction ##
-This is a database project made with the sql (DDL , DML) & pl\sql languages (oracle DBMS) 
+This is a database project made with the sql (DDL , DML) & pl\sql languages (for oracle DBMS) -so may not usefull in others-
