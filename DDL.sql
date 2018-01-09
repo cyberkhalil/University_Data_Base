@@ -18,7 +18,7 @@ employee_id NUMBER(9) PRIMARY KEY,
 full_name_ar VARCHAR2(100) NOT NULL,
 full_name_en VARCHAR2(100) NOT NULL,
 nationality VARCHAR2(20) NOT NULL REFERENCES nationality (nationality),
-national_id NUMBER(9) NOT NULL, --no unique required becuase emp can get employeed more than once
+national_id NUMBER(9) NOT NULL, --no unique required because employee can get employed more than once
 sex CHAR NOT NULL ,
 social_status CHAR NOT NULL, 
 salary NUMBER (8,2) CHECK ( salary >=0),
@@ -116,7 +116,7 @@ salary NUMBER (8,2) check (salary >=0),
 manager_grade VARCHAR2(15) NOT NULL,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) ,
 department_id NUMBER (3) REFERENCES department (department_id) ,
-check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) )  );
+check ( (majors_department_id IS NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) )  );
 
 -- 14
 CREATE TABLE security (
@@ -133,7 +133,7 @@ employment_start_date DATE DEFAULT sysdate,
 employment_end_date DATE,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) ,
 department_id NUMBER (3) REFERENCES department (department_id) ,
-check ( (majors_department_id IN NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ) );
+check ( (majors_department_id IS NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ) );
 
 -- 16
 CREATE TABLE item (
@@ -359,7 +359,7 @@ INSERT into building_log VALUES (:new.building_code,:new.building_desc,'INSERT' 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_building_trgr after delete on building
-for each row 
+FOR each row 
 begin 
 INSERT into building_log VALUES (:old.building_code,:old.building_desc,'delete' ,DEFAULT,DEFAULT );
 end;
@@ -1013,7 +1013,7 @@ end;
  
  --------------------------------------------------------------------------------------------------------------------
 
--- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
+-- a Procedure to insert a student and create a user for him as 'S123' where 123 is the SID of the student
 CREATE OR REPLACE PROCEDURE insert_std(
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
@@ -1052,9 +1052,10 @@ major_id  NUMBER ,
 balance NUMBER )
 AUTHID CURRENT_USER
 IS
+
 sex_number NUMBER(1);
-year NUMBER(4) := EXTRACT (YEAR FROM sysdate);
-seq_count NUMBER(1);
+year NUMBER(4) := extract (year from sysdate);
+seq_count number(2);
 seq_name VARCHAR2(30);
 sid NUMBER(9);
 
@@ -1070,18 +1071,19 @@ seq_name := 'S'||sex_number||year||'_SEQ';
 
 select count(*) into seq_count from user_sequences where SEQUENCE_NAME =seq_name;
 
-if seq_count = 0 then
-execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
+ if seq_count = 0 then
+ execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
 end if;
 
 execute immediate 'select '||seq_name||'.nextval from dual' into SID;
 
- execute immediate 'INSERT INTO STUDENT VALUES ('||sid||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
- --execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
+ execute immediate 'INSERT INTO STUDENT VALUES ('||SID||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','''||password  ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
+ --execute immediate 'CREATE USER S' ||SID|| ' IDENTIFIED BY 123456';
 END;
 /
 
 CREATE OR REPLACE PROCEDURE insert_emp(
+employee_id NUMBER ,
 Full_name_ar VARCHAR2 ,
 Full_name_en VARCHAR2 ,
 Nationality VARCHAR2 ,
@@ -1104,26 +1106,12 @@ block_name VARCHAR2 ,
 street_name VARCHAR2 ) 
 AUTHID CURRENT_USER
 IS
-year NUMBER(4) := extract (year from sysdate);
-seq_count NUMBER(1);
-seq_name VARCHAR2(30);
-employee_id NUMBER(9);
-
 BEGIN
-seq_name := 'E3'||year||'_SEQ';
-select count(*) into seq_count from user_sequences where SEQUENCE_NAME =seq_name;
-
-if seq_count = 0 then
-execute immediate 'create sequence '||seq_name|| ' start with 3'||year ||'0001 maxvalue 3'||year ||'9999' ;
-end if;
-
-execute immediate 'select '||seq_name||'.nextval from dual' into employee_id;
-
-
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||password  ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
 END;
 /
+
 
  --------------------------------------------------------------------------------------------------------------------
 
@@ -1211,7 +1199,7 @@ insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , '
 end;
 /
 
--- chage sex attribute from Male to Female
+-- change sex attribute from Male to Female
 
 begin
 insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
