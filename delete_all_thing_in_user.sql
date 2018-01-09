@@ -51,6 +51,7 @@ drop user E320180002;
 drop user E320180003;
 drop user E320180004;
 drop user E320180005;
+drop user E320180006;
 
 drop user S120180001;
 drop user S120180002;
