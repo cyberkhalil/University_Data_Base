@@ -30,7 +30,6 @@ number_of_family_members NUMBER(2) NOT NULL,
 phone NUMBER(12) NOT NULL,
 telephone_home NUMBER(9),
 email VARCHAR2(30) NOT NULL,
-password VARCHAR2(30) NOT NULL,
 area_name VARCHAR2(30) NOT NULL,
 city_name VARCHAR2(30) NOT NULL,
 block_name VARCHAR2(30) NOT NULL,
@@ -197,7 +196,6 @@ phone NUMBER(12) ,
 telephone_home NUMBER(9) ,
 emergency_phone NUMBER(12) NOT NULL,
 email VARCHAR2(30) ,
-password VARCHAR2(30) NOT NULL,
 tawjihi_GPA NUMBER(4,2) NOT NULL,
 tawjihi_field CHAR NOT NULL,
 area_name VARCHAR2(30) NOT NULL,
@@ -1135,8 +1133,8 @@ INSERT INTO address VALUES('Gaza North','Jabalia','Al Nazlah','Al Saftawy');
 INSERT INTO address VALUES('Rafah','Rafah','Yebna','Kir');
 
 INSERT INTO nationality VALUES('Palestinian');
-INSERT INTO nationality VALUES('egyptian');
-INSERT INTO nationality VALUES('jordanian');
+INSERT INTO nationality VALUES('Egyptian');
+INSERT INTO nationality VALUES('Jordanian');
 
 INSERT INTO building VALUES('A','Management building.');
 INSERT INTO building VALUES('B','Male Students building.');
@@ -1187,10 +1185,9 @@ INSERT INTO course VALUES('UNIV1122','English',1, 2 ,'DESCRIPTION',100);
 INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'DESCRIPTION',100);
 
 begin
-insert_emp('رامي لبد','Ramy Lubbad','Palestinian',388123456,'M','M',1500,'Gaza',to_date('7-8-9','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
-insert_emp('Arabic Full Name 2','English Full Name 2','Palestinian',123456789,'M','S',500,'Gaza', to_date('1-1-10','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
-insert_emp('Arabic Full Name 3','English Full Name 3','Palestinian',123456789,'M','S',500,'Gaza',to_date('2-2-03','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
-insert_emp('Arabic Full Name','English Full Name','Palestinian',123456789,'M','S',500,'Gaza', to_date('1-2-3','dd-mm-yy') , 'Islam','Good',20,970555555555,082876543,'Ahmed@mail.com','ABCD', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('مصطفى أحمد','Mostafa Ahmed','Palestinian',300123456,'M','M',1500,'Gaza',to_date('4-5-1964','dd-mm-yyyy') , 'Islam','Good',7,00972591225472,082876528,'m_ahmed@hotmail.com', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('أحمد شعبان','Ahmed Shaban','Egyptian',300321654,'M','S',700,'Cairo', to_date('1-7-1984','dd-mm-yyyy') , 'Islam','broken arm',3,00972599547231,082895312,'shaban1112@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy');
+insert_emp('ديمة منصور','Dima Mansor','Jordanian',300712698,'F','M',1300,'Amman',to_date('5-6-1976','dd-mm-yyyy') , 'Islam','Good',5,00972567412534,082865723,'dima_m1976@yaho.com', 'Rafah','Rafah','Yebna','Kir');
 end;
 /
 
@@ -1248,3 +1245,6 @@ insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , '
 end;
 /
 
+--------------------------------------------------------------------------------------------------------------------
+
+CREATE ROLE student;
