@@ -161,7 +161,7 @@ CREATE TABLE study_plan_courses (
 plan_number NUMBER (3),
 major_id NUMBER (3),
 course_id VARCHAR2(10) REFERENCES course (course_id),
-year DATE NOT NULL,
+year NUMBER(4) NOT NULL,
 semester NUMBER (1) ,
 FOREIGN KEY (plan_number, major_id) REFERENCES study_plan (plan_number, major_id),
 PRIMARY KEY (plan_number, major_id, course_id),
@@ -213,7 +213,7 @@ CONSTRAINT stdnt_twj_fld_chk CHECK (tawjihi_field  IN ('S' , 'L' )));
 CREATE TABLE academic_advice (
 teacher_id NUMBER (9) REFERENCES teacher (teacher_id) ,
 sid NUMBER(9) REFERENCES student (sid) ,
-year DATE DEFAULT sysdate, 
+year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1),
 PRIMARY KEY (teacher_id, sid, year, semester),
 CONSTRAINT acdmic_advc_smstr_chk CHECK (semester IN (1,2,3)));
@@ -222,7 +222,7 @@ CONSTRAINT acdmic_advc_smstr_chk CHECK (semester IN (1,2,3)));
 CREATE TABLE section (
 section_number NUMBER (3),
 course_id VARCHAR2(10) REFERENCES course (course_id) ,
-year DATE DEFAULT sysdate,
+year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1) ,
 teacher_id NUMBER(9) REFERENCES teacher (teacher_id) ,
 PRIMARY KEY (section_number, course_id, year, semester),
@@ -233,7 +233,7 @@ CREATE TABLE enroll (
 sid NUMBER(9) REFERENCES student (sid) ,
 course_id VARCHAR2(10) ,
 section_number NUMBER(3) ,
-year DATE DEFAULT sysdate, 
+year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER(1) ,
 grade_mid NUMBER (2) DEFAULT NULL ,
 grade_final NUMBER (3) DEFAULT NULL,
@@ -245,7 +245,7 @@ CONSTRAINT eroll_grade_chk CHECK ((grade_final+grade_mid >=40)and (grade_final+g
 CREATE TABLE section_rooms (
 section_number NUMBER (3) ,
 course_id VARCHAR2 (10) ,
-year DATE DEFAULT sysdate, 
+year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1) ,
 room_number NUMBER (2),
 floor_number NUMBER (2),
@@ -767,7 +767,7 @@ end;
 CREATE TABLE academic_advice_log (
 teacher_id NUMBER (9),
 sid NUMBER(9),
-year DATE DEFAULT sysdate, 
+year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1) ,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
@@ -797,7 +797,7 @@ end;
 CREATE TABLE section_log (
 section_number NUMBER (3),
 course_id VARCHAR2(10) ,
-year DATE DEFAULT sysdate,
+year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1),
 teacher_id NUMBER(9),
 action_name char(6) NOT NULL , 
@@ -829,7 +829,7 @@ CREATE TABLE enroll_log (
 sid NUMBER(9),
 course_id VARCHAR2(10) ,
 section_number NUMBER(3) ,
-year DATE DEFAULT sysdate, 
+year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER(1) ,
 grade_mid NUMBER (2) ,
 grade_final NUMBER (3),
@@ -861,7 +861,7 @@ end;
 CREATE TABLE section_rooms_log (
 section_number NUMBER (3) ,
 course_id VARCHAR2 (10) ,
-year DATE DEFAULT sysdate, 
+year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1),
 room_number NUMBER (2),
 floor_number NUMBER (2),
@@ -984,7 +984,7 @@ CREATE TABLE study_plan_courses_log (
 plan_number NUMBER (3),
 major_id NUMBER (3),
 course_id VARCHAR2(10),
-year DATE ,
+year NUMBER(4), 
 semester NUMBER (1),
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
@@ -1188,18 +1188,45 @@ begin
 insert_emp('مصطفى أحمد','Mostafa Ahmed','Palestinian',300123456,'M','M',1500,'Gaza',to_date('4-5-1964','dd-mm-yyyy') , 'Islam','Good',7,00972591225472,082876528,'m_ahmed@hotmail.com', 'Gaza Strip','Gaza','Naser','Elgesser');
 insert_emp('أحمد شعبان','Ahmed Shaban','Egyptian',300321654,'M','S',700,'Cairo', to_date('1-7-1984','dd-mm-yyyy') , 'Islam','broken arm',3,00972599547231,082895312,'shaban1112@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy');
 insert_emp('ديمة منصور','Dima Mansor','Jordanian',300712698,'F','M',1300,'Amman',to_date('5-6-1976','dd-mm-yyyy') , 'Islam','Good',5,00972567412534,082865723,'dima_m1976@yaho.com', 'Rafah','Rafah','Yebna','Kir');
+
+insert_emp('حسن شملخ','Hasan Shamalakh','Egyptian',308122456,'M','M',1500,'Giza',to_date('7-6-1978','dd-mm-yyyy') , 'Islam','Good',7,00972591229412,082876528,'h_shmalakh@yaho.com', 'Gaza Strip','Gaza','Naser','Elgesser');
+insert_emp('سامي بدرة','Samy Badrah','Jordanian',307321644,'M','S',700,'Zarqa', to_date('1-7-1977','dd-mm-yyyy') , 'Islam','broken leg',3,00972569549425,082895312,'S123badr@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy');
+insert_emp('سارة اسماعيل','Sarah Isamel','Jordanian',303714198,'F','M',1300,'Karak',to_date('9-10-1966','dd-mm-yyyy') , 'Islam','Good',5,00972567413214,082865723,'sar_ismael7856@yaho.com', 'Rafah','Rafah','Yebna','Kir');
 end;
 /
 
 
-INSERT INTO teacher VALUES(320180001,TO_DATE('17/12/2015', 'DD/MM/YYYY'),DATE '2017-12-17',100,499.99);
-INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(320180002,DATE '2017-12-17',DATE '2018-12-17',500.00,'Master',100);
-INSERT INTO Security VALUES(320180003,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
-INSERT INTO Secretary VALUES(320180004,DATE '2013-11-1',DATE'2017-10-6',100,null);
-INSERT INTO item VALUES(001,'Lap TOP','Descriotion');
-INSERT INTO room_items VALUES(001,01,1,'A',20);
+INSERT INTO teacher VALUES(320180001, DATE '2017-07-17',DATE '2018-1-17',100,499.99);
+INSERT INTO teacher VALUES(320180002, DATE '2017-07-17',DATE '2018-1-17',101,300.14);
+INSERT INTO teacher VALUES(320180003, DATE '2017-07-17',DATE '2018-1-17',102,600);
+
+INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',103);
+
+INSERT INTO Security VALUES(320180005,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
+
+INSERT INTO Secretary VALUES(320180006,DATE '2013-11-1',DATE'2017-10-6',100,null);
+
+INSERT INTO item VALUES(001,'PC','Desktop PC');
+INSERT INTO item VALUES(002,'Lap TOP','Lap TOP, a moveable PC');
+INSERT INTO item VALUES(003,'LCD','Tool for presenting computer monitor on wall or appropriate surface');
+
+INSERT INTO room_items VALUES(001,01,1,'B',8);
+INSERT INTO room_items VALUES(003,01,1,'B',1);
+
+INSERT INTO room_items VALUES(001,01,2,'W',10);
+INSERT INTO room_items VALUES(003,01,2,'W',1);
+
+INSERT INTO room_items VALUES(002,01,1,'A',15);
+INSERT INTO room_items VALUES(003,01,1,'A',1);
+
 INSERT INTO study_plan VALUES(101,1);
-INSERT INTO study_plan_courses VALUES (101,1,'COMP2113',DATE'2016-10-10',1);
+INSERT INTO study_plan VALUES(101,2);
+INSERT INTO study_plan VALUES(101,3);
+
+    INSERT INTO study_plan_courses VALUES (101,1,'COMP2113',2018,1);
+    INSERT INTO study_plan_courses VALUES (101,1,'UNIV1122',2018,2);
+    INSERT INTO study_plan_courses VALUES (101,2,'UNIV1122',2016,2);
+    INSERT INTO study_plan_courses VALUES (101,3,'UNIV1125',2015,1);
 
 --------------------------------------------------------------------------------------------------------------------
 
