@@ -146,9 +146,9 @@ item_id NUMBER (3) REFERENCES item (item_id) ,
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
-FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_code,floor_number,room_number) ,
+FOREIGN KEY (room_number , floor_number , building_code) REFERENCES room (room_number , floor_number , building_code) ,
 quantity NUMBER (5) NOT NULL,
-PRIMARY KEY (item_id , room_number));
+PRIMARY KEY (item_id , room_number , floor_number , building_code));
 
 -- 18
 CREATE TABLE study_plan (
@@ -1166,8 +1166,8 @@ INSERT INTO room VALUES(01,3,'W',30);
 INSERT INTO room VALUES(02,3,'W',65);
 
 INSERT INTO department VALUES(100,'Acceptance and Registration',01,1,'A');
-INSERT INTO department VALUES(102,'Studnents Affairs',01,2,'A');
-INSERT INTO department VALUES(101,'Academic Affairs',05,1,'A');
+INSERT INTO department VALUES(101,'Studnents Affairs',01,2,'A');
+INSERT INTO department VALUES(102,'Academic Affairs',05,1,'A');
 
 INSERT INTO majors_department VALUES(100,'Engineering',03,1,'A');
 INSERT INTO majors_department VALUES(101,'Languages',03,2,'A');
@@ -1197,7 +1197,7 @@ INSERT INTO teacher VALUES(320180001, DATE '2017-07-17',DATE '2018-1-17',100,499
 INSERT INTO teacher VALUES(320180002, DATE '2017-07-17',DATE '2018-1-17',101,300.14);
 INSERT INTO teacher VALUES(320180003, DATE '2017-07-17',DATE '2018-1-17',102,600);
 
-INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',103);
+INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',100);
 
 INSERT INTO Security VALUES(320180005,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
 
