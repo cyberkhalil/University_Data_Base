@@ -1232,7 +1232,7 @@ insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , '
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
-0811111 , 'Ahmed@mail.com' , 'ABCD' ,
+0811111 , 'Ahmed@mail.com' ,
 5 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
 end;
 /
@@ -1242,7 +1242,7 @@ insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , '
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
-0811111 , 'Ahmed@mail.com' , 'ABCD' ,
+0811111 , 'Ahmed@mail.com' ,
 5 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
 end;
 /
@@ -1254,7 +1254,7 @@ insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , '
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
-0811111 , 'Ahmed@mail.com' , 'ABCD' ,
+0811111 , 'Ahmed@mail.com' ,
 5 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
 end;
 /
@@ -1264,7 +1264,7 @@ insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , '
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
  'FATHER_JOB' , 'FATHER_JOB_DESC' , 
 'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
-0811111 , 'Ahmed@mail.com' , 'ABCD' ,
+0811111 , 'Ahmed@mail.com' ,
 5 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
 end;
 /
