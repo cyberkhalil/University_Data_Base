@@ -57,3 +57,7 @@ This is a database project made with the sql (DDL , DML) & pl\sql languages (for
   ##### In the triggers & the procedures there is pl\sql language we used it in our project ######
   
   As a  last word we want to give all the thanks for our god then for our teachers for learning us like these skills in the first subject in our database 
+  ### Teachers:- ###
+  #### [Dr.Nael Aburas][NaelLink] - [Dr.Rami Lubbad][RamiLink] #### 
+  [RamiLink]: https://www.facebook.com/rlubbad
+  [NaelLink]: https://www.facebook.com/nael.aburas
