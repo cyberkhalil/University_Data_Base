@@ -259,7 +259,7 @@ PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_tim
 
 select count(*) from tab;
 -- should be 24 if every thing went right
---------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
 street_name VARCHAR2(30) NOT NULL,
@@ -1010,7 +1010,7 @@ end;
  /
  
  
- --------------------------------------------------------------------------------------------------------------------
+ ----------------------------------------------------------------------------------------------------------
 
 -- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
 CREATE OR REPLACE PROCEDURE insert_std(
@@ -1123,7 +1123,7 @@ END;
 /
 
 
- --------------------------------------------------------------------------------------------------------------------
+ ----------------------------------------------------------------------------------------------------------
 
 INSERT INTO address VALUES('Gaza Strip','Gaza','Naser','Elgesser');
 INSERT INTO address VALUES('Gaza North','Jabalia','Al Nazlah','Al Saftawy');
@@ -1225,7 +1225,7 @@ INSERT INTO study_plan_courses VALUES (101,1,'UNIV1122',2018,2);
 INSERT INTO study_plan_courses VALUES (101,2,'UNIV1122',2016,2);
 INSERT INTO study_plan_courses VALUES (101,3,'UNIV1125',2015,1);
 
---------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
 
 begin
 insert_std('محمد بركات' , 'Mohammed Barakat' , 'Palestinian',400321548, 'M' , 'S' , 'Khaled Barakat' , 407864284, 'Father' , 'Gaza' , to_date('7-2-1995','dd-mm-yyyy') , 'Islam' , 'Good' , 'Eman' , 'housewife' , 'managing household affairs' , 'Doctor' , 'cure ill or injured people' , 'both_alive' , 12 , 3 , 'government assistance' , 00972567513567 , 082876543 , 0097595763124 , 'Moh7med855@mail.com' ,88 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1    , 150 );
