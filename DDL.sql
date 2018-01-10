@@ -101,39 +101,43 @@ PRIMARY KEY (course_id,pre_required_course_id));
 
 -- 12
 CREATE TABLE teacher (
-teacher_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
-employment_start_date DATE DEFAULT sysdate,
-employment_end_date DATE,
+teacher_id NUMBER (9) REFERENCES employee(employee_id) ,
+teacher_start_date DATE DEFAULT sysdate,
+teacher_end_date DATE,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id),
-salary NUMBER (8,2) check (salary >=0) );
+salary NUMBER (8,2) check (salary >=0) ,
+PRIMARY KEY (teacher_id , teacher_start_date ) ) ;
 
 -- 13
 CREATE TABLE manager (
-manager_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
-employment_start_date DATE DEFAULT sysdate,
-employment_end_date DATE,
+manager_id NUMBER (9) REFERENCES employee(employee_id),
+manager_start_date DATE DEFAULT sysdate,
+manager_end_date DATE,
 salary NUMBER (8,2) check (salary >=0),
 manager_grade VARCHAR2(15) NOT NULL,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) ,
 department_id NUMBER (3) REFERENCES department (department_id) ,
-check ( (majors_department_id IS NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) )  );
+PRIMARY KEY (manager_id , manager_start_date),
+CONSTRAINT mngr_dept_chk CHECK ( (majors_department_id IS NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) )  );
 
 -- 14
 CREATE TABLE security (
-security_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY ,
-employment_start_date DATE DEFAULT sysdate,
-employment_end_date DATE,
+security_id NUMBER (9) REFERENCES employee(employee_id) ,
+security_start_date DATE DEFAULT sysdate,
+security_end_date DATE,
 salary NUMBER (8,2) check (salary >=0),
-department_id NUMBER (3) REFERENCES department (department_id) );
+department_id NUMBER (3) REFERENCES department (department_id),
+PRIMARY KEY (security_id , security_start_date) );
 
 -- 15
 CREATE TABLE secretary (
-secretary_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
-employment_start_date DATE DEFAULT sysdate,
-employment_end_date DATE,
+secretary_id NUMBER (9) REFERENCES employee(employee_id) ,
+secretary_start_date DATE DEFAULT sysdate,
+secretary_end_date DATE,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) ,
 department_id NUMBER (3) REFERENCES department (department_id) ,
-check ( (majors_department_id IS NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ) );
+PRIMARY KEY (secretary_id ,secretary_start_date ) ,
+CONSTRAINT secretary_dept_chk CHECK  ( (majors_department_id IS NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ) );
 
 -- 16
 CREATE TABLE item (
@@ -553,8 +557,8 @@ end;
 
 CREATE TABLE teacher_log (
 Teacher_id NUMBER (9),
-Employment_Start_Date DATE,
-Employment_End_Date DATE,
+teacher_Start_Date DATE,
+teacher_End_Date DATE,
 majors_department_id NUMBER (3),
 salary NUMBER (8,2) check (salary >=0),
 action_name char(6) NOT NULL , 
@@ -564,28 +568,27 @@ action_user VARCHAR2(30) DEFAULT user NOT NULL);
 CREATE OR REPLACE TRIGGER ai_teacher_trgr after INSERT on teacher
 for each row
 begin
-INSERT into teacher_log VALUES (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.salary ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT into teacher_log VALUES (:new.Teacher_id ,:new.teacher_Start_Date ,:new.teacher_End_Date,:new.Majors_Department_id,:new.salary ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 CREATE OR REPLACE TRIGGER au_teacher_trgr after update on teacher
 for each row 
 begin
-INSERT into teacher_log VALUES (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.salary ,'delete' ,DEFAULT,DEFAULT ); 
-INSERT into teacher_log VALUES (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.salary ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT into teacher_log VALUES (:old.Teacher_id ,:old.teacher_Start_Date ,:old.teacher_End_Date,:old.Majors_Department_id,:old.salary ,'delete' ,DEFAULT,DEFAULT ); 
+INSERT into teacher_log VALUES (:new.Teacher_id ,:new.teacher_Start_Date ,:new.teacher_End_Date,:new.Majors_Department_id,:new.salary ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_teacher_trgr after delete on teacher
 for each row 
 begin 
-INSERT into teacher_log VALUES (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.salary ,'delete' ,DEFAULT,DEFAULT ); 
+INSERT into teacher_log VALUES (:old.Teacher_id ,:old.teacher_Start_Date ,:old.teacher_End_Date,:old.Majors_Department_id,:old.salary ,'delete' ,DEFAULT,DEFAULT ); 
 end;
- /
+ / 
  
- 
-CREATE TABLE Manager_log (
+CREATE TABLE manager_log (
 Manager_id NUMBER (9) ,
-Employment_Start_Date DATE DEFAULT sysdate,
-Employment_End_Date DATE,
+manager_Start_Date DATE DEFAULT sysdate,
+manager_End_Date DATE,
 salary NUMBER (8,2) check (salary >=0),
 Manager_Grade VARCHAR2(15) NOT NULL,
 Majors_Department_id NUMBER (3) ,
@@ -597,28 +600,27 @@ action_user VARCHAR2(30) DEFAULT user NOT NULL);
 CREATE OR REPLACE TRIGGER ai_Manager_trgr after INSERT on Manager
 for each row
 begin
-INSERT into Manager_log VALUES (:new.Manager_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Manager_Grade ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT into Manager_log VALUES (:new.Manager_id ,:new.manager_Start_Date ,:new.manager_End_Date ,:new.salary ,:new.Manager_Grade ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 CREATE OR REPLACE TRIGGER au_Manager_trgr after update on Manager
 for each row 
 begin
-INSERT into Manager_log VALUES (:old.Manager_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Manager_Grade ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,DEFAULT,DEFAULT ); 
-INSERT into Manager_log VALUES (:new.Manager_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Manager_Grade ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT into Manager_log VALUES (:old.Manager_id ,:old.manager_Start_Date ,:old.manager_End_Date ,:old.salary ,:old.Manager_Grade ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,DEFAULT,DEFAULT ); 
+INSERT into Manager_log VALUES (:new.Manager_id ,:new.manager_Start_Date ,:new.manager_End_Date ,:new.salary ,:new.Manager_Grade ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_Manager_trgr after delete on Manager
 for each row 
 begin 
-INSERT into Manager_log VALUES (:old.Manager_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Manager_Grade ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,DEFAULT,DEFAULT ); 
+INSERT into Manager_log VALUES (:old.Manager_id ,:old.manager_Start_Date ,:old.manager_End_Date ,:old.salary ,:old.Manager_Grade ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,DEFAULT,DEFAULT ); 
 end;
- /
+/ 
  
- 
-CREATE TABLE Security_log (
+CREATE TABLE security_log (
 Security_id NUMBER (9) ,
-Employment_Start_Date DATE DEFAULT sysdate,
-Employment_End_Date DATE,
+security_Start_Date DATE DEFAULT sysdate,
+security_End_Date DATE,
 salary NUMBER (8,2) ,
 Department_id NUMBER (3),
 action_name char(6) NOT NULL , 
@@ -628,32 +630,32 @@ action_user VARCHAR2(30) DEFAULT user NOT NULL);
 CREATE OR REPLACE TRIGGER ai_Security_trgr after INSERT on Security
 for each row
 begin
-INSERT into Security_log VALUES (:new.Security_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Department_id,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT into Security_log VALUES (:new.Security_id ,:new.security_Start_Date ,:new.security_End_Date ,:new.salary ,:new.Department_id,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 
 CREATE OR REPLACE TRIGGER au_Security_trgr after update on Security
 for each row 
 begin
-INSERT into Security_log VALUES (:old.Security_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Department_id,'delete' ,DEFAULT,DEFAULT ); 
-INSERT into Security_log VALUES (:new.Security_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Department_id,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT into Security_log VALUES (:old.Security_id ,:old.security_Start_Date ,:old.security_End_Date ,:old.salary ,:old.Department_id,'delete' ,DEFAULT,DEFAULT ); 
+INSERT into Security_log VALUES (:new.Security_id ,:new.security_Start_Date ,:new.security_End_Date ,:new.salary ,:new.Department_id,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 
 CREATE OR REPLACE TRIGGER ad_Security_trgr after delete on Security
 for each row 
 begin 
-INSERT into Security_log VALUES (:old.Security_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Department_id,'delete' ,DEFAULT,DEFAULT ); 
+INSERT into Security_log VALUES (:old.Security_id ,:old.security_Start_Date ,:old.security_End_Date ,:old.salary ,:old.Department_id,'delete' ,DEFAULT,DEFAULT ); 
 end;
  /
  
  
-CREATE TABLE Secretary_log (
-Secretary_id NUMBER (9) ,
-Employment_Start_Date DATE DEFAULT sysdate,
-Employment_End_Date DATE,
-Majors_Department_id NUMBER (3) ,
-Department_id NUMBER (3),
+CREATE TABLE secretary_log (
+secretary_id NUMBER (9) ,
+secretary_start_date DATE DEFAULT sysdate,
+secretary_end_date DATE,
+majors_department_id NUMBER (3) ,
+department_id NUMBER (3),
 action_name char (6) NOT NULL, 
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
@@ -662,20 +664,20 @@ action_user VARCHAR2(30) DEFAULT user NOT NULL);
 CREATE OR REPLACE TRIGGER ai_Secretary_trgr after INSERT on Secretary 
 for each row
 begin
-INSERT into Secretary_log VALUES (:new.Secretary_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT into Secretary_log VALUES (:new.Secretary_id ,:new.secretary_Start_Date ,:new.secretary_End_Date ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 CREATE OR REPLACE TRIGGER au_Secretary_trgr after update on Secretary
 for each row 
 begin 
-INSERT into Secretary_log VALUES (:old.Secretary_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,DEFAULT,DEFAULT ); 
-INSERT into Secretary_log VALUES (:new.Secretary_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT into Secretary_log VALUES (:old.Secretary_id ,:old.secretary_Start_Date ,:old.secretary_End_Date ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,DEFAULT,DEFAULT ); 
+INSERT into Secretary_log VALUES (:new.Secretary_id ,:new.secretary_Start_Date ,:new.secretary_End_Date ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_Secretary_trgr after delete on Secretary 
 for each row 
 begin 
-INSERT into Secretary_log VALUES (:old.Secretary_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,DEFAULT,DEFAULT ); 
+INSERT into Secretary_log VALUES (:old.Secretary_id ,:old.secretary_Start_Date ,:old.secretary_End_Date ,:old.Majors_Department_id ,:old.Department_id ,'delete' ,DEFAULT,DEFAULT ); 
 end;
  /
 
@@ -1140,6 +1142,29 @@ execute immediate 'Grant employees_role to E' || employee_id;
 END;
 /
 
+-- a procedure to insert a teacher
+CREATE OR REPLACE PROCEDURE insert_teacher(
+teacher_id NUMBER ,
+teacher_start_date DATE ,
+teacher_end_date DATE ,
+majors_department_id NUMBER ,
+salary NUMBER ) 
+AUTHID CURRENT_USER
+IS
+BEGIN
+execute immediate 'INSERT INTO teacher VALUES (' ||teacher_id ||','''||teacher_start_date  ||''','''||teacher_end_date ||''','||majors_department_id ||','||salary ||')' ;
+execute immediate 'Grant teacher_role to E' || teacher_id;
+
+dbms_scheduler.create_job(
+      job_name => 'revoke teacher_role from '||teacher_id|| ' by the date: '||teacher_end_date ,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''revoke teacher from '||teacher_id||''' ; end;',
+      start_date => teacher_end_date ,
+      enabled => TRUE);
+
+END;
+/
+
 ----------------------------------------------------------------------------------------------------------
 -- insertion operations
 
@@ -1216,8 +1241,9 @@ end;
 INSERT INTO teacher VALUES(320180001, DATE '2017-07-17',DATE '2018-1-17',100,499.99);
 INSERT INTO teacher VALUES(320180002, DATE '2017-07-17',DATE '2018-1-17',101,300.14);
 INSERT INTO teacher VALUES(320180003, DATE '2017-07-17',DATE '2018-1-17',102,600);
+INSERT INTO teacher VALUES(320180003, DATE '2018-07-17',DATE '2019-1-17',102,600);
 
-INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',100);
+INSERT INTO manager(MANAGER_ID,manager_START_DATE,manager_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',100);
 
 INSERT INTO Security VALUES(320180005,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
 
