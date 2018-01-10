@@ -1076,8 +1076,8 @@ end if;
  execute immediate 'select '||seq_name||'.nextval from dual' into sid;
  
  execute immediate 'INSERT INTO STUDENT VALUES ('||sid||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
- execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456'; -- creating a user for student
- execute immediate 'Grant students_role to S' ||sid||; -- give a student's role for this user
+ execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
+ execute immediate 'Grant students_role to S' ||sid||; 
  
 END;
 /
@@ -1120,7 +1120,7 @@ end if;
 execute immediate 'select '||seq_name||'.nextval from dual' into employee_id;
 
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''' )' ;
-execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';-- creating  an user for the employee
+execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
 execute immediate 'Grant employees_role to E' ||employee_id||;
 END;
 /
