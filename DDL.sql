@@ -260,6 +260,7 @@ PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_tim
 
 select count(*) from tab;
 -- should be 24 if every thing went right
+
 ----------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
@@ -1016,6 +1017,11 @@ end;
 
 CREATE ROLE students_role;
 CREATE ROLE employees_role;
+CREATE ROLE teacher_role;
+CREATE ROLE manager_role;
+CREATE ROLE security_role;
+CREATE ROLE secretary_role;
+
 ----------------------------------------------------------------------------------------------------------
 
 -- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
