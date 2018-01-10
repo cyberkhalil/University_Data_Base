@@ -1277,3 +1277,4 @@ insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , '
 5 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
 end;
 /
+
