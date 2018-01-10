@@ -1011,7 +1011,11 @@ INSERT into study_plan_courses_log VALUES (:old.plan_number ,:old.major_id  ,:ol
 end;
  /
  
- 
+----------------------------------------------------------------------------------------------------------
+-- The Roles
+
+CREATE ROLE students_role;
+CREATE ROLE employees_role;
 ----------------------------------------------------------------------------------------------------------
 
 -- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
@@ -1127,12 +1131,6 @@ execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
 execute immediate 'Grant employees_role to E' || employee_id;
 END;
 /
-
-----------------------------------------------------------------------------------------------------------
--- The Roles
-
-CREATE ROLE students_role;
-CREATE ROLE employees_role;
 
 ----------------------------------------------------------------------------------------------------------
 -- insertion operations
