@@ -29,7 +29,7 @@ This is a database project made with the sql (DDL , DML) & pl\sql languages (for
   There are 24 tables (without the log ones) in this data base which conatain all the data that we need to store as records (rows)
   those tables can descripe the relation between the students , teachers , courses , and even more than another 15 object ..
   
-  2.  #### Logs Tables :- #####
+  2.  #### Log Tables :- #####
   For each table from those 24 from there is a log table , which is used to save every manipulation(DML) happen in the table and who did that and what changes , so the log table keep a record about who did what in which record and when ..
   
   3.  #### Triggers :- #####
