@@ -1228,47 +1228,9 @@ INSERT INTO study_plan_courses VALUES (101,3,'UNIV1125',2015,1);
 --------------------------------------------------------------------------------------------------------------------
 
 begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
-'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
- 'FATHER_JOB' , 'FATHER_JOB_DESC' , 
-'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
-0811111 , 'Ahmed@mail.com' ,
-5 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
+insert_std('محمد بركات' , 'Mohammed Barakat' , 'Palestinian',400321548, 'M' , 'S' , 'Khaled Barakat' , 407864284, 'Father' , 'Gaza' , to_date('7-2-1995','dd-mm-yyyy') , 'Islam' , 'Good' , 'Eman' , 'housewife' , 'managing household affairs' , 'Doctor' , 'cure ill or injured people' , 'both_alive' , 12 , 3 , 'government assistance' , 00972567513567 , 082876543 , 0097595763124 , 'Moh7med855@mail.com' ,88 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1    , 150 );
+insert_std('فؤاد سلمان' , 'Fouad Soliman' , 'Jordanian',400953215, 'M' , 'M' , 'Ibrahim Soliman' , 401119513, 'Uncle' , 'Amman' , to_date('26-9-1971','dd-mm-yyyy') , 'Islam' , 'Cut arm' , 'Noor' , 'school teacher' , 'Teach school students' , '-' , '-' , 'dead_father' , 8 , 1 , 'UNRWA assistance' , 00972594599835 , 082883714 , 00972591533841 , 'FSol415@gmail.com' ,85 , 'S' , 'Gaza North','Jabalia','Al Nazlah','Al Saftawy' , 2    , 150 );
+insert_std('سميه شاكر' , 'Somayyah Shaker' , 'Egyptian',402625375, 'F' , 'S' , 'Mohammed Shaker' , 402381853, 'Brother' , 'Giza' , to_date('24-8-1978','dd-mm-yyyy') , 'Islam' , 'Paralized' , 'Marwa' , '-' , '-' , '-' , '-' , 'both_dead' , 6 , 2 , 'UNRWA assistance' , 00972563875071 , 082881989 , 00972591499557 , 'Somayyah1978@mail.com' ,67 , 'L' , 'Rafah','Rafah','Yebna','Kir' , 3    , 150 );
+insert_std('مريم الخياط' , 'Mariam Al-Khayyat' , 'Palestinian',402531181, 'F' , 'M' , 'Ali Al-Khayyat' , 400490070, 'Father' , 'Rafah' , to_date('4-6-1987','dd-mm-yyyy') , 'Christianity' , 'Good' , 'Sarah' , 'university teacher' , 'teach university students' , 'Carpenter' , 'make and repair wooden objects' , 'both_alive' , 10 , 1 , 'Other assistance' , 00972593894811 , 082831132 , 00972564402409 , 'M-Khayyat@yaho.com' ,96 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1    , 150 );
 end;
 /
-
-begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
-'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
- 'FATHER_JOB' , 'FATHER_JOB_DESC' , 
-'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
-0811111 , 'Ahmed@mail.com' ,
-5 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
-end;
-/
-
--- change sex attribute from Male to Female
-
-begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
-'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
- 'FATHER_JOB' , 'FATHER_JOB_DESC' , 
-'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
-0811111 , 'Ahmed@mail.com' ,
-5 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
-end;
-/
-
-begin
-insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'F' , 'S' , 'Gardian Name' , 500, 'Father' , 
-'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
- 'FATHER_JOB' , 'FATHER_JOB_DESC' , 
-'PARENTS_STATUS' , 20 , 9 , 'SOCIAL_AFFAIRS' , 70555555555 , 082876543 , 
-0811111 , 'Ahmed@mail.com' ,
-5 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
-end;
-/
-
---------------------------------------------------------------------------------------------------------------------
-
-CREATE ROLE student;
