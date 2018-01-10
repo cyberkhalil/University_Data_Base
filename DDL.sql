@@ -1023,8 +1023,9 @@ CREATE ROLE security_role;
 CREATE ROLE secretary_role;
 
 ----------------------------------------------------------------------------------------------------------
+-- creating insertion procedures
 
--- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
+-- a procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
 CREATE OR REPLACE PROCEDURE insert_std(
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
@@ -1094,6 +1095,7 @@ execute immediate 'Grant students_role to S' ||sid ;
 END;
 /
 
+-- a procedure to insert an employee and create a user for him as 'E123' where 123 is the sid of the student
 CREATE OR REPLACE PROCEDURE insert_emp(
 Full_name_ar VARCHAR2 ,
 Full_name_en VARCHAR2 ,
