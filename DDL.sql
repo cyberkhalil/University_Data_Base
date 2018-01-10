@@ -170,7 +170,7 @@ CONSTRAINT stdy_pln_smstr_chk CHECK (semester IN (1,2,3)));
 
 -- 20
 CREATE TABLE student (
-sid NUMBER(9) PRIMARY KEY,
+student_id NUMBER(9) PRIMARY KEY,
 full_name_ar VARCHAR2(100) NOT NULL,
 full_name_en VARCHAR2(100) NOT NULL,
 nationality VARCHAR2(20) NOT NULL REFERENCES nationality (nationality) ,
@@ -213,10 +213,10 @@ CONSTRAINT stdnt_twj_fld_chk CHECK (tawjihi_field  IN ('S' , 'L' )));
 -- 21
 CREATE TABLE academic_advice (
 teacher_id NUMBER (9) REFERENCES teacher (teacher_id) ,
-sid NUMBER(9) REFERENCES student (sid) ,
+student_id NUMBER(9) REFERENCES student (student_id) ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1),
-PRIMARY KEY (teacher_id, sid, year, semester),
+PRIMARY KEY (teacher_id, student_id, year, semester),
 CONSTRAINT acdmic_advc_smstr_chk CHECK (semester IN (1,2,3)));
 
 -- 22
@@ -231,7 +231,7 @@ CONSTRAINT section_smstr_chk CHECK (semester IN (1,2,3)));
 
 -- 23
 CREATE TABLE enroll (
-sid NUMBER(9) REFERENCES student (sid) ,
+student_id NUMBER(9) REFERENCES student (student_id) ,
 course_id VARCHAR2(10) ,
 section_number NUMBER(3) ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
@@ -239,7 +239,7 @@ semester NUMBER(1) ,
 grade_mid NUMBER (2) DEFAULT NULL ,
 grade_final NUMBER (3) DEFAULT NULL,
 FOREIGN KEY (section_number , course_id , year , semester) REFERENCES section (section_number , course_id , year , semester) ,
-PRIMARY KEY (sid , course_id , section_number , year , semester),
+PRIMARY KEY (student_id , course_id , section_number , year , semester),
 CONSTRAINT eroll_grade_chk CHECK ((grade_final+grade_mid >=40)and (grade_final+grade_mid <=100 )));
 
 -- 24
@@ -769,7 +769,7 @@ end;
 
 CREATE TABLE academic_advice_log (
 teacher_id NUMBER (9),
-sid NUMBER(9),
+student_id NUMBER(9),
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1) ,
 action_name char(6) NOT NULL , 
@@ -779,20 +779,20 @@ action_user VARCHAR2(30) DEFAULT user NOT NULL);
 CREATE OR REPLACE TRIGGER ai_academic_advice_trgr after INSERT on academic_advice
 for each row
 begin
-INSERT into academic_advice_log VALUES (:new.teacher_id ,:new.sid ,:new.year ,:new.semester,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT into academic_advice_log VALUES (:new.teacher_id ,:new.student_id ,:new.year ,:new.semester,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
 CREATE OR REPLACE TRIGGER au_academic_advice_trgr after update on academic_advice
 for each row 
 begin
-INSERT into academic_advice_log VALUES (:old.teacher_id ,:old.sid ,:old.year ,:old.semester,'delete' ,DEFAULT ,DEFAULT );
-INSERT into academic_advice_log VALUES (:new.teacher_id ,:new.sid ,:new.year ,:new.semester,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT into academic_advice_log VALUES (:old.teacher_id ,:old.student_id ,:old.year ,:old.semester,'delete' ,DEFAULT ,DEFAULT );
+INSERT into academic_advice_log VALUES (:new.teacher_id ,:new.student_id ,:new.year ,:new.semester,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
 CREATE OR REPLACE TRIGGER ad_academic_advice_trgr after delete on academic_advice
 for each row 
 begin 
-INSERT into academic_advice_log VALUES (:old.teacher_id ,:old.sid ,:old.year ,:old.semester,'delete' ,DEFAULT ,DEFAULT );
+INSERT into academic_advice_log VALUES (:old.teacher_id ,:old.student_id ,:old.year ,:old.semester,'delete' ,DEFAULT ,DEFAULT );
 end;
  /
 
@@ -829,7 +829,7 @@ end;
 
 
 CREATE TABLE enroll_log (
-sid NUMBER(9),
+student_id NUMBER(9),
 course_id VARCHAR2(10) ,
 section_number NUMBER(3) ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
@@ -843,20 +843,20 @@ action_user VARCHAR2(30) DEFAULT user NOT NULL);
 CREATE OR REPLACE TRIGGER ai_enroll_trgr after INSERT on enroll
 for each row
 begin
-INSERT into enroll_log VALUES (:new.sid ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT into enroll_log VALUES (:new.student_id ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
 CREATE OR REPLACE TRIGGER au_enroll_trgr after update on enroll
 for each row 
 begin
-INSERT into enroll_log VALUES (:old.sid ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'delete' ,DEFAULT ,DEFAULT );
-INSERT into enroll_log VALUES (:new.sid ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT into enroll_log VALUES (:old.student_id ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'delete' ,DEFAULT ,DEFAULT );
+INSERT into enroll_log VALUES (:new.student_id ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
 CREATE OR REPLACE TRIGGER ad_enroll_trgr after delete on enroll
 for each row 
 begin 
-INSERT into enroll_log VALUES (:old.sid ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'delete' ,DEFAULT ,DEFAULT );
+INSERT into enroll_log VALUES (:old.student_id ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'delete' ,DEFAULT ,DEFAULT );
 end;
  /
 
@@ -897,7 +897,7 @@ end;
  /
  
 CREATE TABLE student_log (
-sid NUMBER(9),
+student_id NUMBER(9),
 Full_name_ar  VARCHAR2(100) ,
 Full_name_en  VARCHAR2(100) ,
 Nationality VARCHAR2(20) ,
@@ -939,20 +939,20 @@ action_user VARCHAR2(30) DEFAULT user NOT NULL);
 CREATE OR REPLACE TRIGGER ai_student_trgr after INSERT on student
 for each row
 begin
-INSERT into student_log VALUES (:new.sid ,:new.Full_name_ar ,:new.Full_name_en ,:new.Nationality ,:new.national_id ,:new.sex ,:new.social_status ,:new.guardian_name ,:new.guardian_national_id ,:new.guardian_relation ,:new.birh_place ,:new.date_of_birth ,:new.religion,:new.health_status ,:new.mother_name ,:new.mother_job ,:new.mother_job_desc ,:new.father_job ,:new.father_job_desc ,:new.parents_status,:new.number_of_family_members ,:new.family_university_students ,:new.social_affairs ,:new.phone ,:new.telephone_home ,:new.emergency_phone ,:new.email ,:new.tawjihi_GPA ,:new.tawjihi_field ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name ,:new.major_id ,:new.balance ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT into student_log VALUES (:new.student_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.Nationality ,:new.national_id ,:new.sex ,:new.social_status ,:new.guardian_name ,:new.guardian_national_id ,:new.guardian_relation ,:new.birh_place ,:new.date_of_birth ,:new.religion,:new.health_status ,:new.mother_name ,:new.mother_job ,:new.mother_job_desc ,:new.father_job ,:new.father_job_desc ,:new.parents_status,:new.number_of_family_members ,:new.family_university_students ,:new.social_affairs ,:new.phone ,:new.telephone_home ,:new.emergency_phone ,:new.email ,:new.tawjihi_GPA ,:new.tawjihi_field ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name ,:new.major_id ,:new.balance ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
 CREATE OR REPLACE TRIGGER au_student_trgr after update on student
 for each row 
 begin
-INSERT into student_log VALUES (:old.sid ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality ,:old.national_id ,:old.sex ,:old.social_status ,:old.guardian_name ,:old.guardian_national_id ,:old.guardian_relation ,:old.birh_place ,:old.date_of_birth ,:old.religion,:old.health_status ,:old.mother_name ,:old.mother_job ,:old.mother_job_desc ,:old.father_job ,:old.father_job_desc ,:old.parents_status,:old.number_of_family_members ,:old.family_university_students ,:old.social_affairs ,:old.phone ,:old.telephone_home ,:old.emergency_phone ,:old.email , :old.tawjihi_GPA ,:old.tawjihi_field ,:old.area_name ,:old.city_name ,:old.block_name  ,:old.street_name ,:old.major_id ,:old.balance  ,'delete' ,DEFAULT ,DEFAULT );
-INSERT into student_log VALUES (:new.sid ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality ,:new.national_id ,:new.sex ,:new.social_status ,:new.guardian_name ,:new.guardian_national_id ,:new.guardian_relation ,:new.birh_place ,:new.date_of_birth ,:new.religion,:new.health_status ,:new.mother_name ,:new.mother_job ,:new.mother_job_desc ,:new.father_job ,:new.father_job_desc ,:new.parents_status,:new.number_of_family_members ,:new.family_university_students ,:new.social_affairs ,:new.phone ,:new.telephone_home ,:new.emergency_phone ,:new.email , :new.tawjihi_GPA ,:new.tawjihi_field ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name , :new.major_id ,:new.balance ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT into student_log VALUES (:old.student_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality ,:old.national_id ,:old.sex ,:old.social_status ,:old.guardian_name ,:old.guardian_national_id ,:old.guardian_relation ,:old.birh_place ,:old.date_of_birth ,:old.religion,:old.health_status ,:old.mother_name ,:old.mother_job ,:old.mother_job_desc ,:old.father_job ,:old.father_job_desc ,:old.parents_status,:old.number_of_family_members ,:old.family_university_students ,:old.social_affairs ,:old.phone ,:old.telephone_home ,:old.emergency_phone ,:old.email , :old.tawjihi_GPA ,:old.tawjihi_field ,:old.area_name ,:old.city_name ,:old.block_name  ,:old.street_name ,:old.major_id ,:old.balance  ,'delete' ,DEFAULT ,DEFAULT );
+INSERT into student_log VALUES (:new.student_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality ,:new.national_id ,:new.sex ,:new.social_status ,:new.guardian_name ,:new.guardian_national_id ,:new.guardian_relation ,:new.birh_place ,:new.date_of_birth ,:new.religion,:new.health_status ,:new.mother_name ,:new.mother_job ,:new.mother_job_desc ,:new.father_job ,:new.father_job_desc ,:new.parents_status,:new.number_of_family_members ,:new.family_university_students ,:new.social_affairs ,:new.phone ,:new.telephone_home ,:new.emergency_phone ,:new.email , :new.tawjihi_GPA ,:new.tawjihi_field ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name , :new.major_id ,:new.balance ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
 CREATE OR REPLACE TRIGGER ad_student_trgr after delete on student
 for each row 
 begin 
-INSERT into student_log VALUES (:old.sid ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality ,:old.national_id ,:old.sex ,:old.social_status ,:old.guardian_name ,:old.guardian_national_id ,:old.guardian_relation ,:old.birh_place ,:old.date_of_birth ,:old.religion,:old.health_status ,:old.mother_name ,:old.mother_job ,:old.mother_job_desc ,:old.father_job ,:old.father_job_desc ,:old.parents_status,:old.number_of_family_members ,:old.family_university_students ,:old.social_affairs ,:old.phone ,:old.telephone_home ,:old.emergency_phone ,:old.email ,:old.tawjihi_GPA ,:old.tawjihi_field ,:old.area_name ,:old.city_name ,:old.block_name  ,:old.street_name , :old.major_id , :old.balance ,'delete' ,DEFAULT ,DEFAULT );
+INSERT into student_log VALUES (:old.student_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality ,:old.national_id ,:old.sex ,:old.social_status ,:old.guardian_name ,:old.guardian_national_id ,:old.guardian_relation ,:old.birh_place ,:old.date_of_birth ,:old.religion,:old.health_status ,:old.mother_name ,:old.mother_job ,:old.mother_job_desc ,:old.father_job ,:old.father_job_desc ,:old.parents_status,:old.number_of_family_members ,:old.family_university_students ,:old.social_affairs ,:old.phone ,:old.telephone_home ,:old.emergency_phone ,:old.email ,:old.tawjihi_GPA ,:old.tawjihi_field ,:old.area_name ,:old.city_name ,:old.block_name  ,:old.street_name , :old.major_id , :old.balance ,'delete' ,DEFAULT ,DEFAULT );
 end;
  /
 
@@ -1025,7 +1025,7 @@ CREATE ROLE secretary_role;
 ----------------------------------------------------------------------------------------------------------
 -- creating insertion procedures
 
--- a procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
+-- a procedure to insert a student and create a user for him as 'S123' where 123 is the student_id of the student
 CREATE OR REPLACE PROCEDURE insert_std(
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
@@ -1068,7 +1068,7 @@ sex_number NUMBER(1);
 year NUMBER(4) := EXTRACT (YEAR FROM sysdate);
 seq_count NUMBER(1);
 seq_name VARCHAR2(30);
-sid NUMBER(9);
+student_id NUMBER(9);
 
 BEGIN
  IF sex = 'M' then
@@ -1086,16 +1086,16 @@ if seq_count = 0 then
 execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
 end if;
 
-execute immediate 'select '||seq_name||'.nextval from dual' into sid;
+execute immediate 'select '||seq_name||'.nextval from dual' into student_id;
  
-execute immediate 'INSERT INTO STUDENT VALUES ('||sid||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
-execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
-execute immediate 'Grant students_role to S' ||sid ; 
+execute immediate 'INSERT INTO STUDENT VALUES ('||student_id||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
+execute immediate 'CREATE USER S' ||student_id|| ' IDENTIFIED BY 123456';
+execute immediate 'Grant students_role to S' ||student_id ; 
  
 END;
 /
 
--- a procedure to insert an employee and create a user for him as 'E123' where 123 is the sid of the student
+-- a procedure to insert an employee and create a user for him as 'E123' where 123 is the student_id of the student
 CREATE OR REPLACE PROCEDURE insert_emp(
 Full_name_ar VARCHAR2 ,
 Full_name_en VARCHAR2 ,
