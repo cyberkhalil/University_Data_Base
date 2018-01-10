@@ -1073,10 +1073,12 @@ if seq_count = 0 then
 execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
 end if;
 
-execute immediate 'select '||seq_name||'.nextval from dual' into sid;
-
+ execute immediate 'select '||seq_name||'.nextval from dual' into sid;
+ 
  execute immediate 'INSERT INTO STUDENT VALUES ('||sid||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
- execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
+ execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456'; -- creating a user for student
+ execute immediate 'Grant students_role to S' ||sid||; -- give a student's role for this user
+ 
 END;
 /
 
@@ -1118,12 +1120,18 @@ end if;
 execute immediate 'select '||seq_name||'.nextval from dual' into employee_id;
 
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''' )' ;
-execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
+execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';-- creating  an user for the employee
+execute immediate 'Grant employees_role to E' ||employee_id||;
 END;
 /
 
-
  --------------------------------------------------------------------------------------------------------------------
+ -- The Roles
+
+CREATE ROLE students_role;
+CREATE ROLE employees_role;
+ --------------------------------------------------------------------------------------------------------------------
+ -- insertion operations
 
 INSERT INTO address VALUES('Gaza Strip','Gaza','Naser','Elgesser');
 INSERT INTO address VALUES('Gaza North','Jabalia','Al Nazlah','Al Saftawy');
@@ -1181,6 +1189,7 @@ INSERT INTO course VALUES('COMP2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
 INSERT INTO course VALUES('UNIV1122','English',1, 2 ,'DESCRIPTION',100);
 INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'DESCRIPTION',100);
 
+-- Insertion by procedures
 begin
 insert_emp('مصطفى أحمد','Mostafa Ahmed','Palestinian',300123456,'M','M',1500,'Gaza',to_date('4-5-1964','dd-mm-yyyy') , 'Islam','Good',7,00972591225472,082876528,'m_ahmed@hotmail.com', 'Gaza Strip','Gaza','Naser','Elgesser');
 insert_emp('أحمد شعبان','Ahmed Shaban','Egyptian',300321654,'M','S',700,'Cairo', to_date('1-7-1984','dd-mm-yyyy') , 'Islam','broken arm',3,00972599547231,082895312,'shaban1112@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy');
@@ -1226,7 +1235,7 @@ INSERT INTO study_plan VALUES(101,3);
     INSERT INTO study_plan_courses VALUES (101,3,'UNIV1125',2015,1);
 
 --------------------------------------------------------------------------------------------------------------------
-
+-- Insertion by procedures
 begin
 insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , 'M' , 'S' , 'Gardian Name' , 500, 'Father' , 
 'Gaza' , to_date('1-1-10','dd-mm-yy') , 'Islam' , 'Good' , 'Mother' , 'Mother job' , 'Mother job desc' ,
@@ -1268,7 +1277,3 @@ insert_std('Arabic Full Name' , 'English Full Name' , 'Palestinian',12345789 , '
 5 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1 , 50 );
 end;
 /
-
---------------------------------------------------------------------------------------------------------------------
-
-CREATE ROLE student;
