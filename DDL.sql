@@ -1339,6 +1339,7 @@ INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'DESCRIPTION',100);
 
 ----------------------------------------------------------------------------------------------------------
 -- Insertion by procedures
+
 begin
 insert_emp('مصطفى أحمد','Mostafa Ahmed','Palestinian',300123456,'M','M',1500,'Gaza',to_date('4-5-1964','dd-mm-yyyy') , 'Islam','Good',7,00972591225472,082876528,'m_ahmed@hotmail.com', 'Gaza Strip','Gaza','Naser','Elgesser' , DATE '2015-7-10');
 insert_emp('أحمد شعبان','Ahmed Shaban','Egyptian',300321654,'M','S',700,'Cairo', to_date('1-7-1984','dd-mm-yyyy') , 'Islam','broken arm',3,00972599547231,082895312,'shaban1112@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2016-8-15');
@@ -1362,6 +1363,9 @@ insert_secretary (320180006,DATE '2013-11-1',DATE'2017-10-6',500,100,null , 2 );
 
 end;
 /
+
+----------------------------------------------------------------------------------------------------------
+-- insertion operations
 
 INSERT INTO item VALUES(001,'PC','Desktop PC');
 INSERT INTO item VALUES(002,'Lap TOP','Lap TOP, a moveable PC');
