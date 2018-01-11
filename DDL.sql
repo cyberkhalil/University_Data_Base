@@ -1184,7 +1184,7 @@ execute immediate 'INSERT INTO teacher VALUES (' ||teacher_id ||','''||teacher_s
 execute immediate 'GRANT teacher_role to E' || teacher_id;
 
 dbms_scheduler.create_job(
-      job_name => 'revoke teacher_role from E'||teacher_id|| ' by the date: '||teacher_end_date ,
+      job_name => 'rvk_teacher_E'||teacher_id,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke teacher_role from E'||teacher_id||''' ; end;',
       start_date => teacher_end_date ,
@@ -1213,7 +1213,7 @@ execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_s
 execute immediate 'GRANT manager_role to E' || manager_id;
 
 dbms_scheduler.create_job(
-      job_name => 'revoke manager_role from E'||manager_id|| ' by the date: '||manager_end_date ,
+      job_name => 'rvk_manager_role_from_E'||manager_id,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke manager_role from E'||manager_id||''' ; end;',
       start_date => manager_end_date ,
