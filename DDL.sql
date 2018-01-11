@@ -276,8 +276,9 @@ end_time DATE ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section (section_number , course_id , year , semester ) ,
 PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
+-- just for testing
 select count(*) from tab;
--- should be 24 if every thing went right
+-- should be 24 if 1st part: table creation (without logs nor triggers) went right
 
 ----------------------------------------------------------------------------------------------------------
 
@@ -679,7 +680,7 @@ majors_department_id NUMBER (3) ,
 department_id NUMBER (3),
 secretary_start_year NUMBER(4) NOT NULL,
 secretary_start_semester NUMBER(1) NOT NULL,
-action_name char (6) NOT NULL, secretary
+action_name char (6) NOT NULL,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
@@ -1115,7 +1116,7 @@ execute immediate 'select '||seq_name||'.nextval from dual' into student_id;
  
 execute immediate 'INSERT INTO STUDENT VALUES ('||student_id||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
 execute immediate 'CREATE USER S' ||student_id|| ' IDENTIFIED BY 123456';
-execute immediate 'Grant students_role to S' ||student_id ; 
+execute immediate 'GRANT student_role to S' ||student_id ; 
  
 END;
 /
@@ -1144,7 +1145,7 @@ street_name VARCHAR2,
 employment_date DATE ) 
 AUTHID CURRENT_USER
 IS
-year NUMBER(4) := extract (year from sysdate);		
+year NUMBER(4) := EXTRACT (year from sysdate);		
 seq_count NUMBER(1);		
 seq_name VARCHAR2(30);		
 employee_id NUMBER(9);
@@ -1161,7 +1162,7 @@ execute immediate 'select '||seq_name||'.nextval from dual' into employee_id;
 
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''','''||employment_date||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
-execute immediate 'Grant employees_role to E' || employee_id;
+execute immediate 'GRANT employee_role to E' || employee_id;
 END;
 /
 
@@ -1176,14 +1177,14 @@ teacher_start_semester NUMBER)
 AUTHID CURRENT_USER
 IS
 
-teacher_start_year NUMBER(4) := extract (year from teacher_start_date);		
+teacher_start_year NUMBER(4) := EXTRACT (year from teacher_start_date);		
 
 BEGIN
 execute immediate 'INSERT INTO teacher VALUES (' ||teacher_id ||','''||teacher_start_date  ||''','''||teacher_end_date ||''','||majors_department_id ||','||salary ||','||teacher_start_year||','||teacher_start_semester||')' ;
-execute immediate 'Grant teacher_role to E' || teacher_id;
+execute immediate 'GRANT teacher_role to E' || teacher_id;
 
 dbms_scheduler.create_job(
-      job_name => 'revoke teacher_role from E'||teacher_id|| ' by the date: '||teacher_end_date ,
+      job_name => 'rvk_tchr_E'||teacher_id||'_'||teacher_start_year||'_'||teacher_start_semester,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke teacher_role from E'||teacher_id||''' ; end;',
       start_date => teacher_end_date ,
@@ -1205,14 +1206,14 @@ manager_start_semester NUMBER )
 AUTHID CURRENT_USER
 IS
 
-manager_start_year NUMBER(4) := extract (year from manager_start_date);		
+manager_start_year NUMBER(4) := EXTRACT (year from manager_start_date);		
 
 BEGIN
-execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','||salary ||','''||manager_grade||''','||majors_department_id||','||manager_start_year||','||manager_start_semester||')' ;
+execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','|| salary || ','''|| manager_grade||''', :val1, :val2 ,'||manager_start_year||','||manager_start_semester||')' USING majors_department_id,department_id ;
 execute immediate 'GRANT manager_role to E' || manager_id;
 
 dbms_scheduler.create_job(
-      job_name => 'revoke manager_role from E'||manager_id|| ' by the date: '||manager_end_date ,
+      job_name => 'rvk_mngr_E'||manager_id||manager_start_year||'_'||manager_start_semester,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke manager_role from E'||manager_id||''' ; end;',
       start_date => manager_end_date ,
@@ -1233,14 +1234,14 @@ security_start_semester NUMBER)
 AUTHID CURRENT_USER
 IS
 
-security_start_year NUMBER(4) := extract (year from security_start_date);		
+security_start_year NUMBER(4) := EXTRACT (year from security_start_date);		
 
 BEGIN
 execute immediate 'INSERT INTO security VALUES (' ||security_id ||','''||security_start_date  ||''','''||security_end_date ||''','||salary ||','||department_id||','||security_start_year||','||security_start_semester||')' ;
 execute immediate 'GRANT security_role to E' || security_id;
 
 dbms_scheduler.create_job(
-      job_name => 'revoke security_role from E'||security_id|| ' by the date: '||security_end_date ,
+      job_name => 'rvk_scurty_E'||security_id||security_start_year||'_'||security_start_semester ,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke security_role from E'||security_id||''' ; end;',
       start_date => security_end_date ,
@@ -1261,14 +1262,14 @@ secretary_start_semester NUMBER)
 AUTHID CURRENT_USER
 IS
 
-secretary_start_year NUMBER(4) := extract (year from secretary_start_date);		
+secretary_start_year NUMBER(4) := EXTRACT (year from secretary_start_date);		
 
 BEGIN
-execute immediate 'INSERT INTO secretary VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||','||majors_department_id||','||department_id||','||secretary_start_year||','||secretary_start_semester||')' ;
+execute immediate 'INSERT INTO secretary VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||', :val1 , :val2 ,'||secretary_start_year||','||secretary_start_semester||')' USING majors_department_id,department_id ;
 execute immediate 'GRANT secretary_role to E' || secretary_id;
 
 dbms_scheduler.create_job(
-      job_name => 'revoke secretary_role from E'||secretary_id|| ' by the date: '||secretary_end_date ,
+      job_name => 'rvk_scrtary_E'||secretary_id ||secretary_start_year||'_'||secretary_start_semester ,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke secretary_role from E'||secretary_id||''' ; end;',
       start_date => secretary_end_date ,
@@ -1338,6 +1339,7 @@ INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'DESCRIPTION',100);
 
 ----------------------------------------------------------------------------------------------------------
 -- Insertion by procedures
+
 begin
 insert_emp('مصطفى أحمد','Mostafa Ahmed','Palestinian',300123456,'M','M',1500,'Gaza',to_date('4-5-1964','dd-mm-yyyy') , 'Islam','Good',7,00972591225472,082876528,'m_ahmed@hotmail.com', 'Gaza Strip','Gaza','Naser','Elgesser' , DATE '2015-7-10');
 insert_emp('أحمد شعبان','Ahmed Shaban','Egyptian',300321654,'M','S',700,'Cairo', to_date('1-7-1984','dd-mm-yyyy') , 'Islam','broken arm',3,00972599547231,082895312,'shaban1112@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2016-8-15');
@@ -1346,20 +1348,24 @@ insert_emp('ديمة منصور','Dima Mansor','Jordanian',300712698,'F','M',130
 insert_emp('حسن شملخ','Hasan Shamalakh','Egyptian',308122456,'M','M',1500,'Giza',to_date('7-6-1978','dd-mm-yyyy') , 'Islam','Good',7,00972591229412,082876528,'h_shmalakh@yaho.com', 'Gaza Strip','Gaza','Naser','Elgesser', DATE '2012-1-14');
 insert_emp('سامي بدرة','Samy Badrah','Jordanian',307321644,'M','S',700,'Zarqa', to_date('1-7-1977','dd-mm-yyyy') , 'Islam','broken leg',3,00972569549425,082895312,'S123badr@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2017-5-1');
 insert_emp('سارة اسماعيل','Sarah Isamel','Jordanian',303714198,'F','M',1300,'Karak',to_date('9-10-1966','dd-mm-yyyy') , 'Islam','Good',5,00972567413214,082865723,'sar_ismael7856@yaho.com', 'Rafah','Rafah','Yebna','Kir', DATE '2017-5-15');
+
+
+insert_teacher(320180001, DATE '2017-07-17',DATE '2018-1-17',100,499.99 , 1);
+insert_teacher(320180002, DATE '2017-07-17',DATE '2018-1-17',101,300.14 , 1);
+insert_teacher(320180003, DATE '2017-07-17',DATE '2018-1-17',102,600 , 2 );
+insert_teacher(320180003, DATE '2018-07-17',DATE '2019-1-17',102,600 , 2);
+
+insert_manager(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',null,100 , 1);
+
+insert_security (320180005,DATE '2017-12-17',DATE '2018-12-17',500.00,100 ,2 );
+
+insert_secretary (320180006,DATE '2013-11-1',DATE'2017-10-6',500,100,null , 2 );
+
 end;
 /
 
-
-INSERT INTO teacher VALUES(320180001, DATE '2017-07-17',DATE '2018-1-17',100,499.99);
-INSERT INTO teacher VALUES(320180002, DATE '2017-07-17',DATE '2018-1-17',101,300.14);
-INSERT INTO teacher VALUES(320180003, DATE '2017-07-17',DATE '2018-1-17',102,600);
-INSERT INTO teacher VALUES(320180003, DATE '2018-07-17',DATE '2019-1-17',102,600);
-
-INSERT INTO manager(MANAGER_ID,manager_START_DATE,manager_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',100);
-
-INSERT INTO Security VALUES(320180005,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
-
-INSERT INTO Secretary VALUES(320180006,DATE '2013-11-1',DATE'2017-10-6',100,null);
+----------------------------------------------------------------------------------------------------------
+-- insertion operations
 
 INSERT INTO item VALUES(001,'PC','Desktop PC');
 INSERT INTO item VALUES(002,'Lap TOP','Lap TOP, a moveable PC');
