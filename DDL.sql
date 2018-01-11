@@ -276,6 +276,10 @@ end_time DATE ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section (section_number , course_id , year , semester ) ,
 PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
+-- just for testing
+select count(*) from tab;
+-- should be 24 if 1st part: table creation (without logs nor triggers) went right
+
 ----------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
@@ -1391,9 +1395,3 @@ insert_std('سميه شاكر' , 'Somayyah Shaker' , 'Egyptian',402625375, 'F' ,
 insert_std('مريم الخياط' , 'Mariam Al-Khayyat' , 'Palestinian',402531181, 'F' , 'M' , 'Ali Al-Khayyat' , 400490070, 'Father' , 'Rafah' , to_date('4-6-1987','dd-mm-yyyy') , 'Christianity' , 'Good' , 'Sarah' , 'university teacher' , 'teach university students' , 'Carpenter' , 'make and repair wooden objects' , 'both_alive' , 10 , 1 , 'Other assistance' , 00972593894811 , 082831132 , 00972564402409 , 'M-Khayyat@yaho.com' ,96 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1    , 150 );
 end;
 /
-
-
-----------------------------------------------------------------------------------------------------------
--- just for testing
-select count(*) from tab;
--- should be 24 if 1st part: table creation (witho log nor trigger) went right
