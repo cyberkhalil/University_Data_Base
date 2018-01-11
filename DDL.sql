@@ -1116,7 +1116,7 @@ execute immediate 'select '||seq_name||'.nextval from dual' into student_id;
  
 execute immediate 'INSERT INTO STUDENT VALUES ('||student_id||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
 execute immediate 'CREATE USER S' ||student_id|| ' IDENTIFIED BY 123456';
-execute immediate 'Grant students_role to S' ||student_id ; 
+execute immediate 'GRANT student_role to S' ||student_id ; 
  
 END;
 /
@@ -1162,7 +1162,7 @@ execute immediate 'select '||seq_name||'.nextval from dual' into employee_id;
 
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''','''||employment_date||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
-execute immediate 'Grant employees_role to E' || employee_id;
+execute immediate 'GRANT employee_role to E' || employee_id;
 END;
 /
 
@@ -1181,7 +1181,7 @@ teacher_start_year NUMBER(4) := extract (year from teacher_start_date);
 
 BEGIN
 execute immediate 'INSERT INTO teacher VALUES (' ||teacher_id ||','''||teacher_start_date  ||''','''||teacher_end_date ||''','||majors_department_id ||','||salary ||','||teacher_start_year||','||teacher_start_semester||')' ;
-execute immediate 'Grant teacher_role to E' || teacher_id;
+execute immediate 'GRANT teacher_role to E' || teacher_id;
 
 dbms_scheduler.create_job(
       job_name => 'revoke teacher_role from E'||teacher_id|| ' by the date: '||teacher_end_date ,
