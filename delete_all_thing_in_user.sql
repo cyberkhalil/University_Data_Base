@@ -46,7 +46,7 @@ END;
 /
 
 -- Stop here !
--- you have to know that you will drop students and employees users by completing copying this code & droping student and employee roles too !
+-- you have to know that you will drop students and employees users by completing copying this code & dropping student and employee roles too !
 
 -- Dropping employees
 drop user E320180001;
@@ -65,9 +65,8 @@ drop user S220180001;
 drop user S220180002;
 
 -- Dropping roles
-drop role students_role;
-drop role employees_role;
+drop role student_role;
+drop role employee_role;
 -- Done
 
 clear scr
-
