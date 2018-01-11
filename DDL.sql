@@ -1145,7 +1145,7 @@ street_name VARCHAR2,
 employment_date DATE ) 
 AUTHID CURRENT_USER
 IS
-year NUMBER(4) := extract (year from sysdate);		
+year NUMBER(4) := EXTRACT (year from sysdate);		
 seq_count NUMBER(1);		
 seq_name VARCHAR2(30);		
 employee_id NUMBER(9);
@@ -1177,7 +1177,7 @@ teacher_start_semester NUMBER)
 AUTHID CURRENT_USER
 IS
 
-teacher_start_year NUMBER(4) := extract (year from teacher_start_date);		
+teacher_start_year NUMBER(4) := EXTRACT (year from teacher_start_date);		
 
 BEGIN
 execute immediate 'INSERT INTO teacher VALUES (' ||teacher_id ||','''||teacher_start_date  ||''','''||teacher_end_date ||''','||majors_department_id ||','||salary ||','||teacher_start_year||','||teacher_start_semester||')' ;
@@ -1206,14 +1206,14 @@ manager_start_semester NUMBER )
 AUTHID CURRENT_USER
 IS
 
-manager_start_year NUMBER(4) := extract (year from manager_start_date);		
+manager_start_year NUMBER(4) := EXTRACT (year from manager_start_date);		
 
 BEGIN
-execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','||salary ||','''||manager_grade||''','||majors_department_id||','||department_id||','||manager_start_year||','||manager_start_semester||')' ;
+execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','|| salary || ','''|| manager_grade||''', :val1, :val2 ,'||manager_start_year||','||manager_start_semester||')' USING majors_department_id,department_id ;
 execute immediate 'GRANT manager_role to E' || manager_id;
 
 dbms_scheduler.create_job(
-      job_name => 'rvk_manager_role_from_E'||manager_id,
+      job_name => 'rvk_manager_E'||manager_id,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke manager_role from E'||manager_id||''' ; end;',
       start_date => manager_end_date ,
@@ -1234,7 +1234,7 @@ security_start_semester NUMBER)
 AUTHID CURRENT_USER
 IS
 
-security_start_year NUMBER(4) := extract (year from security_start_date);		
+security_start_year NUMBER(4) := EXTRACT (year from security_start_date);		
 
 BEGIN
 execute immediate 'INSERT INTO security VALUES (' ||security_id ||','''||security_start_date  ||''','''||security_end_date ||''','||salary ||','||department_id||','||security_start_year||','||security_start_semester||')' ;
@@ -1262,14 +1262,14 @@ secretary_start_semester NUMBER)
 AUTHID CURRENT_USER
 IS
 
-secretary_start_year NUMBER(4) := extract (year from secretary_start_date);		
+secretary_start_year NUMBER(4) := EXTRACT (year from secretary_start_date);		
 
 BEGIN
-execute immediate 'INSERT INTO secretary VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||','||majors_department_id||','||department_id||','||secretary_start_year||','||secretary_start_semester||')' ;
+execute immediate 'INSERT INTO secretary VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||', :val1 , :val2 ,'||secretary_start_year||','||secretary_start_semester||')' USING majors_department_id,department_id ;
 execute immediate 'GRANT secretary_role to E' || secretary_id;
 
 dbms_scheduler.create_job(
-      job_name => 'revoke secretary_role from E'||secretary_id|| ' by the date: '||secretary_end_date ,
+      job_name => 'rvk_secretary_E'||secretary_id ,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke secretary_role from E'||secretary_id||''' ; end;',
       start_date => secretary_end_date ,
