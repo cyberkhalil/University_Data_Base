@@ -65,9 +65,18 @@ drop user S220180001;
 drop user S220180002;
 
 -- Dropping roles
-drop role students_role;
-drop role employees_role;
+DROP ROLE student_role;
+DROP ROLE employee_role;
+DROP ROLE teacher_role;
+DROP ROLE manager_role;
+DROP ROLE security_role;
+DROP ROLE secretary_role;
 -- Done
 
-clear scr
+-- drop job syntax
+--begin
+--DBMS_SCHEDULER.DROP_JOB('RVK_TEACHER_E320180001');
+--end;
+--/
 
+clear scr
