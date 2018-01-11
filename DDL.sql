@@ -1209,7 +1209,7 @@ IS
 manager_start_year NUMBER(4) := extract (year from manager_start_date);		
 
 BEGIN
-execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','||salary ||','''||manager_grade||''','||majors_department_id||','||manager_start_year||','||manager_start_semester||')' ;
+execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','||salary ||','''||manager_grade||''','||majors_department_id||','||department_id||','||manager_start_year||','||manager_start_semester||')' ;
 execute immediate 'GRANT manager_role to E' || manager_id;
 
 dbms_scheduler.create_job(
@@ -1241,7 +1241,7 @@ execute immediate 'INSERT INTO security VALUES (' ||security_id ||','''||securit
 execute immediate 'GRANT security_role to E' || security_id;
 
 dbms_scheduler.create_job(
-      job_name => 'revoke security_role from E'||security_id|| ' by the date: '||security_end_date ,
+      job_name => 'rvk_security_E'||security_id ,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke security_role from E'||security_id||''' ; end;',
       start_date => security_end_date ,
