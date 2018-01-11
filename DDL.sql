@@ -1184,7 +1184,7 @@ execute immediate 'INSERT INTO teacher VALUES (' ||teacher_id ||','''||teacher_s
 execute immediate 'GRANT teacher_role to E' || teacher_id;
 
 dbms_scheduler.create_job(
-      job_name => 'rvk_teacher_E'||teacher_id,
+      job_name => 'rvk_tchr_E'||teacher_id||'_'||teacher_start_year||'_'||teacher_start_semester,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke teacher_role from E'||teacher_id||''' ; end;',
       start_date => teacher_end_date ,
@@ -1213,7 +1213,7 @@ execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_s
 execute immediate 'GRANT manager_role to E' || manager_id;
 
 dbms_scheduler.create_job(
-      job_name => 'rvk_manager_E'||manager_id,
+      job_name => 'rvk_mngr_E'||manager_id||manager_start_year||'_'||manager_start_semester,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke manager_role from E'||manager_id||''' ; end;',
       start_date => manager_end_date ,
@@ -1241,7 +1241,7 @@ execute immediate 'INSERT INTO security VALUES (' ||security_id ||','''||securit
 execute immediate 'GRANT security_role to E' || security_id;
 
 dbms_scheduler.create_job(
-      job_name => 'rvk_security_E'||security_id ,
+      job_name => 'rvk_scurty_E'||security_id||security_start_year||'_'||security_start_semester ,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke security_role from E'||security_id||''' ; end;',
       start_date => security_end_date ,
@@ -1269,7 +1269,7 @@ execute immediate 'INSERT INTO secretary VALUES (' ||secretary_id ||','''||secre
 execute immediate 'GRANT secretary_role to E' || secretary_id;
 
 dbms_scheduler.create_job(
-      job_name => 'rvk_secretary_E'||secretary_id ,
+      job_name => 'rvk_scrtary_E'||secretary_id ||secretary_start_year||'_'||secretary_start_semester ,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''revoke secretary_role from E'||secretary_id||''' ; end;',
       start_date => secretary_end_date ,
