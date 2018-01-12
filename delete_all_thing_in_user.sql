@@ -72,10 +72,38 @@ DROP ROLE security_role;
 DROP ROLE secretary_role;
 -- Done
 
--- drop job syntax
---begin
---DBMS_SCHEDULER.DROP_JOB('RVK_TEACHER_E320180001');
---end;
---/
+--drop jobs according to our current insertion
+begin
+DBMS_SCHEDULER.DROP_JOB('RVK_MNGR_E320180004_2017_1');
+end;
+/
+
+begin
+DBMS_SCHEDULER.DROP_JOB('RVK_SCURTY_E320180005_2017_2');
+end;
+/
+
+begin
+DBMS_SCHEDULER.DROP_JOB('RVK_TCHR_E320180001_2017_1');
+end;
+/
+
+begin
+DBMS_SCHEDULER.DROP_JOB('RVK_TCHR_E320180002_2017_1');
+end;
+/
+
+begin
+DBMS_SCHEDULER.DROP_JOB('RVK_TCHR_E320180003_2017_2');
+end;
+/
+
+begin
+DBMS_SCHEDULER.DROP_JOB('RVK_TCHR_E320180003_2018_2');
+end;
+/
+
+--manually check if there still existing jobs please comment 'clear scr' command if you want to check this
+select job_name from user_scheduler_jobs;
 
 clear scr
