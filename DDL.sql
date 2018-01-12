@@ -1175,9 +1175,67 @@ execute immediate 'select '||seq_name||'.nextval from dual' INTO employee_id;
 
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''','''||employment_date||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
-execute immediate 'Grant employee_role to E' || employee_id;
+execute immediate 'GRANT employee_role to E' || employee_id;
 END;
 /
+
+-- a procedure to insert a teacher
+CREATE OR REPLACE PROCEDURE insert_teacher(
+teacher_id NUMBER ,
+teacher_start_date DATE ,
+teacher_end_date DATE ,
+majors_department_id NUMBER ,
+salary NUMBER ,
+teacher_start_semester NUMBER) 
+AUTHID CURRENT_USER
+IS
+
+teacher_start_year NUMBER(4) := EXTRACT (year from teacher_start_date);		
+
+BEGIN
+execute immediate 'INSERT INTO teacher VALUES (' ||teacher_id ||','''||teacher_start_date  ||''','''||teacher_end_date ||''','||majors_department_id ||','||salary ||','||teacher_start_year||','||teacher_start_semester||')' ;
+execute immediate 'GRANT teacher_role to E' || teacher_id;
+
+dbms_scheduler.create_job(
+      job_name => 'rvk_tchr_E'||teacher_id||'_'||teacher_start_year||'_'||teacher_start_semester,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''revoke teacher_role from E'||teacher_id||''' ; end;',
+      start_date => teacher_end_date ,
+      enabled => TRUE);
+
+END;
+/
+
+-- a procedure to insert a manger
+CREATE OR REPLACE PROCEDURE insert_manager(
+manager_id NUMBER ,
+manager_start_date DATE ,
+manager_end_date DATE ,
+salary NUMBER ,
+manager_grade VARCHAR2 ,
+majors_department_id NUMBER ,
+department_id NUMBER ,
+manager_start_semester NUMBER ) 
+AUTHID CURRENT_USER
+IS
+
+manager_start_year NUMBER(4) := EXTRACT (year from manager_start_date);		
+
+BEGIN
+execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','|| salary || ','''|| manager_grade||''', :val1, :val2 ,'||manager_start_year||','||manager_start_semester||')' USING majors_department_id,department_id ;
+execute immediate 'GRANT manager_role to E' || manager_id;
+
+dbms_scheduler.create_job(
+      job_name => 'rvk_mngr_E'||manager_id||'_'||manager_start_year||'_'||manager_start_semester,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''revoke manager_role from E'||manager_id||''' ; end;',
+      start_date => manager_end_date ,
+      enabled => TRUE);
+
+END;
+/
+
+
 
 ----------------------------------------------------------------------------------------------------------
 -- creating Views
