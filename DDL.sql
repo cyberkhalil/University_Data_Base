@@ -276,10 +276,6 @@ FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_c
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section (section_number , course_id , year , semester ) ,
 PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
--- just for testing
-select count(*) from tab;
--- should be 24 if 1st part: table creation (without logs nor triggers) went right
-
 ----------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
@@ -1079,7 +1075,7 @@ CREATE ROLE secretary_role;
 -- creating insertion procedures
 
 -- a procedure to insert a student and create a user for him as 'S123' where 123 is the student_id of the student
-CREATE OR REPLACE PROCEDURE insert_std(
+CREATE OR REPLACE PROCEDURE insert_student(
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
 Nationality VARCHAR2  ,
@@ -1149,7 +1145,7 @@ END;
 /
 
 -- a procedure to insert an employee and create a user for him as 'E123' where 123 is the student_id of the student
-CREATE OR REPLACE PROCEDURE insert_emp(
+CREATE OR REPLACE PROCEDURE insert_employee(
 Full_name_ar VARCHAR2 ,
 Full_name_en VARCHAR2 ,
 Nationality VARCHAR2 ,
@@ -1189,7 +1185,14 @@ execute immediate 'select '||seq_name||'.nextval from dual' INTO employee_id;
 
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''','''||employment_date||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
-execute immediate 'GRANT employee_role to E' || employee_id;
+
+dbms_scheduler.create_job(
+      job_name => 'grnt_emp_E'||employee_id,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''GRANT employee_role to E'||employee_id||''' ; end;',
+      start_date => employment_date ,
+      enabled => TRUE);
+
 END;
 /
 
@@ -1207,7 +1210,13 @@ IS
 teacher_start_year NUMBER(4) := EXTRACT (year from teacher_start_date);		
 BEGIN
 execute immediate 'INSERT INTO teacher VALUES (' ||teacher_id ||','''||teacher_start_date  ||''','''||teacher_end_date ||''','||majors_department_id ||','||salary ||','||teacher_start_year||','||teacher_start_semester||')' ;
-execute immediate 'GRANT teacher_role to E' || teacher_id;
+
+dbms_scheduler.create_job(
+      job_name => 'grnt_tchr_E'||teacher_id||'_'||teacher_start_year||'_'||teacher_start_semester,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''GRANT teacher_role to E'||teacher_id||''' ; end;',
+      start_date => teacher_start_date ,
+      enabled => TRUE);
 
 dbms_scheduler.create_job(
       job_name => 'rvk_tchr_E'||teacher_id||'_'||teacher_start_year||'_'||teacher_start_semester,
@@ -1236,7 +1245,13 @@ manager_start_year NUMBER(4) := EXTRACT (year from manager_start_date);
 
 BEGIN
 execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','|| salary || ','''|| manager_grade||''', :val1, :val2 ,'||manager_start_year||','||manager_start_semester||')' USING majors_department_id,department_id ;
-execute immediate 'GRANT manager_role to E' || manager_id;
+
+dbms_scheduler.create_job(
+      job_name => 'grnt_mngr_E'||manager_id||'_'||manager_start_year||'_'||manager_start_semester,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''GRANT manager_role to E'||manager_id||''' ; end;',
+      start_date => manager_start_date ,
+      enabled => TRUE);
 
 dbms_scheduler.create_job(
       job_name => 'rvk_mngr_E'||manager_id||'_'||manager_start_year||'_'||manager_start_semester,
@@ -1264,7 +1279,13 @@ security_start_year NUMBER(4) := EXTRACT (year from security_start_date);
 
 BEGIN
 execute immediate 'INSERT INTO security VALUES (' ||security_id ||','''||security_start_date  ||''','''||security_end_date ||''','||salary ||','||department_id||','||security_start_year||','||security_start_semester||')' ;
-execute immediate 'GRANT security_role to E' || security_id;
+
+dbms_scheduler.create_job(
+      job_name => 'grnt_scurty_E'||security_id||'_'||security_start_year||'_'||security_start_semester ,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''GRANT security_role to E'||security_id||''' ; end;',
+      start_date => security_start_date ,
+      enabled => TRUE);
 
 dbms_scheduler.create_job(
       job_name => 'rvk_scurty_E'||security_id||'_'||security_start_year||'_'||security_start_semester ,
@@ -1292,7 +1313,13 @@ secretary_start_year NUMBER(4) := EXTRACT (year from secretary_start_date);
 
 BEGIN
 execute immediate 'INSERT INTO secretary VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||', :val1 , :val2 ,'||secretary_start_year||','||secretary_start_semester||')' USING majors_department_id,department_id ;
-execute immediate 'GRANT secretary_role to E' || secretary_id;
+
+dbms_scheduler.create_job(
+      job_name => 'grnt_scrtary_E'||secretary_id ||'_'||secretary_start_year||'_'||secretary_start_semester ,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''GRANT secretary_role to E'||secretary_id||''' ; end;',
+      start_date => secretary_start_date ,
+      enabled => TRUE);
 
 dbms_scheduler.create_job(
       job_name => 'rvk_scrtary_E'||secretary_id ||'_'||secretary_start_year||'_'||secretary_start_semester ,
@@ -1423,19 +1450,18 @@ GRANT SELECT ON UNIVERSITY.employee to employee_role;
 -- Insertion by procedures
 
 begin
-insert_emp('مصطفى أحمد','Mostafa Ahmed','Palestinian',300123456,'M','M',1500,'Gaza',to_date('4-5-1964','dd-mm-yyyy') , 'Islam','Good',7,00972591225472,082876528,'m_ahmed@hotmail.com', 'Gaza Strip','Gaza','Naser','Elgesser' , DATE '2015-7-10');
-insert_emp('أحمد شعبان','Ahmed Shaban','Egyptian',300321654,'M','S',700,'Cairo', to_date('1-7-1984','dd-mm-yyyy') , 'Islam','broken arm',3,00972599547231,082895312,'shaban1112@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2016-8-15');
-insert_emp('ديمة منصور','Dima Mansor','Jordanian',300712698,'F','M',1300,'Amman',to_date('5-6-1976','dd-mm-yyyy') , 'Islam','Good',5,00972567412534,082865723,'dima_m1976@yaho.com', 'Rafah','Rafah','Yebna','Kir', DATE '2013-8-21');
+insert_employee('مصطفى أحمد','Mostafa Ahmed','Palestinian',300123456,'M','M',1500,'Gaza',to_date('4-5-1964','dd-mm-yyyy') , 'Islam','Good',7,00972591225472,082876528,'m_ahmed@hotmail.com', 'Gaza Strip','Gaza','Naser','Elgesser' , DATE '2015-7-10');
+insert_employee('أحمد شعبان','Ahmed Shaban','Egyptian',300321654,'M','S',700,'Cairo', to_date('1-7-1984','dd-mm-yyyy') , 'Islam','broken arm',3,00972599547231,082895312,'shaban1112@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2016-8-15');
+insert_employee('ديمة منصور','Dima Mansor','Jordanian',300712698,'F','M',1300,'Amman',to_date('5-6-1976','dd-mm-yyyy') , 'Islam','Good',5,00972567412534,082865723,'dima_m1976@yaho.com', 'Rafah','Rafah','Yebna','Kir', DATE '2019-8-21');
 
-insert_emp('حسن شملخ','Hasan Shamalakh','Egyptian',308122456,'M','M',1500,'Giza',to_date('7-6-1978','dd-mm-yyyy') , 'Islam','Good',7,00972591229412,082876528,'h_shmalakh@yaho.com', 'Gaza Strip','Gaza','Naser','Elgesser', DATE '2012-1-14');
-insert_emp('سامي بدرة','Samy Badrah','Jordanian',307321644,'M','S',700,'Zarqa', to_date('1-7-1977','dd-mm-yyyy') , 'Islam','broken leg',3,00972569549425,082895312,'S123badr@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2017-5-1');
-insert_emp('سارة اسماعيل','Sarah Isamel','Jordanian',303714198,'F','M',1300,'Karak',to_date('9-10-1966','dd-mm-yyyy') , 'Islam','Good',5,00972567413214,082865723,'sar_ismael7856@yaho.com', 'Rafah','Rafah','Yebna','Kir', DATE '2017-5-15');
+insert_employee('حسن شملخ','Hasan Shamalakh','Egyptian',308122456,'M','M',1500,'Giza',to_date('7-6-1978','dd-mm-yyyy') , 'Islam','Good',7,00972591229412,082876528,'h_shmalakh@yaho.com', 'Gaza Strip','Gaza','Naser','Elgesser', DATE '2012-1-14');
+insert_employee('سامي بدرة','Samy Badrah','Jordanian',307321644,'M','S',700,'Zarqa', to_date('1-7-1977','dd-mm-yyyy') , 'Islam','broken leg',3,00972569549425,082895312,'S123badr@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2017-5-1');
+insert_employee('سارة اسماعيل','Sarah Isamel','Jordanian',303714198,'F','M',1300,'Karak',to_date('9-10-1966','dd-mm-yyyy') , 'Islam','Good',5,00972567413214,082865723,'sar_ismael7856@yaho.com', 'Rafah','Rafah','Yebna','Kir', DATE '2017-5-15');
 
 
 insert_teacher(320180001, DATE '2017-07-17',DATE '2018-1-17',100,499.99 , 1);
-insert_teacher(320180002, DATE '2017-07-17',DATE '2018-1-17',101,300.14 , 1);
-insert_teacher(320180003, DATE '2017-07-17',DATE '2018-1-17',102,600 , 2 );
-insert_teacher(320180003, DATE '2018-07-17',DATE '2019-1-17',102,600 , 2);
+insert_teacher(320180002, DATE '2017-07-17',DATE '2018-3-17',101,300.14 , 1);
+insert_teacher(320180002, DATE '2018-07-17',DATE '2019-3-17',101,300.14 , 1);
 
 insert_manager(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',null,100 , 1);
 
@@ -1451,7 +1477,7 @@ end;
 
 INSERT INTO item VALUES(001,'PC','Desktop PC');
 INSERT INTO item VALUES(002,'Lap TOP','Lap TOP, a moveable PC');
-INSERT INTO item VALUES(003,'LCD','Tool for presenting computer monitor ON wall or appropriate surface');
+INSERT INTO item VALUES(003,'LCD','Tool for presenting computer monitor on wall or appropriate surface');
 
 INSERT INTO room_items VALUES(001,01,1,'B',8);
 INSERT INTO room_items VALUES(003,01,1,'B',1);
@@ -1475,10 +1501,10 @@ INSERT INTO study_plan_courses VALUES (101,3,'UNIV1125',2015,1);
 -- Insertion by procedures
 
 begin
-insert_std('محمد بركات' , 'Mohammed Barakat' , 'Palestinian',400321548, 'M' , 'S' , 'Khaled Barakat' , 407864284, 'Father' , 'Gaza' , to_date('7-2-1995','dd-mm-yyyy') , 'Islam' , 'Good' , 'Eman' , 'housewife' , 'managing household affairs' , 'Doctor' , 'cure ill or injured people' , 'both_alive' , 12 , 3 , 'government assistance' , 00972567513567 , 082876543 , 0097595763124 , 'Moh7med855@mail.com' ,88 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1    , 150 );
-insert_std('فؤاد سلمان' , 'Fouad Soliman' , 'Jordanian',400953215, 'M' , 'M' , 'Ibrahim Soliman' , 401119513, 'Uncle' , 'Amman' , to_date('26-9-1971','dd-mm-yyyy') , 'Islam' , 'Cut arm' , 'Noor' , 'school teacher' , 'Teach school students' , '-' , '-' , 'dead_father' , 8 , 1 , 'UNRWA assistance' , 00972594599835 , 082883714 , 00972591533841 , 'FSol415@gmail.com' ,85 , 'S' , 'Gaza North','Jabalia','Al Nazlah','Al Saftawy' , 2    , 150 );
-insert_std('سميه شاكر' , 'Somayyah Shaker' , 'Egyptian',402625375, 'F' , 'S' , 'Mohammed Shaker' , 402381853, 'Brother' , 'Giza' , to_date('24-8-1978','dd-mm-yyyy') , 'Islam' , 'Paralized' , 'Marwa' , '-' , '-' , '-' , '-' , 'both_dead' , 6 , 2 , 'UNRWA assistance' , 00972563875071 , 082881989 , 00972591499557 , 'Somayyah1978@mail.com' ,67 , 'L' , 'Rafah','Rafah','Yebna','Kir' , 3    , 150 );
-insert_std('مريم الخياط' , 'Mariam Al-Khayyat' , 'Palestinian',402531181, 'F' , 'M' , 'Ali Al-Khayyat' , 400490070, 'Father' , 'Rafah' , to_date('4-6-1987','dd-mm-yyyy') , 'Christianity' , 'Good' , 'Sarah' , 'university teacher' , 'teach university students' , 'Carpenter' , 'make and repair wooden objects' , 'both_alive' , 10 , 1 , 'Other assistance' , 00972593894811 , 082831132 , 00972564402409 , 'M-Khayyat@yaho.com' ,96 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1    , 150 );
+insert_student('محمد بركات' , 'Mohammed Barakat' , 'Palestinian',400321548, 'M' , 'S' , 'Khaled Barakat' , 407864284, 'Father' , 'Gaza' , to_date('7-2-1995','dd-mm-yyyy') , 'Islam' , 'Good' , 'Eman' , 'housewife' , 'managing household affairs' , 'Doctor' , 'cure ill or injured people' , 'both_alive' , 12 , 3 , 'government assistance' , 00972567513567 , 082876543 , 0097595763124 , 'Moh7med855@mail.com' ,88 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1    , 150 );
+insert_student('فؤاد سلمان' , 'Fouad Soliman' , 'Jordanian',400953215, 'M' , 'M' , 'Ibrahim Soliman' , 401119513, 'Uncle' , 'Amman' , to_date('26-9-1971','dd-mm-yyyy') , 'Islam' , 'Cut arm' , 'Noor' , 'school teacher' , 'Teach school students' , '-' , '-' , 'dead_father' , 8 , 1 , 'UNRWA assistance' , 00972594599835 , 082883714 , 00972591533841 , 'FSol415@gmail.com' ,85 , 'S' , 'Gaza North','Jabalia','Al Nazlah','Al Saftawy' , 2    , 150 );
+insert_student('سميه شاكر' , 'Somayyah Shaker' , 'Egyptian',402625375, 'F' , 'S' , 'Mohammed Shaker' , 402381853, 'Brother' , 'Giza' , to_date('24-8-1978','dd-mm-yyyy') , 'Islam' , 'Paralized' , 'Marwa' , '-' , '-' , '-' , '-' , 'both_dead' , 6 , 2 , 'UNRWA assistance' , 00972563875071 , 082881989 , 00972591499557 , 'Somayyah1978@mail.com' ,67 , 'L' , 'Rafah','Rafah','Yebna','Kir' , 3    , 150 );
+insert_student('مريم الخياط' , 'Mariam Al-Khayyat' , 'Palestinian',402531181, 'F' , 'M' , 'Ali Al-Khayyat' , 400490070, 'Father' , 'Rafah' , to_date('4-6-1987','dd-mm-yyyy') , 'Christianity' , 'Good' , 'Sarah' , 'university teacher' , 'teach university students' , 'Carpenter' , 'make and repair wooden objects' , 'both_alive' , 10 , 1 , 'Other assistance' , 00972593894811 , 082831132 , 00972564402409 , 'M-Khayyat@yaho.com' ,96 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1    , 150 );
 end;
 /
 
@@ -1491,3 +1517,20 @@ INSERT INTO academic_advice VALUES (320180001,2017,1,120180001);
 INSERT INTO section VALUES (201 , 'COMP2113' , 320180001,2017,1);
 
 INSERT INTO enroll  VALUES (220180002 , 'COMP2113' ,201 , 2017,1 ,35,51);
+
+
+----------------------------------------------------------------------------------------------------------
+-- manually check for creation problem
+
+select count(*) from tab where tabtype='TABLE';
+-- should be 48
+
+select count(*) from tab where tabtype='VIEW';
+-- should be 6
+
+select count(*) from user_triggers;
+-- should be 72
+
+select count(*) from user_procedures where OBJECT_TYPE ='PROCEDURE';
+-- should be 6
+
