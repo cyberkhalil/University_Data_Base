@@ -1206,7 +1206,7 @@ dbms_scheduler.create_job(
 END;
 /
 
--- a procedure to insert a manger
+-- a procedure to insert a manager
 CREATE OR REPLACE PROCEDURE insert_manager(
 manager_id NUMBER ,
 manager_start_date DATE ,
@@ -1235,7 +1235,60 @@ dbms_scheduler.create_job(
 END;
 /
 
+-- a procedure to insert a security
+CREATE OR REPLACE PROCEDURE insert_security(
+security_id NUMBER ,
+security_start_date DATE ,
+security_end_date DATE ,
+salary NUMBER ,
+department_id NUMBER ,
+security_start_semester NUMBER) 
+AUTHID CURRENT_USER
+IS
 
+security_start_year NUMBER(4) := EXTRACT (year from security_start_date);		
+
+BEGIN
+execute immediate 'INSERT INTO security VALUES (' ||security_id ||','''||security_start_date  ||''','''||security_end_date ||''','||salary ||','||department_id||','||security_start_year||','||security_start_semester||')' ;
+execute immediate 'GRANT security_role to E' || security_id;
+
+dbms_scheduler.create_job(
+      job_name => 'rvk_scurty_E'||security_id||'_'||security_start_year||'_'||security_start_semester ,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''revoke security_role from E'||security_id||''' ; end;',
+      start_date => security_end_date ,
+      enabled => TRUE);
+
+END;
+/
+
+-- a procedure to insert a secretary
+CREATE OR REPLACE PROCEDURE insert_secretary(
+secretary_id NUMBER ,
+secretary_start_date DATE ,
+secretary_end_date DATE ,
+salary NUMBER ,
+majors_department_id NUMBER ,
+department_id NUMBER,
+secretary_start_semester NUMBER) 
+AUTHID CURRENT_USER
+IS
+
+secretary_start_year NUMBER(4) := EXTRACT (year from secretary_start_date);		
+
+BEGIN
+execute immediate 'INSERT INTO secretary VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||', :val1 , :val2 ,'||secretary_start_year||','||secretary_start_semester||')' USING majors_department_id,department_id ;
+execute immediate 'GRANT secretary_role to E' || secretary_id;
+
+dbms_scheduler.create_job(
+      job_name => 'rvk_scrtary_E'||secretary_id ||'_'||secretary_start_year||'_'||secretary_start_semester ,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''revoke secretary_role from E'||secretary_id||''' ; end;',
+      start_date => secretary_end_date ,
+      enabled => TRUE);
+
+END;
+/
 
 ----------------------------------------------------------------------------------------------------------
 -- creating Views
