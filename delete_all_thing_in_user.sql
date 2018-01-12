@@ -103,7 +103,10 @@ DBMS_SCHEDULER.DROP_JOB('RVK_TCHR_E320180003_2018_2');
 end;
 /
 
+begin
+DBMS_SCHEDULER.DROP_JOB('GRNT_EMP_E320180003');
+end;
+/
+
 --manually check if there still existing jobs please comment 'clear scr' command if you want to check this
 select job_name from user_scheduler_jobs;
-
-clear scr
