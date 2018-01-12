@@ -981,6 +981,33 @@ INSERT INTO Nationality_log VALUES (:old.Nationality ,'DELETE' ,DEFAULT,DEFAULT 
 end;
  /
 
+CREATE TABLE pre_required_courses_log (
+course_id VARCHAR2(10) ,
+pre_required_course_id VARCHAR2(10) ,
+action_name char(6) NOT NULL , 
+action_date date DEFAULT sysdate NOT NULL, 
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
+
+CREATE OR REPLACE TRIGGER ai_pre_required_courses_trgr AFTER INSERT ON pre_required_courses
+for each row
+begin
+INSERT INTO pre_required_courses_log VALUES (:new.course_id ,:new.pre_required_course_id ,'INSERT' ,DEFAULT ,DEFAULT );
+end;
+ /
+CREATE OR REPLACE TRIGGER au_pre_required_courses_trgr AFTER UPDATE ON pre_required_courses
+for each row 
+begin
+INSERT INTO pre_required_courses_log VALUES (:old.course_id ,:old.pre_required_course_id ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO pre_required_courses_log VALUES (:new.course_id ,:new.pre_required_course_id ,'INSERT' ,DEFAULT ,DEFAULT );
+end;
+ /
+CREATE OR REPLACE TRIGGER ad_pre_required_courses_trgr AFTER DELETE ON pre_required_courses
+for each row 
+begin 
+INSERT INTO pre_required_courses_log VALUES (:old.course_id ,:old.pre_required_course_id ,'DELETE' ,DEFAULT ,DEFAULT );
+end;
+ /
+ 
 CREATE TABLE study_plan_courses_log (
 plan_number NUMBER (3),
 major_id NUMBER (3),
@@ -1011,34 +1038,6 @@ INSERT INTO study_plan_courses_log VALUES (:old.plan_number ,:old.major_id  ,:ol
 end;
  /
  
- 
- CREATE TABLE pre_required_courses_log (
-course_id VARCHAR2(10) ,
-pre_required_course_id VARCHAR2(10) ,
-action_name char(6) NOT NULL , 
-action_date date DEFAULT sysdate NOT NULL, 
-action_user VARCHAR2(30) DEFAULT user NOT NULL);
-
-CREATE OR REPLACE TRIGGER ai_pre_required_courses_trgr AFTER INSERT ON pre_required_courses
-for each row
-begin
-INSERT INTO pre_required_courses_log VALUES (:new.course_id ,:new.pre_required_course_id ,'INSERT' ,DEFAULT ,DEFAULT );
-end;
- /
-CREATE OR REPLACE TRIGGER au_pre_required_courses_trgr AFTER UPDATE ON pre_required_courses
-for each row 
-begin
-INSERT INTO pre_required_courses_log VALUES (:old.course_id ,:old.pre_required_course_id ,'DELETE' ,DEFAULT ,DEFAULT );
-INSERT INTO pre_required_courses_log VALUES (:new.course_id ,:new.pre_required_course_id ,'INSERT' ,DEFAULT ,DEFAULT );
-end;
- /
-CREATE OR REPLACE TRIGGER ad_pre_required_courses_trgr AFTER DELETE ON pre_required_courses
-for each row 
-begin 
-INSERT INTO pre_required_courses_log VALUES (:old.course_id ,:old.pre_required_course_id ,'DELETE' ,DEFAULT ,DEFAULT );
-end;
- /
- 
 ----------------------------------------------------------------------------------------------------------
 -- The Roles
 
@@ -1049,8 +1048,8 @@ CREATE ROLE manager_role;
 CREATE ROLE security_role;
 CREATE ROLE secretary_role;
 
--- giving privileges;
 
+-- giving privileges;
 GRANT CREATE SESSION to student_role;
 GRANT SELECT ON UNIVERSITY.Std_dept_and_mjr to student_role;
 GRANT SELECT ON UNIVERSITY.Std_personal to student_role;
