@@ -1235,6 +1235,7 @@ dbms_scheduler.create_job(
 END;
 /
 
+
 -- a procedure to insert a security
 CREATE OR REPLACE PROCEDURE insert_security(
 security_id NUMBER ,
