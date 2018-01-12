@@ -101,39 +101,56 @@ PRIMARY KEY (course_id,pre_required_course_id));
 
 -- 12
 CREATE TABLE teacher (
-teacher_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
-employment_start_date DATE DEFAULT sysdate,
-employment_end_date DATE,
+teacher_id NUMBER (9) REFERENCES employee(employee_id) ,
+teacher_start_date DATE DEFAULT sysdate,
+teacher_end_date DATE,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id),
-salary NUMBER (8,2) check (salary >=0) );
+salary NUMBER (8,2) CHECK (salary >=0) ,
+teacher_start_year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate) NOT NULL,
+teacher_start_semester NUMBER(1) NOT NULL,
+CONSTRAINT tchr_pk PRIMARY KEY (teacher_id , teacher_start_year , teacher_start_semester ),
+CONSTRAINT tchr_strt_smstr_chk CHECK (teacher_start_semester IN (1,2,3)) );
 
 -- 13
 CREATE TABLE manager (
-manager_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
-employment_start_date DATE DEFAULT sysdate,
-employment_end_date DATE,
+manager_id NUMBER (9) REFERENCES employee(employee_id),
+manager_start_date DATE DEFAULT sysdate,
+manager_end_date DATE,
 salary NUMBER (8,2) check (salary >=0),
 manager_grade VARCHAR2(15) NOT NULL,
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) ,
 department_id NUMBER (3) REFERENCES department (department_id) ,
-check ( (majors_department_id IS NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) )  );
+manager_start_year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate) NOT NULL,
+manager_start_semester NUMBER(1) NOT NULL,
+CONSTRAINT mngr_pk PRIMARY KEY (manager_id , manager_start_year , manager_start_semester ),
+CONSTRAINT mngr_strt_smstr_chk CHECK (manager_start_semester IN (1,2,3)),
+CONSTRAINT mngr_dept_chk CHECK ( (majors_department_id IS NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) )  );
 
 -- 14
 CREATE TABLE security (
-security_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY ,
-employment_start_date DATE DEFAULT sysdate,
-employment_end_date DATE,
-salary NUMBER (8,2) check (salary >=0),
-department_id NUMBER (3) REFERENCES department (department_id) );
+security_id NUMBER (9) REFERENCES employee(employee_id) ,
+security_start_date DATE DEFAULT sysdate,
+security_end_date DATE,
+salary NUMBER (8,2) CHECK (salary >=0),
+department_id NUMBER (3) REFERENCES department (department_id),
+security_start_year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate) NOT NULL,
+security_start_semester NUMBER(1) NOT NULL,
+CONSTRAINT security_pk PRIMARY KEY (security_id , security_start_year , security_start_semester ),
+CONSTRAINT security_strt_smstr_chk CHECK (security_start_semester IN (1,2,3)));
 
 -- 15
 CREATE TABLE secretary (
-secretary_id NUMBER (9) REFERENCES employee(employee_id) PRIMARY KEY,
-employment_start_date DATE DEFAULT sysdate,
-employment_end_date DATE,
+secretary_id NUMBER (9) REFERENCES employee(employee_id) ,
+secretary_start_date DATE DEFAULT sysdate,
+secretary_end_date DATE,
+salary NUMBER (8,2) CHECK (salary >=0),
 majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) ,
 department_id NUMBER (3) REFERENCES department (department_id) ,
-check ( (majors_department_id IS NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ) );
+secretary_start_year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate) NOT NULL,
+secretary_start_semester NUMBER(1) NOT NULL,
+CONSTRAINT secretary_pk PRIMARY KEY (secretary_id , secretary_start_year , secretary_start_semester ),
+CONSTRAINT secretary_strt_smstr_chk CHECK (secretary_start_semester IN (1,2,3)),
+CONSTRAINT secretary_dept_chk CHECK  ( (majors_department_id IS NULL AND  department_id IS NOT NULL) OR (department_id IS NULL AND majors_department_id IS NOT NULL) ) );
 
 -- 16
 CREATE TABLE item (
@@ -170,7 +187,7 @@ CONSTRAINT stdy_pln_smstr_chk CHECK (semester IN (1,2,3)));
 
 -- 20
 CREATE TABLE student (
-sid NUMBER(9) PRIMARY KEY,
+student_id NUMBER(9) PRIMARY KEY,
 full_name_ar VARCHAR2(100) NOT NULL,
 full_name_en VARCHAR2(100) NOT NULL,
 nationality VARCHAR2(20) NOT NULL REFERENCES nationality (nationality) ,
@@ -212,26 +229,27 @@ CONSTRAINT stdnt_twj_fld_chk CHECK (tawjihi_field  IN ('S' , 'L' )));
 
 -- 21
 CREATE TABLE academic_advice (
-teacher_id NUMBER (9) REFERENCES teacher (teacher_id) ,
-sid NUMBER(9) REFERENCES student (sid) ,
+teacher_id NUMBER (9) ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1),
-PRIMARY KEY (teacher_id, sid, year, semester),
-CONSTRAINT acdmic_advc_smstr_chk CHECK (semester IN (1,2,3)));
+student_id NUMBER(9) REFERENCES student (student_id) ,
+CONSTRAINT acdmic_advc_fk_tchr FOREIGN KEY (teacher_id ,year ,semester) REFERENCES teacher(teacher_id ,teacher_start_year , teacher_start_semester),
+PRIMARY KEY (teacher_id, year, semester, student_id) );
 
 -- 22
 CREATE TABLE section (
 section_number NUMBER (3),
 course_id VARCHAR2(10) REFERENCES course (course_id) ,
+teacher_id NUMBER (9) ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1) ,
-teacher_id NUMBER(9) REFERENCES teacher (teacher_id) ,
+CONSTRAINT section_fk_tchr FOREIGN KEY (teacher_id ,year ,semester) REFERENCES teacher(teacher_id ,teacher_start_year , teacher_start_semester),
 PRIMARY KEY (section_number, course_id, year, semester),
 CONSTRAINT section_smstr_chk CHECK (semester IN (1,2,3)));
 
 -- 23
 CREATE TABLE enroll (
-sid NUMBER(9) REFERENCES student (sid) ,
+student_id NUMBER(9) REFERENCES student (student_id) ,
 course_id VARCHAR2(10) ,
 section_number NUMBER(3) ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
@@ -239,7 +257,7 @@ semester NUMBER(1) ,
 grade_mid NUMBER (2) DEFAULT NULL ,
 grade_final NUMBER (3) DEFAULT NULL,
 FOREIGN KEY (section_number , course_id , year , semester) REFERENCES section (section_number , course_id , year , semester) ,
-PRIMARY KEY (sid , course_id , section_number , year , semester),
+PRIMARY KEY (student_id , course_id , section_number , year , semester),
 CONSTRAINT eroll_grade_chk CHECK ((grade_final+grade_mid >=40)and (grade_final+grade_mid <=100 )));
 
 -- 24
@@ -251,15 +269,17 @@ semester NUMBER (1) ,
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
-FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_code,floor_number,room_number) ,
 day DATE NOT NULL,
 start_time DATE ,
 end_time DATE ,
+FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_code,floor_number,room_number) ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section (section_number , course_id , year , semester ) ,
 PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
+-- just for testing
 select count(*) from tab;
--- should be 24 if every thing went right
+-- should be 24 if 1st part: table creation (without logs nor triggers) went right
+
 ----------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
@@ -271,13 +291,13 @@ action_name char (6) NOT NULL,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_address_trgr after INSERT on address 
+CREATE OR REPLACE TRIGGER ai_address_trgr AFTER INSERT ON address 
 for each row
 begin
-INSERT into address_log VALUES (:new.street_name ,:new.block_name ,:new.city_name ,:new.area_name ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO address_log VALUES (:new.street_name ,:new.block_name ,:new.city_name ,:new.area_name ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_address_trgr after UPDATE on address
+CREATE OR REPLACE TRIGGER au_address_trgr AFTER UPDATE ON address
 for each row 
 begin 
 INSERT into ADDRESS_LOG VALUES (:old.street_name ,:old.block_name ,:old.city_name ,:old.area_name , 'DELETE',DEFAULT,DEFAULT );
@@ -285,7 +305,7 @@ INSERT into ADDRESS_LOG VALUES (:new.street_name ,:new.block_name ,:new.city_nam
 end;
  /
  
-CREATE OR REPLACE TRIGGER ad_address_trgr after DELETE on address 
+CREATE OR REPLACE TRIGGER ad_address_trgr AFTER DELETE ON address 
 for each row 
 begin 
 INSERT into ADDRESS_LOG VALUES (:old.street_name ,:old.block_name ,:old.city_name ,:old.area_name ,'DELETE' ,DEFAULT ,DEFAULT );
@@ -318,23 +338,23 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_employee_trgr after INSERT on employee
+CREATE OR REPLACE TRIGGER ai_employee_trgr AFTER INSERT ON employee
 for each row
 begin
-INSERT into employee_log VALUES (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality ,:new.national_id 
+INSERT INTO employee_log VALUES (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality ,:new.national_id 
 ,:new.sex ,:new.social_status ,:new.salary ,:new.birh_place , :new.date_of_birth ,:new.religion ,:new.health_status ,:new.number_of_family_members 
 ,:new.phone ,:new.telephone_home ,:new.email ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name ,:new.employment_date ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
 
-CREATE OR REPLACE TRIGGER au_employee_trgr after UPDATE on employee
+CREATE OR REPLACE TRIGGER au_employee_trgr AFTER UPDATE ON employee
 for each row 
 begin
 INSERT into employee_log VALUES (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.salary  ,:old.birh_place,:old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members ,:old.phone ,:old.telephone_home ,:old.email , :old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,:old.employment_date ,'DELETE' ,DEFAULT ,DEFAULT );
 INSERT into employee_log VALUES (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.salary  ,:new.birh_place,:new.date_of_birth ,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email , :new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,:new.employment_date ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER ad_employee_trgr after DELETE on employee
+CREATE OR REPLACE TRIGGER ad_employee_trgr AFTER DELETE ON employee
 for each row 
 begin 
 INSERT into employee_log VALUES (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:old.sex  ,:old.social_status  ,:old.salary  ,:old.birh_place, :old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  , :old.employment_date ,'DELETE' ,DEFAULT ,DEFAULT );
@@ -347,20 +367,20 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL );
 
-CREATE OR REPLACE TRIGGER ai_building_trgr after INSERT on building
+CREATE OR REPLACE TRIGGER ai_building_trgr AFTER INSERT ON building
 for each row
 begin
-INSERT into building_log VALUES (:new.building_code,:new.building_desc ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO building_log VALUES (:new.building_code,:new.building_desc ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_building_trgr after UPDATE on building
+CREATE OR REPLACE TRIGGER au_building_trgr AFTER UPDATE ON building
 for each row 
 begin 
 INSERT into building_log VALUES (:old.building_code,:old.building_desc,'DELETE' ,DEFAULT,DEFAULT );
 INSERT into building_log VALUES (:new.building_code,:new.building_desc,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_building_trgr after DELETE on building
+CREATE OR REPLACE TRIGGER ad_building_trgr AFTER DELETE ON building
 FOR each row 
 begin 
 INSERT into building_log VALUES (:old.building_code,:old.building_desc,'DELETE' ,DEFAULT,DEFAULT );
@@ -376,20 +396,20 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL );
 
-CREATE OR REPLACE TRIGGER ai_floor_trgr after INSERT on floor
+CREATE OR REPLACE TRIGGER ai_floor_trgr AFTER INSERT ON floor
 for each row
 begin
-INSERT into floor_log VALUES (:new.floor_number ,:new.building_code,:new.floor_desc ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO floor_log VALUES (:new.floor_number ,:new.building_code,:new.floor_desc ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_floor_trgr after UPDATE on floor
+CREATE OR REPLACE TRIGGER au_floor_trgr AFTER UPDATE ON floor
 for each row 
 begin 
 INSERT into floor_log VALUES (:old.floor_number ,:old.building_code,:old.floor_desc ,'DELETE' ,DEFAULT,DEFAULT );
 INSERT into floor_log VALUES (:new.floor_number ,:new.building_code,:new.floor_desc ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_floor_trgr after DELETE on floor
+CREATE OR REPLACE TRIGGER ad_floor_trgr AFTER DELETE ON floor
 for each row 
 begin 
 INSERT into floor_log VALUES (:old.floor_number ,:old.building_code,:old.floor_desc,'DELETE' , DEFAULT ,DEFAULT );
@@ -406,20 +426,20 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_room_trgr after INSERT on room
+CREATE OR REPLACE TRIGGER ai_room_trgr AFTER INSERT ON room
 for each row
 begin
-INSERT into room_log VALUES (:new.room_number ,:new.floor_number ,:new.building_code,:new.capacity ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO room_log VALUES (:new.room_number ,:new.floor_number ,:new.building_code,:new.capacity ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_room_trgr after UPDATE on room
+CREATE OR REPLACE TRIGGER au_room_trgr AFTER UPDATE ON room
 for each row 
 begin
 INSERT into room_log VALUES (:old.room_number ,:old.floor_number ,:old.building_code,:old.capacity ,'DELETE' ,DEFAULT,DEFAULT ); 
 INSERT into room_log VALUES (:new.room_number ,:new.floor_number ,:new.building_code,:new.capacity ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_room_trgr after DELETE on room
+CREATE OR REPLACE TRIGGER ad_room_trgr AFTER DELETE ON room
 for each row 
 begin 
 INSERT into room_log VALUES (:old.room_number ,:old.floor_number ,:old.building_code,:old.capacity ,'DELETE' ,DEFAULT,DEFAULT ); 
@@ -438,20 +458,20 @@ action_date date DEFAULT sysdate NOT NULL,
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 
-CREATE OR REPLACE TRIGGER ai_Department_trgr after INSERT on Department
+CREATE OR REPLACE TRIGGER ai_Department_trgr AFTER INSERT ON Department
 for each row
 begin
-INSERT into Department_log VALUES (:new.Department_id ,:new.Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
+INSERT INTO Department_log VALUES (:new.Department_id ,:new.Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_Department_trgr after UPDATE on Department
+CREATE OR REPLACE TRIGGER au_Department_trgr AFTER UPDATE ON Department
 for each row 
 begin
 INSERT into Department_log VALUES (:old.Department_id ,:old.Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
 INSERT into Department_log VALUES (:new.Department_id ,:new.Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_Department_trgr after DELETE on Department
+CREATE OR REPLACE TRIGGER ad_Department_trgr AFTER DELETE ON Department
 for each row 
 begin 
 INSERT into Department_log VALUES (:old.Department_id ,:old.Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
@@ -469,20 +489,20 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_Majors_Department_trgr after INSERT on Majors_Department
+CREATE OR REPLACE TRIGGER ai_Majors_Department_trgr AFTER INSERT ON Majors_Department
 for each row
 begin
-INSERT into Majors_Department_log VALUES (:new.Majors_Department_id ,:new.Majors_Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
+INSERT INTO Majors_Department_log VALUES (:new.Majors_Department_id ,:new.Majors_Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_Majors_Department_trgr after UPDATE on Majors_Department
+CREATE OR REPLACE TRIGGER au_Majors_Department_trgr AFTER UPDATE ON Majors_Department
 for each row 
 begin
 INSERT into Majors_Department_log VALUES (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
 INSERT into Majors_Department_log VALUES (:new.Majors_Department_id ,:new.Majors_Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
 end;
 /
-CREATE OR REPLACE TRIGGER ad_Majors_Department_trgr after DELETE on Majors_Department
+CREATE OR REPLACE TRIGGER ad_Majors_Department_trgr AFTER DELETE ON Majors_Department
 for each row 
 begin 
 INSERT into Majors_Department_log VALUES (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
@@ -498,20 +518,20 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_major_trgr after INSERT on major
+CREATE OR REPLACE TRIGGER ai_major_trgr AFTER INSERT ON major
 for each row
 begin
-INSERT into major_log VALUES (:new.major_id ,:new.major_name ,:new.Majors_Department_id ,'INSERT',DEFAULT,DEFAULT); 
+INSERT INTO major_log VALUES (:new.major_id ,:new.major_name ,:new.Majors_Department_id ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_major_trgr after UPDATE on major
+CREATE OR REPLACE TRIGGER au_major_trgr AFTER UPDATE ON major
 for each row 
 begin
 INSERT into major_log VALUES (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'DELETE',DEFAULT,DEFAULT); 
 INSERT into major_log VALUES (:new.major_id ,:new.major_name ,:new.Majors_Department_id ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_major_trgr after DELETE on major
+CREATE OR REPLACE TRIGGER ad_major_trgr AFTER DELETE ON major
 for each row 
 begin 
 INSERT into major_log VALUES (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'DELETE',DEFAULT,DEFAULT); 
@@ -529,20 +549,20 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_course_trgr after INSERT on course
+CREATE OR REPLACE TRIGGER ai_course_trgr AFTER INSERT ON course
 for each row
 begin
-INSERT into course_log VALUES (:new.course_id ,:new.course_name ,:new.credit , :new.clevel ,:new.Majors_Department_id ,'INSERT',DEFAULT,DEFAULT); 
+INSERT INTO course_log VALUES (:new.course_id ,:new.course_name ,:new.credit , :new.clevel ,:new.Majors_Department_id ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_course_trgr after UPDATE on course
+CREATE OR REPLACE TRIGGER au_course_trgr AFTER UPDATE ON course
 for each row 
 begin
 INSERT into course_log VALUES (:old.course_id ,:old.course_name ,:old.credit , :old.clevel ,:old.Majors_Department_id,'DELETE',DEFAULT,DEFAULT); 
 INSERT into course_log VALUES (:new.course_id ,:new.course_name ,:new.credit , :new.clevel ,:new.Majors_Department_id,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_course_trgr after DELETE on course
+CREATE OR REPLACE TRIGGER ad_course_trgr AFTER DELETE ON course
 for each row 
 begin 
 INSERT into course_log VALUES (:old.course_id ,:old.course_name ,:old.credit , :old.clevel ,:old.Majors_Department_id,'DELETE',DEFAULT,DEFAULT); 
@@ -551,130 +571,137 @@ end;
 
 
 CREATE TABLE teacher_log (
-Teacher_id NUMBER (9),
-Employment_Start_Date DATE,
-Employment_End_Date DATE,
+teacher_id NUMBER (9),
+teacher_start_date DATE,
+teacher_end_date DATE,
 majors_department_id NUMBER (3),
 salary NUMBER (8,2) check (salary >=0),
+teacher_start_year NUMBER(4) NOT NULL,
+teacher_start_semester NUMBER(1) NOT NULL,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_teacher_trgr after INSERT on teacher
+CREATE OR REPLACE TRIGGER ai_teacher_trgr AFTER INSERT ON teacher
 for each row
 begin
-INSERT into teacher_log VALUES (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.salary ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO teacher_log VALUES (:new.teacher_id ,:new.teacher_start_date ,:new.teacher_end_date,:new.majors_department_id,:new.salary , :new.teacher_start_year , :new.teacher_start_semester , 'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_teacher_trgr after UPDATE on teacher
+CREATE OR REPLACE TRIGGER au_teacher_trgr AFTER UPDATE ON teacher
 for each row 
 begin
-INSERT into teacher_log VALUES (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.salary ,'DELETE' ,DEFAULT,DEFAULT ); 
-INSERT into teacher_log VALUES (:new.Teacher_id ,:new.Employment_Start_Date ,:new.Employment_End_Date,:new.Majors_Department_id,:new.salary ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO teacher_log VALUES (:old.Teacher_id ,:old.teacher_Start_Date ,:old.teacher_End_Date,:old.Majors_Department_id,:old.salary , :old.teacher_start_year , :old.teacher_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO teacher_log VALUES (:new.Teacher_id ,:new.teacher_Start_Date ,:new.teacher_End_Date,:new.Majors_Department_id,:new.salary , :new.teacher_start_year , :new.teacher_start_semester , 'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_teacher_trgr after DELETE on teacher
+CREATE OR REPLACE TRIGGER ad_teacher_trgr AFTER DELETE ON teacher
 for each row 
 begin 
-INSERT into teacher_log VALUES (:old.Teacher_id ,:old.Employment_Start_Date ,:old.Employment_End_Date,:old.Majors_Department_id,:old.salary ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO teacher_log VALUES (:old.Teacher_id ,:old.teacher_Start_Date ,:old.teacher_End_Date,:old.Majors_Department_id,:old.salary , :old.teacher_start_year , :old.teacher_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
 end;
- /
+ / 
  
- 
-CREATE TABLE Manager_log (
-Manager_id NUMBER (9) ,
-Employment_Start_Date DATE DEFAULT sysdate,
-Employment_End_Date DATE,
+CREATE TABLE manager_log (
+manager_id NUMBER (9) ,
+manager_Start_Date DATE DEFAULT sysdate,
+manager_End_Date DATE,
 salary NUMBER (8,2) check (salary >=0),
-Manager_Grade VARCHAR2(15) NOT NULL,
-Majors_Department_id NUMBER (3) ,
-Department_id NUMBER (3) ,
+manager_grade VARCHAR2(15) NOT NULL,
+majors_department_id NUMBER (3) ,
+department_id NUMBER (3) ,
+manager_start_year NUMBER(4) NOT NULL,
+manager_start_semester NUMBER(1) NOT NULL,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_Manager_trgr after INSERT on Manager
+CREATE OR REPLACE TRIGGER ai_manager_trgr AFTER INSERT ON manager
 for each row
 begin
-INSERT into Manager_log VALUES (:new.Manager_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Manager_Grade ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO manager_log VALUES (:new.manager_id ,:new.manager_Start_Date ,:new.manager_End_Date ,:new.salary ,:new.Manager_Grade ,:new.Majors_Department_id ,:new.Department_id , :new.manager_start_year , :new.manager_start_semester , 'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_Manager_trgr after UPDATE on Manager
+CREATE OR REPLACE TRIGGER au_manager_trgr AFTER UPDATE ON manager
 for each row 
 begin
-INSERT into Manager_log VALUES (:old.Manager_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Manager_Grade ,:old.Majors_Department_id ,:old.Department_id ,'DELETE' ,DEFAULT,DEFAULT ); 
-INSERT into Manager_log VALUES (:new.Manager_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Manager_Grade ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO manager_log VALUES (:old.manager_id ,:old.manager_Start_Date ,:old.manager_End_Date ,:old.salary ,:old.Manager_Grade ,:old.Majors_Department_id ,:old.Department_id , :old.manager_start_year , :old.manager_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO manager_log VALUES (:new.manager_id ,:new.manager_Start_Date ,:new.manager_End_Date ,:new.salary ,:new.Manager_Grade ,:new.Majors_Department_id ,:new.Department_id , :new.manager_start_year , :new.manager_start_semester , 'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_Manager_trgr after DELETE on Manager
+CREATE OR REPLACE TRIGGER ad_manager_trgr AFTER DELETE ON manager
 for each row 
 begin 
-INSERT into Manager_log VALUES (:old.Manager_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Manager_Grade ,:old.Majors_Department_id ,:old.Department_id ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO  manager_log VALUES (:old.manager_id ,:old.manager_Start_Date ,:old.manager_End_Date ,:old.salary ,:old.Manager_Grade ,:old.Majors_Department_id ,:old.Department_id , :old.manager_start_year , :old.manager_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
 end;
- /
+/ 
  
- 
-CREATE TABLE Security_log (
+CREATE TABLE security_log (
 Security_id NUMBER (9) ,
-Employment_Start_Date DATE DEFAULT sysdate,
-Employment_End_Date DATE,
+security_Start_Date DATE DEFAULT sysdate,
+security_End_Date DATE,
 salary NUMBER (8,2) ,
 Department_id NUMBER (3),
+security_start_year NUMBER(4) NOT NULL,
+security_start_semester NUMBER(1) NOT NULL,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_Security_trgr after INSERT on Security
+CREATE OR REPLACE TRIGGER ai_Security_trgr AFTER INSERT ON Security
 for each row
 begin
-INSERT into Security_log VALUES (:new.Security_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Department_id,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO Security_log VALUES (:new.Security_id ,:new.security_Start_Date ,:new.security_End_Date ,:new.salary ,:new.Department_id, :new.security_start_year , :new.security_start_semester , 'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 
-CREATE OR REPLACE TRIGGER au_Security_trgr after UPDATE on Security
+CREATE OR REPLACE TRIGGER au_Security_trgr AFTER UPDATE ON Security
 for each row 
 begin
-INSERT into Security_log VALUES (:old.Security_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Department_id,'DELETE' ,DEFAULT,DEFAULT ); 
-INSERT into Security_log VALUES (:new.Security_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.salary ,:new.Department_id,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO Security_log VALUES (:old.Security_id ,:old.security_Start_Date ,:old.security_End_Date ,:old.salary ,:old.Department_id, :old.security_start_year , :old.security_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO Security_log VALUES (:new.Security_id ,:new.security_Start_Date ,:new.security_End_Date ,:new.salary ,:new.Department_id, :new.security_start_year , :new.security_start_semester , 'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 
-CREATE OR REPLACE TRIGGER ad_Security_trgr after DELETE on Security
+CREATE OR REPLACE TRIGGER ad_Security_trgr AFTER DELETE ON Security
 for each row 
 begin 
-INSERT into Security_log VALUES (:old.Security_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.salary ,:old.Department_id,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO Security_log VALUES (:old.Security_id ,:old.security_Start_Date ,:old.security_End_Date ,:old.salary ,:old.Department_id, :old.security_start_year , :old.security_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
 end;
  /
  
  
-CREATE TABLE Secretary_log (
-Secretary_id NUMBER (9) ,
-Employment_Start_Date DATE DEFAULT sysdate,
-Employment_End_Date DATE,
-Majors_Department_id NUMBER (3) ,
-Department_id NUMBER (3),
-action_name char (6) NOT NULL, 
+CREATE TABLE secretary_log (
+secretary_id NUMBER (9) ,
+secretary_start_date DATE DEFAULT sysdate,
+secretary_end_date DATE,
+salary NUMBER (8,2) CHECK (salary >=0),
+majors_department_id NUMBER (3) ,
+department_id NUMBER (3),
+secretary_start_year NUMBER(4) NOT NULL,
+secretary_start_semester NUMBER(1) NOT NULL,
+action_name char (6) NOT NULL,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
 
-CREATE OR REPLACE TRIGGER ai_Secretary_trgr after INSERT on Secretary 
+CREATE OR REPLACE TRIGGER ai_secretary_trgr AFTER INSERT ON secretary 
 for each row
 begin
-INSERT into Secretary_log VALUES (:new.Secretary_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO Secretary_log VALUES (:new.Secretary_id ,:new.secretary_Start_Date ,:new.secretary_End_Date , :new.salary , :new.majors_department_id ,:new.Department_id , :new.secretary_start_year , :new.secretary_start_semester , 'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_Secretary_trgr after UPDATE on Secretary
+CREATE OR REPLACE TRIGGER au_Secretary_trgr AFTER UPDATE ON Secretary
 for each row 
 begin 
-INSERT into Secretary_log VALUES (:old.Secretary_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.Majors_Department_id ,:old.Department_id ,'DELETE' ,DEFAULT,DEFAULT ); 
-INSERT into Secretary_log VALUES (:new.Secretary_id ,:new.Employment_Start_Date ,:new.Employment_End_Date ,:new.Majors_Department_id ,:new.Department_id ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO Secretary_log VALUES (:old.Secretary_id ,:old.secretary_Start_Date ,:old.secretary_End_Date , :old.salary  ,:old.Majors_Department_id ,:old.Department_id , :old.secretary_start_year , :old.secretary_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO Secretary_log VALUES (:new.Secretary_id ,:new.secretary_Start_Date ,:new.secretary_End_Date , :new.salary  ,:new.Majors_Department_id ,:new.Department_id , :new.secretary_start_year , :new.secretary_start_semester , 'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_Secretary_trgr after DELETE on Secretary 
+CREATE OR REPLACE TRIGGER ad_Secretary_trgr AFTER DELETE ON Secretary 
 for each row 
 begin 
-INSERT into Secretary_log VALUES (:old.Secretary_id ,:old.Employment_Start_Date ,:old.Employment_End_Date ,:old.Majors_Department_id ,:old.Department_id ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO Secretary_log VALUES (:old.Secretary_id ,:old.secretary_Start_Date ,:old.secretary_End_Date , :old.salary   ,:old.Majors_Department_id ,:old.Department_id , :old.secretary_start_year , :old.secretary_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
 end;
  /
 
@@ -687,23 +714,23 @@ action_name char (6) NOT NULL,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_item_trgr after INSERT on item 
+CREATE OR REPLACE TRIGGER ai_item_trgr AFTER INSERT ON item 
 for each row
 begin
-INSERT into item_log VALUES (:new.item_id ,:new.item_name ,:new.item_description ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO item_log VALUES (:new.item_id ,:new.item_name ,:new.item_description ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_item_trgr after UPDATE on item
+CREATE OR REPLACE TRIGGER au_item_trgr AFTER UPDATE ON item
 for each row 
 begin 
-INSERT into item_log VALUES (:old.item_id ,:old.item_name ,:old.item_description ,'DELETE' ,DEFAULT,DEFAULT ); 
-INSERT into item_log VALUES (:new.item_id ,:new.item_name ,:new.item_description ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO item_log VALUES (:old.item_id ,:old.item_name ,:old.item_description ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO item_log VALUES (:new.item_id ,:new.item_name ,:new.item_description ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_item_trgr after DELETE on item 
+CREATE OR REPLACE TRIGGER ad_item_trgr AFTER DELETE ON item 
 for each row 
 begin 
-INSERT into item_log VALUES (:old.item_id ,:old.item_name ,:old.item_description ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO item_log VALUES (:old.item_id ,:old.item_name ,:old.item_description ,'DELETE' ,DEFAULT,DEFAULT ); 
 end;
  /
 
@@ -718,23 +745,23 @@ action_name char (6) NOT NULL,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_room_items_trgr after INSERT on room_items 
+CREATE OR REPLACE TRIGGER ai_room_items_trgr AFTER INSERT ON room_items 
 for each row
 begin
-INSERT into room_items_log VALUES (:new.item_id ,:new.room_number ,:new.floor_number ,:new.building_code ,:new.quantity ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO room_items_log VALUES (:new.item_id ,:new.room_number ,:new.floor_number ,:new.building_code ,:new.quantity ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_room_items_trgr after UPDATE on room_items
+CREATE OR REPLACE TRIGGER au_room_items_trgr AFTER UPDATE ON room_items
 for each row 
 begin 
-INSERT into room_items_log VALUES (:old.item_id ,:old.room_number ,:old.floor_number ,:old.building_code ,:old.quantity ,'INSERT' ,DEFAULT,DEFAULT ); 
-INSERT into room_items_log VALUES (:new.item_id ,:new.room_number ,:new.floor_number ,:new.building_code ,:new.quantity ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO room_items_log VALUES (:old.item_id ,:old.room_number ,:old.floor_number ,:old.building_code ,:old.quantity ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO room_items_log VALUES (:new.item_id ,:new.room_number ,:new.floor_number ,:new.building_code ,:new.quantity ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_room_items_trgr after DELETE on room_items 
+CREATE OR REPLACE TRIGGER ad_room_items_trgr AFTER DELETE ON room_items 
 for each row 
 begin 
-INSERT into room_items_log VALUES (:old.item_id ,:old.room_number ,:old.floor_number ,:old.building_code ,:old.quantity ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO room_items_log VALUES (:old.item_id ,:old.room_number ,:old.floor_number ,:old.building_code ,:old.quantity ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 
@@ -746,52 +773,52 @@ action_name char (6) NOT NULL,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_study_plan_trgr after INSERT on study_plan 
+CREATE OR REPLACE TRIGGER ai_study_plan_trgr AFTER INSERT ON study_plan 
 for each row
 begin
-INSERT into study_plan_log VALUES (:new.plan_number ,:new.major_id ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO study_plan_log VALUES (:new.plan_number ,:new.major_id ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_study_plan_trgr after UPDATE on study_plan
+CREATE OR REPLACE TRIGGER au_study_plan_trgr AFTER UPDATE ON study_plan
 for each row 
 begin 
-INSERT into study_plan_log VALUES (:old.plan_number ,:old.major_id ,'DELETE' ,DEFAULT,DEFAULT ); 
-INSERT into study_plan_log VALUES (:new.plan_number ,:new.major_id ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO study_plan_log VALUES (:old.plan_number ,:old.major_id ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO study_plan_log VALUES (:new.plan_number ,:new.major_id ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_study_plan_trgr after DELETE on study_plan 
+CREATE OR REPLACE TRIGGER ad_study_plan_trgr AFTER DELETE ON study_plan 
 for each row 
 begin 
-INSERT into study_plan_log VALUES (:old.plan_number ,:old.major_id ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO study_plan_log VALUES (:old.plan_number ,:old.major_id ,'DELETE' ,DEFAULT,DEFAULT ); 
 end;
  /
 
 CREATE TABLE academic_advice_log (
 teacher_id NUMBER (9),
-sid NUMBER(9),
+student_id NUMBER(9),
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1) ,
 action_name char(6) NOT NULL , 
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_academic_advice_trgr after INSERT on academic_advice
+CREATE OR REPLACE TRIGGER ai_academic_advice_trgr AFTER INSERT ON academic_advice
 for each row
 begin
-INSERT into academic_advice_log VALUES (:new.teacher_id ,:new.sid ,:new.year ,:new.semester,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO academic_advice_log VALUES (:new.teacher_id ,:new.student_id ,:new.year ,:new.semester,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_academic_advice_trgr after UPDATE on academic_advice
+CREATE OR REPLACE TRIGGER au_academic_advice_trgr AFTER UPDATE ON academic_advice
 for each row 
 begin
-INSERT into academic_advice_log VALUES (:old.teacher_id ,:old.sid ,:old.year ,:old.semester,'DELETE' ,DEFAULT ,DEFAULT );
-INSERT into academic_advice_log VALUES (:new.teacher_id ,:new.sid ,:new.year ,:new.semester,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO academic_advice_log VALUES (:old.teacher_id ,:old.student_id ,:old.year ,:old.semester,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO academic_advice_log VALUES (:new.teacher_id ,:new.student_id ,:new.year ,:new.semester,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER ad_academic_advice_trgr after DELETE on academic_advice
+CREATE OR REPLACE TRIGGER ad_academic_advice_trgr AFTER DELETE ON academic_advice
 for each row 
 begin 
-INSERT into academic_advice_log VALUES (:old.teacher_id ,:old.sid ,:old.year ,:old.semester,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO academic_advice_log VALUES (:old.teacher_id ,:old.student_id ,:old.year ,:old.semester,'DELETE' ,DEFAULT ,DEFAULT );
 end;
  /
 
@@ -806,29 +833,29 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_section_trgr after INSERT on section
+CREATE OR REPLACE TRIGGER ai_section_trgr AFTER INSERT ON section
 for each row
 begin
-INSERT into section_log VALUES (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.teacher_id,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO section_log VALUES (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.teacher_id,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_section_trgr after UPDATE on section
+CREATE OR REPLACE TRIGGER au_section_trgr AFTER UPDATE ON section
 for each row 
 begin
-INSERT into section_log VALUES (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.teacher_id,'DELETE' ,DEFAULT ,DEFAULT );
-INSERT into section_log VALUES (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.teacher_id,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO section_log VALUES (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.teacher_id,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO section_log VALUES (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.teacher_id,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER ad_section_trgr after DELETE on section
+CREATE OR REPLACE TRIGGER ad_section_trgr AFTER DELETE ON section
 for each row 
 begin 
-INSERT into section_log VALUES (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.teacher_id,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO section_log VALUES (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.teacher_id,'DELETE' ,DEFAULT ,DEFAULT );
 end;
  /
 
 
 CREATE TABLE enroll_log (
-sid NUMBER(9),
+student_id NUMBER(9),
 course_id VARCHAR2(10) ,
 section_number NUMBER(3) ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
@@ -839,23 +866,23 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_enroll_trgr after INSERT on enroll
+CREATE OR REPLACE TRIGGER ai_enroll_trgr AFTER INSERT ON enroll
 for each row
 begin
-INSERT into enroll_log VALUES (:new.sid ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO enroll_log VALUES (:new.student_id ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_enroll_trgr after UPDATE on enroll
+CREATE OR REPLACE TRIGGER au_enroll_trgr AFTER UPDATE ON enroll
 for each row 
 begin
-INSERT into enroll_log VALUES (:old.sid ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'DELETE' ,DEFAULT ,DEFAULT );
-INSERT into enroll_log VALUES (:new.sid ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO enroll_log VALUES (:old.student_id ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO enroll_log VALUES (:new.student_id ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER ad_enroll_trgr after DELETE on enroll
+CREATE OR REPLACE TRIGGER ad_enroll_trgr AFTER DELETE ON enroll
 for each row 
 begin 
-INSERT into enroll_log VALUES (:old.sid ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO enroll_log VALUES (:old.student_id ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'DELETE' ,DEFAULT ,DEFAULT );
 end;
  /
 
@@ -875,28 +902,28 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_section_rooms_trgr after INSERT on section_rooms
+CREATE OR REPLACE TRIGGER ai_section_rooms_trgr AFTER INSERT ON section_rooms
 for each row
 begin
-INSERT into section_rooms_log VALUES (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.room_number,:new.floor_number ,:new.building_code ,:new.day ,:new.start_time ,:new.end_time ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO section_rooms_log VALUES (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.room_number,:new.floor_number ,:new.building_code ,:new.day ,:new.start_time ,:new.end_time ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_section_rooms_trgr after UPDATE on section_rooms
+CREATE OR REPLACE TRIGGER au_section_rooms_trgr AFTER UPDATE ON section_rooms
 for each row 
 begin
-INSERT into section_rooms_log VALUES (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.room_number,:old.floor_number ,:old.building_code ,:old.day ,:old.start_time ,:old.end_time ,'DELETE' ,DEFAULT ,DEFAULT );
-INSERT into section_rooms_log VALUES (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.room_number,:new.floor_number ,:new.building_code ,:new.day ,:new.start_time ,:new.end_time ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO section_rooms_log VALUES (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.room_number,:old.floor_number ,:old.building_code ,:old.day ,:old.start_time ,:old.end_time ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO section_rooms_log VALUES (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.room_number,:new.floor_number ,:new.building_code ,:new.day ,:new.start_time ,:new.end_time ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER ad_section_rooms_trgr after DELETE on section_rooms
+CREATE OR REPLACE TRIGGER ad_section_rooms_trgr AFTER DELETE ON section_rooms
 for each row 
 begin 
-INSERT into section_rooms_log VALUES (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.room_number,:old.floor_number ,:old.building_code ,:old.day ,:old.start_time ,:old.end_time ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO section_rooms_log VALUES (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.room_number,:old.floor_number ,:old.building_code ,:old.day ,:old.start_time ,:old.end_time ,'DELETE' ,DEFAULT ,DEFAULT );
 end;
  /
  
 CREATE TABLE student_log (
-sid NUMBER(9),
+student_id NUMBER(9),
 Full_name_ar  VARCHAR2(100) ,
 Full_name_en  VARCHAR2(100) ,
 Nationality VARCHAR2(20) ,
@@ -935,23 +962,23 @@ action_name char (6) NOT NULL,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_student_trgr after INSERT on student
+CREATE OR REPLACE TRIGGER ai_student_trgr AFTER INSERT ON student
 for each row
 begin
-INSERT into student_log VALUES (:new.sid ,:new.Full_name_ar ,:new.Full_name_en ,:new.Nationality ,:new.national_id ,:new.sex ,:new.social_status ,:new.guardian_name ,:new.guardian_national_id ,:new.guardian_relation ,:new.birh_place ,:new.date_of_birth ,:new.religion,:new.health_status ,:new.mother_name ,:new.mother_job ,:new.mother_job_desc ,:new.father_job ,:new.father_job_desc ,:new.parents_status,:new.number_of_family_members ,:new.family_university_students ,:new.social_affairs ,:new.phone ,:new.telephone_home ,:new.emergency_phone ,:new.email ,:new.tawjihi_GPA ,:new.tawjihi_field ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name ,:new.major_id ,:new.balance ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO student_log VALUES (:new.student_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.Nationality ,:new.national_id ,:new.sex ,:new.social_status ,:new.guardian_name ,:new.guardian_national_id ,:new.guardian_relation ,:new.birh_place ,:new.date_of_birth ,:new.religion,:new.health_status ,:new.mother_name ,:new.mother_job ,:new.mother_job_desc ,:new.father_job ,:new.father_job_desc ,:new.parents_status,:new.number_of_family_members ,:new.family_university_students ,:new.social_affairs ,:new.phone ,:new.telephone_home ,:new.emergency_phone ,:new.email ,:new.tawjihi_GPA ,:new.tawjihi_field ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name ,:new.major_id ,:new.balance ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_student_trgr after UPDATE on student
+CREATE OR REPLACE TRIGGER au_student_trgr AFTER UPDATE ON student
 for each row 
 begin
-INSERT into student_log VALUES (:old.sid ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality ,:old.national_id ,:old.sex ,:old.social_status ,:old.guardian_name ,:old.guardian_national_id ,:old.guardian_relation ,:old.birh_place ,:old.date_of_birth ,:old.religion,:old.health_status ,:old.mother_name ,:old.mother_job ,:old.mother_job_desc ,:old.father_job ,:old.father_job_desc ,:old.parents_status,:old.number_of_family_members ,:old.family_university_students ,:old.social_affairs ,:old.phone ,:old.telephone_home ,:old.emergency_phone ,:old.email , :old.tawjihi_GPA ,:old.tawjihi_field ,:old.area_name ,:old.city_name ,:old.block_name  ,:old.street_name ,:old.major_id ,:old.balance  ,'DELETE' ,DEFAULT ,DEFAULT );
-INSERT into student_log VALUES (:new.sid ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality ,:new.national_id ,:new.sex ,:new.social_status ,:new.guardian_name ,:new.guardian_national_id ,:new.guardian_relation ,:new.birh_place ,:new.date_of_birth ,:new.religion,:new.health_status ,:new.mother_name ,:new.mother_job ,:new.mother_job_desc ,:new.father_job ,:new.father_job_desc ,:new.parents_status,:new.number_of_family_members ,:new.family_university_students ,:new.social_affairs ,:new.phone ,:new.telephone_home ,:new.emergency_phone ,:new.email , :new.tawjihi_GPA ,:new.tawjihi_field ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name , :new.major_id ,:new.balance ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO student_log VALUES (:old.student_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality ,:old.national_id ,:old.sex ,:old.social_status ,:old.guardian_name ,:old.guardian_national_id ,:old.guardian_relation ,:old.birh_place ,:old.date_of_birth ,:old.religion,:old.health_status ,:old.mother_name ,:old.mother_job ,:old.mother_job_desc ,:old.father_job ,:old.father_job_desc ,:old.parents_status,:old.number_of_family_members ,:old.family_university_students ,:old.social_affairs ,:old.phone ,:old.telephone_home ,:old.emergency_phone ,:old.email , :old.tawjihi_GPA ,:old.tawjihi_field ,:old.area_name ,:old.city_name ,:old.block_name  ,:old.street_name ,:old.major_id ,:old.balance  ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO student_log VALUES (:new.student_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality ,:new.national_id ,:new.sex ,:new.social_status ,:new.guardian_name ,:new.guardian_national_id ,:new.guardian_relation ,:new.birh_place ,:new.date_of_birth ,:new.religion,:new.health_status ,:new.mother_name ,:new.mother_job ,:new.mother_job_desc ,:new.father_job ,:new.father_job_desc ,:new.parents_status,:new.number_of_family_members ,:new.family_university_students ,:new.social_affairs ,:new.phone ,:new.telephone_home ,:new.emergency_phone ,:new.email , :new.tawjihi_GPA ,:new.tawjihi_field ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name , :new.major_id ,:new.balance ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER ad_student_trgr after DELETE on student
+CREATE OR REPLACE TRIGGER ad_student_trgr AFTER DELETE ON student
 for each row 
 begin 
-INSERT into student_log VALUES (:old.sid ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality ,:old.national_id ,:old.sex ,:old.social_status ,:old.guardian_name ,:old.guardian_national_id ,:old.guardian_relation ,:old.birh_place ,:old.date_of_birth ,:old.religion,:old.health_status ,:old.mother_name ,:old.mother_job ,:old.mother_job_desc ,:old.father_job ,:old.father_job_desc ,:old.parents_status,:old.number_of_family_members ,:old.family_university_students ,:old.social_affairs ,:old.phone ,:old.telephone_home ,:old.emergency_phone ,:old.email ,:old.tawjihi_GPA ,:old.tawjihi_field ,:old.area_name ,:old.city_name ,:old.block_name  ,:old.street_name , :old.major_id , :old.balance ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO student_log VALUES (:old.student_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality ,:old.national_id ,:old.sex ,:old.social_status ,:old.guardian_name ,:old.guardian_national_id ,:old.guardian_relation ,:old.birh_place ,:old.date_of_birth ,:old.religion,:old.health_status ,:old.mother_name ,:old.mother_job ,:old.mother_job_desc ,:old.father_job ,:old.father_job_desc ,:old.parents_status,:old.number_of_family_members ,:old.family_university_students ,:old.social_affairs ,:old.phone ,:old.telephone_home ,:old.emergency_phone ,:old.email ,:old.tawjihi_GPA ,:old.tawjihi_field ,:old.area_name ,:old.city_name ,:old.block_name  ,:old.street_name , :old.major_id , :old.balance ,'DELETE' ,DEFAULT ,DEFAULT );
 end;
  /
 
@@ -961,26 +988,53 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_Nationality_trgr after INSERT on Nationality 
+CREATE OR REPLACE TRIGGER ai_Nationality_trgr AFTER INSERT ON Nationality 
 for each row
 begin
-INSERT into Nationality_log VALUES (:new.Nationality ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO Nationality_log VALUES (:new.Nationality ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_Nationality_trgr after UPDATE on Nationality
+CREATE OR REPLACE TRIGGER au_Nationality_trgr AFTER UPDATE ON Nationality
 for each row 
 begin 
-INSERT into Nationality_log VALUES (:old.Nationality ,'DELETE' ,DEFAULT,DEFAULT ); 
-INSERT into Nationality_log VALUES (:new.Nationality ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO Nationality_log VALUES (:old.Nationality ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO Nationality_log VALUES (:new.Nationality ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER ad_Nationality_trgr after DELETE on Nationality 
+CREATE OR REPLACE TRIGGER ad_Nationality_trgr AFTER DELETE ON Nationality 
 for each row 
 begin 
-INSERT into Nationality_log VALUES (:old.Nationality ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO Nationality_log VALUES (:old.Nationality ,'DELETE' ,DEFAULT,DEFAULT ); 
 end;
  /
 
+CREATE TABLE pre_required_courses_log (
+course_id VARCHAR2(10) ,
+pre_required_course_id VARCHAR2(10) ,
+action_name char(6) NOT NULL , 
+action_date date DEFAULT sysdate NOT NULL, 
+action_user VARCHAR2(30) DEFAULT user NOT NULL);
+
+CREATE OR REPLACE TRIGGER ai_pre_required_courses_trgr AFTER INSERT ON pre_required_courses
+for each row
+begin
+INSERT INTO pre_required_courses_log VALUES (:new.course_id ,:new.pre_required_course_id ,'INSERT' ,DEFAULT ,DEFAULT );
+end;
+ /
+CREATE OR REPLACE TRIGGER au_pre_required_courses_trgr AFTER UPDATE ON pre_required_courses
+for each row 
+begin
+INSERT INTO pre_required_courses_log VALUES (:old.course_id ,:old.pre_required_course_id ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO pre_required_courses_log VALUES (:new.course_id ,:new.pre_required_course_id ,'INSERT' ,DEFAULT ,DEFAULT );
+end;
+ /
+CREATE OR REPLACE TRIGGER ad_pre_required_courses_trgr AFTER DELETE ON pre_required_courses
+for each row 
+begin 
+INSERT INTO pre_required_courses_log VALUES (:old.course_id ,:old.pre_required_course_id ,'DELETE' ,DEFAULT ,DEFAULT );
+end;
+ /
+ 
 CREATE TABLE study_plan_courses_log (
 plan_number NUMBER (3),
 major_id NUMBER (3),
@@ -991,58 +1045,52 @@ action_name char(6) NOT NULL ,
 action_date date DEFAULT sysdate NOT NULL, 
 action_user VARCHAR2(30) DEFAULT user NOT NULL);
 
-CREATE OR REPLACE TRIGGER ai_study_plan_courses_trgr after INSERT on study_plan_courses
+CREATE OR REPLACE TRIGGER ai_study_plan_courses_trgr AFTER INSERT ON study_plan_courses
 for each row
 begin
-INSERT into study_plan_courses_log VALUES (:new.plan_number ,:new.major_id  ,:new.course_id,:new.year ,:new.semester ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO study_plan_courses_log VALUES (:new.plan_number ,:new.major_id  ,:new.course_id,:new.year ,:new.semester ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_study_plan_courses_trgr after UPDATE on study_plan_courses
+CREATE OR REPLACE TRIGGER au_study_plan_courses_trgr AFTER UPDATE ON study_plan_courses
 for each row 
 begin
-INSERT into study_plan_courses_log VALUES (:old.plan_number ,:old.major_id  ,:old.course_id,:old.year ,:old.semester ,'DELETE' ,DEFAULT ,DEFAULT );
-INSERT into study_plan_courses_log VALUES (:new.plan_number ,:new.major_id  ,:new.course_id,:new.year ,:new.semester ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO study_plan_courses_log VALUES (:old.plan_number ,:old.major_id  ,:old.course_id,:old.year ,:old.semester ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO study_plan_courses_log VALUES (:new.plan_number ,:new.major_id  ,:new.course_id,:new.year ,:new.semester ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER ad_study_plan_courses_trgr after DELETE on study_plan_courses
+CREATE OR REPLACE TRIGGER ad_study_plan_courses_trgr AFTER DELETE ON study_plan_courses
 for each row 
 begin 
-INSERT into study_plan_courses_log VALUES (:old.plan_number ,:old.major_id  ,:old.course_id,:old.year ,:old.semester ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO study_plan_courses_log VALUES (:old.plan_number ,:old.major_id  ,:old.course_id,:old.year ,:old.semester ,'DELETE' ,DEFAULT ,DEFAULT );
 end;
  /
- 
- 
- CREATE TABLE pre_required_courses_log (
-course_id VARCHAR2(10) ,
-pre_required_course_id VARCHAR2(10) ,
-action_name char(6) NOT NULL , 
-action_date date DEFAULT sysdate NOT NULL, 
-action_user VARCHAR2(30) DEFAULT user NOT NULL);
-
-CREATE OR REPLACE TRIGGER ai_pre_required_courses_trgr after INSERT on pre_required_courses
-for each row
-begin
-INSERT into pre_required_courses_log VALUES (:new.course_id ,:new.pre_required_course_id ,'INSERT' ,DEFAULT ,DEFAULT );
-end;
- /
-CREATE OR REPLACE TRIGGER au_pre_required_courses_trgr after UPDATE on pre_required_courses
-for each row 
-begin
-INSERT into pre_required_courses_log VALUES (:old.course_id ,:old.pre_required_course_id ,'DELETE' ,DEFAULT ,DEFAULT );
-INSERT into pre_required_courses_log VALUES (:new.course_id ,:new.pre_required_course_id ,'INSERT' ,DEFAULT ,DEFAULT );
-end;
- /
-CREATE OR REPLACE TRIGGER ad_pre_required_courses_trgr after DELETE on pre_required_courses
-for each row 
-begin 
-INSERT into pre_required_courses_log VALUES (:old.course_id ,:old.pre_required_course_id ,'DELETE' ,DEFAULT ,DEFAULT );
-end;
- /
- 
  
 ----------------------------------------------------------------------------------------------------------
--- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
+-- The Roles
 
+CREATE ROLE student_role;
+CREATE ROLE employee_role;
+CREATE ROLE teacher_role;
+CREATE ROLE manager_role;
+CREATE ROLE security_role;
+CREATE ROLE secretary_role;
+
+-- giving privileges;
+GRANT CREATE SESSION to student_role;
+GRANT SELECT ON UNIVERSITY.Std_dept_and_mjr to student_role;
+GRANT SELECT ON UNIVERSITY.Std_personal to student_role;
+GRANT SELECT ON UNIVERSITY.Std_fmly_status to student_role;
+GRANT SELECT ON UNIVERSITY.Std_contact_and_addrs to student_role;
+GRANT SELECT ON UNIVERSITY.Std_balance to student_role;
+GRANT SELECT ON UNIVERSITY.Std_plan to student_role;
+
+GRANT CREATE SESSION to employee_role;
+GRANT SELECT ON UNIVERSITY.employee to employee_role;
+
+----------------------------------------------------------------------------------------------------------
+-- creating insertion procedures
+
+-- a procedure to insert a student and create a user for him as 'S123' where 123 is the student_id of the student
 CREATE OR REPLACE PROCEDURE insert_std(
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
@@ -1085,7 +1133,7 @@ sex_number NUMBER(1);
 year NUMBER(4) := EXTRACT (YEAR FROM sysdate);
 seq_count NUMBER(1);
 seq_name VARCHAR2(30);
-sid NUMBER(9);
+student_id NUMBER(9);
 
 BEGIN
  IF sex = 'M' then
@@ -1097,21 +1145,22 @@ BEGIN
 
 seq_name := 'S'||sex_number||year||'_SEQ';
 
-select count(*) into seq_count from user_sequences where SEQUENCE_NAME =seq_name;
+select count(*) INTO seq_count from user_sequences where SEQUENCE_NAME =seq_name;
 
 if seq_count = 0 then
 execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
 end if;
 
-execute immediate 'select '||seq_name||'.nextval from dual' into sid;
+execute immediate 'SELECT '||seq_name||'.nextval from dual' into student_id;
  
-execute immediate 'INSERT INTO STUDENT VALUES ('||sid||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
-execute immediate 'CREATE USER S' ||sid|| ' IDENTIFIED BY 123456';
-execute immediate 'Grant student_role to S' ||sid ; 
+execute immediate 'INSERT INTO STUDENT VALUES ('||student_id||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
+execute immediate 'CREATE USER S' ||student_id|| ' IDENTIFIED BY 123456';
+execute immediate 'GRANT student_role to S' ||student_id ; 
  
 END;
 /
 
+-- a procedure to insert an employee and create a user for him as 'E123' where 123 is the student_id of the student
 CREATE OR REPLACE PROCEDURE insert_emp(
 Full_name_ar VARCHAR2 ,
 Full_name_en VARCHAR2 ,
@@ -1135,59 +1184,168 @@ street_name VARCHAR2,
 employment_date DATE ) 
 AUTHID CURRENT_USER
 IS
-year NUMBER(4) := extract (year from sysdate);		
+year NUMBER(4) := EXTRACT (year from sysdate);		
 seq_count NUMBER(1);		
 seq_name VARCHAR2(30);		
 employee_id NUMBER(9);
 
 BEGIN
 seq_name := 'E3'||year||'_SEQ';		
-select count(*) into seq_count from user_sequences where SEQUENCE_NAME =seq_name;		
+select count(*) INTO seq_count from user_sequences where SEQUENCE_NAME =seq_name;		
 		
 if seq_count = 0 then		
 execute immediate 'create sequence '||seq_name|| ' start with 3'||year ||'0001 maxvalue 3'||year ||'9999' ;		
 end if;		
 		
-execute immediate 'select '||seq_name||'.nextval from dual' into employee_id;
+execute immediate 'select '||seq_name||'.nextval from dual' INTO employee_id;
 
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''','''||employment_date||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
-execute immediate 'Grant employee_role to E' || employee_id;
+execute immediate 'GRANT employee_role to E' || employee_id;
 END;
 /
 
+-- a procedure to insert a teacher
+CREATE OR REPLACE PROCEDURE insert_teacher(
+teacher_id NUMBER ,
+teacher_start_date DATE ,
+teacher_end_date DATE ,
+majors_department_id NUMBER ,
+salary NUMBER ,
+teacher_start_semester NUMBER) 
+AUTHID CURRENT_USER
+IS
+
+teacher_start_year NUMBER(4) := EXTRACT (year from teacher_start_date);		
+BEGIN
+execute immediate 'INSERT INTO teacher VALUES (' ||teacher_id ||','''||teacher_start_date  ||''','''||teacher_end_date ||''','||majors_department_id ||','||salary ||','||teacher_start_year||','||teacher_start_semester||')' ;
+execute immediate 'GRANT teacher_role to E' || teacher_id;
+
+dbms_scheduler.create_job(
+      job_name => 'rvk_tchr_E'||teacher_id||'_'||teacher_start_year||'_'||teacher_start_semester,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''revoke teacher_role from E'||teacher_id||''' ; end;',
+      start_date => teacher_end_date ,
+      enabled => TRUE);
+
+END;
+/
+
+-- a procedure to insert a manager
+CREATE OR REPLACE PROCEDURE insert_manager(
+manager_id NUMBER ,
+manager_start_date DATE ,
+manager_end_date DATE ,
+salary NUMBER ,
+manager_grade VARCHAR2 ,
+majors_department_id NUMBER ,
+department_id NUMBER ,
+manager_start_semester NUMBER ) 
+AUTHID CURRENT_USER
+IS
+
+manager_start_year NUMBER(4) := EXTRACT (year from manager_start_date);		
+
+BEGIN
+execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','|| salary || ','''|| manager_grade||''', :val1, :val2 ,'||manager_start_year||','||manager_start_semester||')' USING majors_department_id,department_id ;
+execute immediate 'GRANT manager_role to E' || manager_id;
+
+dbms_scheduler.create_job(
+      job_name => 'rvk_mngr_E'||manager_id||'_'||manager_start_year||'_'||manager_start_semester,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''revoke manager_role from E'||manager_id||''' ; end;',
+      start_date => manager_end_date ,
+      enabled => TRUE);
+
+END;
+/
+
+-- a procedure to insert a security
+CREATE OR REPLACE PROCEDURE insert_security(
+security_id NUMBER ,
+security_start_date DATE ,
+security_end_date DATE ,
+salary NUMBER ,
+department_id NUMBER ,
+security_start_semester NUMBER) 
+AUTHID CURRENT_USER
+IS
+
+security_start_year NUMBER(4) := EXTRACT (year from security_start_date);		
+
+BEGIN
+execute immediate 'INSERT INTO security VALUES (' ||security_id ||','''||security_start_date  ||''','''||security_end_date ||''','||salary ||','||department_id||','||security_start_year||','||security_start_semester||')' ;
+execute immediate 'GRANT security_role to E' || security_id;
+
+dbms_scheduler.create_job(
+      job_name => 'rvk_scurty_E'||security_id||'_'||security_start_year||'_'||security_start_semester ,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''revoke security_role from E'||security_id||''' ; end;',
+      start_date => security_end_date ,
+      enabled => TRUE);
+
+END;
+/
+
+-- a procedure to insert a secretary
+CREATE OR REPLACE PROCEDURE insert_secretary(
+secretary_id NUMBER ,
+secretary_start_date DATE ,
+secretary_end_date DATE ,
+salary NUMBER ,
+majors_department_id NUMBER ,
+department_id NUMBER,
+secretary_start_semester NUMBER) 
+AUTHID CURRENT_USER
+IS
+
+secretary_start_year NUMBER(4) := EXTRACT (year from secretary_start_date);		
+
+BEGIN
+execute immediate 'INSERT INTO secretary VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||', :val1 , :val2 ,'||secretary_start_year||','||secretary_start_semester||')' USING majors_department_id,department_id ;
+execute immediate 'GRANT secretary_role to E' || secretary_id;
+
+dbms_scheduler.create_job(
+      job_name => 'rvk_scrtary_E'||secretary_id ||'_'||secretary_start_year||'_'||secretary_start_semester ,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''revoke secretary_role from E'||secretary_id||''' ; end;',
+      start_date => secretary_end_date ,
+      enabled => TRUE);
+
+END;
+/
 ----------------------------------------------------------------------------------------------------------
 -- creating Views
 
 	CREATE OR REPLACE VIEW Std_dept_and_mjr
 AS select 
-	sid,Full_name_en,major_name,Majors_Department_name from
-	Majors_Department md,major m ,student s where  s.sid= substr(USER,2) and s.major_id=m.major_id and m.Majors_Department_id= md.Majors_Department_id;
+	student_id,Full_name_en,major_name,Majors_Department_name from
+	Majors_Department md,major m ,student s where  s.student_id= substr(USER,2) and s.major_id=m.major_id and m.Majors_Department_id= md.Majors_Department_id;
 
 	CREATE OR REPLACE VIEW Std_personal
 AS select 
 	full_name_ar,full_name_en,social_status,guardian_name,guardian_national_id,guardian_relation,birh_place,date_of_birth,national_id,nationality,religion,health_status
-	from student where sid= substr(USER,2) ;
+	from student where student_id= substr(USER,2) ;
 	
 	CREATE OR REPLACE VIEW Std_fmly_status
 AS select 
 	mother_name,mother_job,mother_job_desc,father_job,father_job_desc,parents_status,number_of_family_members,family_university_students,social_affairs
-	from student where sid= substr(USER,2) ;
+	from student where student_id= substr(USER,2) ;
 	
 	CREATE OR REPLACE VIEW Std_contact_and_addrs
 AS select 
 	area_name,city_name,block_name,street_name,telephone_home,phone,emergency_phone,email
-	from student where sid= substr(USER,2) ;
+	from student where student_id= substr(USER,2) ;
 	
 	CREATE OR REPLACE VIEW Std_balance
 AS select 
 	balance
-	from student where sid= substr(USER,2) ;
+	from student where student_id= substr(USER,2) ;
 	
 	CREATE OR REPLACE VIEW Std_plan
 AS select c.course_id,c.course_name,c.credit 
 from student s , course c , major m , study_plan sp , study_plan_courses spc 
-where spc.plan_number=sp.plan_number and  sp.major_id = m.major_id and c.course_id=spc.course_id and s.major_id=m.major_id and s.sid= substr(USER,2);
+where spc.plan_number=sp.plan_number and  sp.major_id = m.major_id and c.course_id=spc.course_id and s.major_id=m.major_id and s.student_id= substr(USER,2);
 
 
 
@@ -1198,23 +1356,6 @@ AS SELECT
     WHERE    c.course_id=en.course_id and s.section_number=en.section_number 
     and e.employee_id= t.teacher_id;
 	 */
-----------------------------------------------------------------------------------------------------------
--- creating Roles
-CREATE ROLE student_role;
-CREATE ROLE employee_role;
-
--- giving privileges;
-
-GRANT CREATE SESSION to student_role;
-GRANT SELECT ON UNIVERSITY.Std_dept_and_mjr to student_role;
-GRANT SELECT ON UNIVERSITY.Std_personal to student_role;
-GRANT SELECT ON UNIVERSITY.Std_fmly_status to student_role;
-GRANT SELECT ON UNIVERSITY.Std_contact_and_addrs to student_role;
-GRANT SELECT ON UNIVERSITY.Std_balance to student_role;
-GRANT SELECT ON UNIVERSITY.Std_plan to student_role;
-
-GRANT CREATE SESSION to employee_role;
-GRANT SELECT ON UNIVERSITY.employee to employee_role;
 
 ----------------------------------------------------------------------------------------------------------
 -- insertion operations
@@ -1277,6 +1418,7 @@ INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'DESCRIPTION',100);
 
 ----------------------------------------------------------------------------------------------------------
 -- Insertion by procedures
+
 begin
 insert_emp('مصطفى أحمد','Mostafa Ahmed','Palestinian',300123456,'M','M',1500,'Gaza',to_date('4-5-1964','dd-mm-yyyy') , 'Islam','Good',7,00972591225472,082876528,'m_ahmed@hotmail.com', 'Gaza Strip','Gaza','Naser','Elgesser' , DATE '2015-7-10');
 insert_emp('أحمد شعبان','Ahmed Shaban','Egyptian',300321654,'M','S',700,'Cairo', to_date('1-7-1984','dd-mm-yyyy') , 'Islam','broken arm',3,00972599547231,082895312,'shaban1112@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2016-8-15');
@@ -1285,23 +1427,28 @@ insert_emp('ديمة منصور','Dima Mansor','Jordanian',300712698,'F','M',130
 insert_emp('حسن شملخ','Hasan Shamalakh','Egyptian',308122456,'M','M',1500,'Giza',to_date('7-6-1978','dd-mm-yyyy') , 'Islam','Good',7,00972591229412,082876528,'h_shmalakh@yaho.com', 'Gaza Strip','Gaza','Naser','Elgesser', DATE '2012-1-14');
 insert_emp('سامي بدرة','Samy Badrah','Jordanian',307321644,'M','S',700,'Zarqa', to_date('1-7-1977','dd-mm-yyyy') , 'Islam','broken leg',3,00972569549425,082895312,'S123badr@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2017-5-1');
 insert_emp('سارة اسماعيل','Sarah Isamel','Jordanian',303714198,'F','M',1300,'Karak',to_date('9-10-1966','dd-mm-yyyy') , 'Islam','Good',5,00972567413214,082865723,'sar_ismael7856@yaho.com', 'Rafah','Rafah','Yebna','Kir', DATE '2017-5-15');
+
+
+insert_teacher(320180001, DATE '2017-07-17',DATE '2018-1-17',100,499.99 , 1);
+insert_teacher(320180002, DATE '2017-07-17',DATE '2018-1-17',101,300.14 , 1);
+insert_teacher(320180003, DATE '2017-07-17',DATE '2018-1-17',102,600 , 2 );
+insert_teacher(320180003, DATE '2018-07-17',DATE '2019-1-17',102,600 , 2);
+
+insert_manager(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',null,100 , 1);
+
+insert_security (320180005,DATE '2017-12-17',DATE '2018-12-17',500.00,100 ,2 );
+
+insert_secretary (320180006,DATE '2013-11-1',DATE'2017-10-6',500,100,null , 2 );
+
 end;
 /
 
-
-INSERT INTO teacher VALUES(320180001, DATE '2017-07-17',DATE '2018-1-17',100,499.99);
-INSERT INTO teacher VALUES(320180002, DATE '2017-07-17',DATE '2018-1-17',101,300.14);
-INSERT INTO teacher VALUES(320180003, DATE '2017-07-17',DATE '2018-1-17',102,600);
-
-INSERT INTO manager(MANAGER_ID,EMPLOYMENT_START_DATE,EMPLOYMENT_END_DATE,SALARY,MANAGER_GRADE,DEPARTMENT_ID) VALUES(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',100);
-
-INSERT INTO Security VALUES(320180005,DATE '2017-12-17',DATE '2018-12-17',500.00,100);
-
-INSERT INTO Secretary VALUES(320180006,DATE '2013-11-1',DATE'2017-10-6',100,null);
+----------------------------------------------------------------------------------------------------------
+-- insertion operations
 
 INSERT INTO item VALUES(001,'PC','Desktop PC');
 INSERT INTO item VALUES(002,'Lap TOP','Lap TOP, a moveable PC');
-INSERT INTO item VALUES(003,'LCD','Tool for presenting computer monitor on wall or appropriate surface');
+INSERT INTO item VALUES(003,'LCD','Tool for presenting computer monitor ON wall or appropriate surface');
 
 INSERT INTO room_items VALUES(001,01,1,'B',8);
 INSERT INTO room_items VALUES(003,01,1,'B',1);
@@ -1331,3 +1478,13 @@ insert_std('سميه شاكر' , 'Somayyah Shaker' , 'Egyptian',402625375, 'F' ,
 insert_std('مريم الخياط' , 'Mariam Al-Khayyat' , 'Palestinian',402531181, 'F' , 'M' , 'Ali Al-Khayyat' , 400490070, 'Father' , 'Rafah' , to_date('4-6-1987','dd-mm-yyyy') , 'Christianity' , 'Good' , 'Sarah' , 'university teacher' , 'teach university students' , 'Carpenter' , 'make and repair wooden objects' , 'both_alive' , 10 , 1 , 'Other assistance' , 00972593894811 , 082831132 , 00972564402409 , 'M-Khayyat@yaho.com' ,96 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1    , 150 );
 end;
 /
+
+----------------------------------------------------------------------------------------------------------
+
+INSERT INTO pre_required_courses VALUES ('COMP2113' ,'UNIV1122');
+
+INSERT INTO academic_advice VALUES (320180001,2017,1,120180001);
+
+INSERT INTO section VALUES (201 , 'COMP2113' , 320180001,2017,1);
+
+INSERT INTO enroll  VALUES (220180002 , 'COMP2113' ,201 , 2017,1 ,35,51);
