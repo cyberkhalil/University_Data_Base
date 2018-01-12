@@ -1185,7 +1185,14 @@ execute immediate 'select '||seq_name||'.nextval from dual' INTO employee_id;
 
 execute immediate 'INSERT INTO EMPLOYEE VALUES (' ||employee_id ||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''|| sex  ||''','''||social_status  ||''','|| salary||','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','|| number_of_family_members  ||','||  phone  ||','||telephone_home  ||','''||email ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name ||''','''||employment_date||''' )' ;
 execute immediate 'CREATE USER E' ||employee_id|| ' IDENTIFIED BY 123456';
-execute immediate 'GRANT employee_role to E' || employee_id;
+
+dbms_scheduler.create_job(
+      job_name => 'grnt_emp_E'||employee_id,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''GRANT employee_role to E'||employee_id||''' ; end;',
+      start_date => employment_date ,
+      enabled => TRUE);
+
 END;
 /
 
@@ -1421,7 +1428,7 @@ GRANT SELECT ON UNIVERSITY.employee to employee_role;
 begin
 insert_employee('مصطفى أحمد','Mostafa Ahmed','Palestinian',300123456,'M','M',1500,'Gaza',to_date('4-5-1964','dd-mm-yyyy') , 'Islam','Good',7,00972591225472,082876528,'m_ahmed@hotmail.com', 'Gaza Strip','Gaza','Naser','Elgesser' , DATE '2015-7-10');
 insert_employee('أحمد شعبان','Ahmed Shaban','Egyptian',300321654,'M','S',700,'Cairo', to_date('1-7-1984','dd-mm-yyyy') , 'Islam','broken arm',3,00972599547231,082895312,'shaban1112@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2016-8-15');
-insert_employee('ديمة منصور','Dima Mansor','Jordanian',300712698,'F','M',1300,'Amman',to_date('5-6-1976','dd-mm-yyyy') , 'Islam','Good',5,00972567412534,082865723,'dima_m1976@yaho.com', 'Rafah','Rafah','Yebna','Kir', DATE '2013-8-21');
+insert_employee('ديمة منصور','Dima Mansor','Jordanian',300712698,'F','M',1300,'Amman',to_date('5-6-1976','dd-mm-yyyy') , 'Islam','Good',5,00972567412534,082865723,'dima_m1976@yaho.com', 'Rafah','Rafah','Yebna','Kir', DATE '2019-8-21');
 
 insert_employee('حسن شملخ','Hasan Shamalakh','Egyptian',308122456,'M','M',1500,'Giza',to_date('7-6-1978','dd-mm-yyyy') , 'Islam','Good',7,00972591229412,082876528,'h_shmalakh@yaho.com', 'Gaza Strip','Gaza','Naser','Elgesser', DATE '2012-1-14');
 insert_employee('سامي بدرة','Samy Badrah','Jordanian',307321644,'M','S',700,'Zarqa', to_date('1-7-1977','dd-mm-yyyy') , 'Islam','broken leg',3,00972569549425,082895312,'S123badr@gmail.com', 'Gaza North','Jabalia','Al Nazlah','Al Saftawy', DATE '2017-5-1');
@@ -1429,9 +1436,8 @@ insert_employee('سارة اسماعيل','Sarah Isamel','Jordanian',303714198,'
 
 
 insert_teacher(320180001, DATE '2017-07-17',DATE '2018-1-17',100,499.99 , 1);
-insert_teacher(320180002, DATE '2017-07-17',DATE '2018-1-17',101,300.14 , 1);
-insert_teacher(320180003, DATE '2017-07-17',DATE '2018-1-17',102,600 , 2 );
-insert_teacher(320180003, DATE '2018-07-17',DATE '2019-1-17',102,600 , 2);
+insert_teacher(320180002, DATE '2017-07-17',DATE '2018-3-17',101,300.14 , 1);
+insert_teacher(320180002, DATE '2018-07-17',DATE '2019-3-17',101,300.14 , 1);
 
 insert_manager(320180004,DATE '2017-12-17',DATE '2018-1-17',240.58,'Master',null,100 , 1);
 
