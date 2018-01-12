@@ -1210,7 +1210,13 @@ IS
 teacher_start_year NUMBER(4) := EXTRACT (year from teacher_start_date);		
 BEGIN
 execute immediate 'INSERT INTO teacher VALUES (' ||teacher_id ||','''||teacher_start_date  ||''','''||teacher_end_date ||''','||majors_department_id ||','||salary ||','||teacher_start_year||','||teacher_start_semester||')' ;
-execute immediate 'GRANT teacher_role to E' || teacher_id;
+
+dbms_scheduler.create_job(
+      job_name => 'grnt_tchr_E'||teacher_id,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''GRANT teacher_role to E'||teacher_id||''' ; end;',
+      start_date => teacher_start_date ,
+      enabled => TRUE);
 
 dbms_scheduler.create_job(
       job_name => 'rvk_tchr_E'||teacher_id||'_'||teacher_start_year||'_'||teacher_start_semester,
@@ -1239,7 +1245,13 @@ manager_start_year NUMBER(4) := EXTRACT (year from manager_start_date);
 
 BEGIN
 execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','|| salary || ','''|| manager_grade||''', :val1, :val2 ,'||manager_start_year||','||manager_start_semester||')' USING majors_department_id,department_id ;
-execute immediate 'GRANT manager_role to E' || manager_id;
+
+dbms_scheduler.create_job(
+      job_name => 'grnt_tchr_E'||manager_id,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''GRANT manager_role to E'||manager_id||''' ; end;',
+      start_date => manager_start_date ,
+      enabled => TRUE);
 
 dbms_scheduler.create_job(
       job_name => 'rvk_mngr_E'||manager_id||'_'||manager_start_year||'_'||manager_start_semester,
@@ -1267,7 +1279,13 @@ security_start_year NUMBER(4) := EXTRACT (year from security_start_date);
 
 BEGIN
 execute immediate 'INSERT INTO security VALUES (' ||security_id ||','''||security_start_date  ||''','''||security_end_date ||''','||salary ||','||department_id||','||security_start_year||','||security_start_semester||')' ;
-execute immediate 'GRANT security_role to E' || security_id;
+
+dbms_scheduler.create_job(
+      job_name => 'grnt_tchr_E'||security_id,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''GRANT security_role to E'||security_id||''' ; end;',
+      start_date => security_start_date ,
+      enabled => TRUE);
 
 dbms_scheduler.create_job(
       job_name => 'rvk_scurty_E'||security_id||'_'||security_start_year||'_'||security_start_semester ,
@@ -1294,8 +1312,14 @@ IS
 secretary_start_year NUMBER(4) := EXTRACT (year from secretary_start_date);		
 
 BEGIN
-execute immediate 'INSERT INTO secretary VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||', :val1 , :val2 ,'||secretary_start_year||','||secretary_start_semester||')' USING majors_department_id,department_id ;
-execute immediate 'GRANT secretary_role to E' || secretary_id;
+execute immediate 'INSERT INTO  VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||', :val1 , :val2 ,'||secretary_start_year||','||secretary_start_semester||')' USING majors_department_id,department_id ;
+
+dbms_scheduler.create_job(
+      job_name => 'grnt_tchr_E'||secretary_id,
+      job_type => 'PLSQL_BLOCK',
+      job_action => 'begin execute immediate ''GRANT secretary_role to E'||secretary_id||''' ; end;',
+      start_date => secretary_start_date ,
+      enabled => TRUE);
 
 dbms_scheduler.create_job(
       job_name => 'rvk_scrtary_E'||secretary_id ||'_'||secretary_start_year||'_'||secretary_start_semester ,
