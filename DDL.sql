@@ -269,10 +269,10 @@ semester NUMBER (1) ,
 room_number NUMBER (2),
 floor_number NUMBER (2),
 building_code CHAR (1),
-FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_code,floor_number,room_number) ,
 day DATE NOT NULL,
 start_time DATE ,
 end_time DATE ,
+FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_code,floor_number,room_number) ,
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section (section_number , course_id , year , semester ) ,
 PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
@@ -1399,3 +1399,13 @@ insert_std('سميه شاكر' , 'Somayyah Shaker' , 'Egyptian',402625375, 'F' ,
 insert_std('مريم الخياط' , 'Mariam Al-Khayyat' , 'Palestinian',402531181, 'F' , 'M' , 'Ali Al-Khayyat' , 400490070, 'Father' , 'Rafah' , to_date('4-6-1987','dd-mm-yyyy') , 'Christianity' , 'Good' , 'Sarah' , 'university teacher' , 'teach university students' , 'Carpenter' , 'make and repair wooden objects' , 'both_alive' , 10 , 1 , 'Other assistance' , 00972593894811 , 082831132 , 00972564402409 , 'M-Khayyat@yaho.com' ,96 , 'S' , 'Gaza Strip' , 'Gaza' , 'Naser' , 'Elgesser' , 1    , 150 );
 end;
 /
+
+----------------------------------------------------------------------------------------------------------
+
+INSERT INTO pre_required_courses VALUES ('COMP2113' ,'UNIV1122');
+
+INSERT INTO academic_advice VALUES (320180001,2017,1,120180001);
+
+INSERT INTO section VALUES (201 , 'COMP2113' , 320180001,2017,1);
+
+INSERT INTO enroll  VALUES (220180002 , 'COMP2113' ,201 , 2017,1 ,35,51);
