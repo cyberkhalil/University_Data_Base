@@ -1039,8 +1039,25 @@ INSERT INTO pre_required_courses_log VALUES (:old.course_id ,:old.pre_required_c
 end;
  /
  
- 
 ----------------------------------------------------------------------------------------------------------
+-- creating Roles
+CREATE ROLE student_role;
+CREATE ROLE employee_role;
+
+-- giving privileges;
+
+GRANT CREATE SESSION to student_role;
+GRANT SELECT ON UNIVERSITY.Std_dept_and_mjr to student_role;
+GRANT SELECT ON UNIVERSITY.Std_personal to student_role;
+GRANT SELECT ON UNIVERSITY.Std_fmly_status to student_role;
+GRANT SELECT ON UNIVERSITY.Std_contact_and_addrs to student_role;
+GRANT SELECT ON UNIVERSITY.Std_balance to student_role;
+GRANT SELECT ON UNIVERSITY.Std_plan to student_role;
+
+GRANT CREATE SESSION to employee_role;
+GRANT SELECT ON UNIVERSITY.employee to employee_role;
+
+
 -- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
 
 CREATE OR REPLACE PROCEDURE insert_std(
@@ -1198,23 +1215,6 @@ AS SELECT
     WHERE    c.course_id=en.course_id and s.section_number=en.section_number 
     and e.employee_id= t.teacher_id;
 	 */
-----------------------------------------------------------------------------------------------------------
--- creating Roles
-CREATE ROLE student_role;
-CREATE ROLE employee_role;
-
--- giving privileges;
-
-GRANT CREATE SESSION to student_role;
-GRANT SELECT ON UNIVERSITY.Std_dept_and_mjr to student_role;
-GRANT SELECT ON UNIVERSITY.Std_personal to student_role;
-GRANT SELECT ON UNIVERSITY.Std_fmly_status to student_role;
-GRANT SELECT ON UNIVERSITY.Std_contact_and_addrs to student_role;
-GRANT SELECT ON UNIVERSITY.Std_balance to student_role;
-GRANT SELECT ON UNIVERSITY.Std_plan to student_role;
-
-GRANT CREATE SESSION to employee_role;
-GRANT SELECT ON UNIVERSITY.employee to employee_role;
 
 ----------------------------------------------------------------------------------------------------------
 -- insertion operations
