@@ -1312,7 +1312,7 @@ IS
 secretary_start_year NUMBER(4) := EXTRACT (year from secretary_start_date);		
 
 BEGIN
-execute immediate 'INSERT INTO  VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||', :val1 , :val2 ,'||secretary_start_year||','||secretary_start_semester||')' USING majors_department_id,department_id ;
+execute immediate 'INSERT INTO secretary VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||', :val1 , :val2 ,'||secretary_start_year||','||secretary_start_semester||')' USING majors_department_id,department_id ;
 
 dbms_scheduler.create_job(
       job_name => 'grnt_scrtary_E'||secretary_id ||'_'||secretary_start_year||'_'||secretary_start_semester ,
