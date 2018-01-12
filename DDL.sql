@@ -1247,7 +1247,7 @@ BEGIN
 execute immediate 'INSERT INTO manager VALUES (' ||manager_id ||','''||manager_start_date  ||''','''||manager_end_date ||''','|| salary || ','''|| manager_grade||''', :val1, :val2 ,'||manager_start_year||','||manager_start_semester||')' USING majors_department_id,department_id ;
 
 dbms_scheduler.create_job(
-      job_name => 'grnt_tchr_E'||manager_id,
+      job_name => 'grnt_mngr_E'||manager_id,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''GRANT manager_role to E'||manager_id||''' ; end;',
       start_date => manager_start_date ,
@@ -1281,7 +1281,7 @@ BEGIN
 execute immediate 'INSERT INTO security VALUES (' ||security_id ||','''||security_start_date  ||''','''||security_end_date ||''','||salary ||','||department_id||','||security_start_year||','||security_start_semester||')' ;
 
 dbms_scheduler.create_job(
-      job_name => 'grnt_tchr_E'||security_id,
+      job_name => 'grnt_scurty_E'||security_id,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''GRANT security_role to E'||security_id||''' ; end;',
       start_date => security_start_date ,
@@ -1315,7 +1315,7 @@ BEGIN
 execute immediate 'INSERT INTO  VALUES (' ||secretary_id ||','''||secretary_start_date  ||''','''||secretary_end_date ||''','||salary ||', :val1 , :val2 ,'||secretary_start_year||','||secretary_start_semester||')' USING majors_department_id,department_id ;
 
 dbms_scheduler.create_job(
-      job_name => 'grnt_tchr_E'||secretary_id,
+      job_name => 'grnt_scrtary_E'||secretary_id,
       job_type => 'PLSQL_BLOCK',
       job_action => 'begin execute immediate ''GRANT secretary_role to E'||secretary_id||''' ; end;',
       start_date => secretary_start_date ,
