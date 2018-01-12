@@ -297,7 +297,7 @@ begin
 INSERT into address_log VALUES (:new.street_name ,:new.block_name ,:new.city_name ,:new.area_name ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_address_trgr AFTER update ON address
+CREATE OR REPLACE TRIGGER au_address_trgr AFTER UPDATE ON address
 for each row 
 begin 
 INSERT into ADDRESS_LOG VALUES (:old.street_name ,:old.block_name ,:old.city_name ,:old.area_name , 'DELETE',DEFAULT,DEFAULT );
@@ -347,7 +347,7 @@ INSERT into employee_log VALUES (:new.employee_id ,:new.Full_name_ar ,:new.Full_
 end;
  /
 
-CREATE OR REPLACE TRIGGER au_employee_trgr AFTER update ON employee
+CREATE OR REPLACE TRIGGER au_employee_trgr AFTER UPDATE ON employee
 for each row 
 begin
 INSERT into employee_log VALUES (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.salary  ,:old.birh_place,:old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members ,:old.phone ,:old.telephone_home ,:old.email , :old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,:old.employment_date ,'DELETE' ,DEFAULT ,DEFAULT );
@@ -373,7 +373,7 @@ begin
 INSERT into building_log VALUES (:new.building_code,:new.building_desc ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_building_trgr AFTER update ON building
+CREATE OR REPLACE TRIGGER au_building_trgr AFTER UPDATE ON building
 for each row 
 begin 
 INSERT into building_log VALUES (:old.building_code,:old.building_desc,'DELETE' ,DEFAULT,DEFAULT );
@@ -402,7 +402,7 @@ begin
 INSERT into floor_log VALUES (:new.floor_number ,:new.building_code,:new.floor_desc ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_floor_trgr AFTER update ON floor
+CREATE OR REPLACE TRIGGER au_floor_trgr AFTER UPDATE ON floor
 for each row 
 begin 
 INSERT into floor_log VALUES (:old.floor_number ,:old.building_code,:old.floor_desc ,'DELETE' ,DEFAULT,DEFAULT );
@@ -432,7 +432,7 @@ begin
 INSERT into room_log VALUES (:new.room_number ,:new.floor_number ,:new.building_code,:new.capacity ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_room_trgr AFTER update ON room
+CREATE OR REPLACE TRIGGER au_room_trgr AFTER UPDATE ON room
 for each row 
 begin
 INSERT into room_log VALUES (:old.room_number ,:old.floor_number ,:old.building_code,:old.capacity ,'DELETE' ,DEFAULT,DEFAULT ); 
@@ -464,7 +464,7 @@ begin
 INSERT into Department_log VALUES (:new.Department_id ,:new.Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_Department_trgr AFTER update ON Department
+CREATE OR REPLACE TRIGGER au_Department_trgr AFTER UPDATE ON Department
 for each row 
 begin
 INSERT into Department_log VALUES (:old.Department_id ,:old.Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
@@ -495,7 +495,7 @@ begin
 INSERT into Majors_Department_log VALUES (:new.Majors_Department_id ,:new.Majors_Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_Majors_Department_trgr AFTER update ON Majors_Department
+CREATE OR REPLACE TRIGGER au_Majors_Department_trgr AFTER UPDATE ON Majors_Department
 for each row 
 begin
 INSERT into Majors_Department_log VALUES (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
@@ -524,7 +524,7 @@ begin
 INSERT into major_log VALUES (:new.major_id ,:new.major_name ,:new.Majors_Department_id ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_major_trgr AFTER update ON major
+CREATE OR REPLACE TRIGGER au_major_trgr AFTER UPDATE ON major
 for each row 
 begin
 INSERT into major_log VALUES (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'DELETE',DEFAULT,DEFAULT); 
@@ -555,7 +555,7 @@ begin
 INSERT into course_log VALUES (:new.course_id ,:new.course_name ,:new.credit , :new.clevel ,:new.Majors_Department_id ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_course_trgr AFTER update ON course
+CREATE OR REPLACE TRIGGER au_course_trgr AFTER UPDATE ON course
 for each row 
 begin
 INSERT into course_log VALUES (:old.course_id ,:old.course_name ,:old.credit , :old.clevel ,:old.Majors_Department_id,'Delete',DEFAULT,DEFAULT); 
@@ -588,7 +588,7 @@ begin
 INSERT into teacher_log VALUES (:new.teacher_id ,:new.teacher_start_date ,:new.teacher_end_date,:new.majors_department_id,:new.salary , :new.teacher_start_year , :new.teacher_start_semester , 'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_teacher_trgr AFTER update ON teacher
+CREATE OR REPLACE TRIGGER au_teacher_trgr AFTER UPDATE ON teacher
 for each row 
 begin
 INSERT into teacher_log VALUES (:old.Teacher_id ,:old.teacher_Start_Date ,:old.teacher_End_Date,:old.Majors_Department_id,:old.salary , :old.teacher_start_year , :old.teacher_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
@@ -655,7 +655,7 @@ INSERT into Security_log VALUES (:new.Security_id ,:new.security_Start_Date ,:ne
 end;
  /
 
-CREATE OR REPLACE TRIGGER au_Security_trgr AFTER update ON Security
+CREATE OR REPLACE TRIGGER au_Security_trgr AFTER UPDATE ON Security
 for each row 
 begin
 INSERT into Security_log VALUES (:old.Security_id ,:old.security_Start_Date ,:old.security_End_Date ,:old.salary ,:old.Department_id, :old.security_start_year , :old.security_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
@@ -691,7 +691,7 @@ begin
 INSERT into Secretary_log VALUES (:new.Secretary_id ,:new.secretary_Start_Date ,:new.secretary_End_Date , :new.salary , :new.majors_department_id ,:new.Department_id , :new.secretary_start_year , :new.secretary_start_semester , 'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_Secretary_trgr AFTER update ON Secretary
+CREATE OR REPLACE TRIGGER au_Secretary_trgr AFTER UPDATE ON Secretary
 for each row 
 begin 
 INSERT into Secretary_log VALUES (:old.Secretary_id ,:old.secretary_Start_Date ,:old.secretary_End_Date , :old.salary  ,:old.Majors_Department_id ,:old.Department_id , :old.secretary_start_year , :old.secretary_start_semester , 'DELETE' ,DEFAULT,DEFAULT ); 
@@ -720,7 +720,7 @@ begin
 INSERT into item_log VALUES (:new.item_id ,:new.item_name ,:new.item_description ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_item_trgr AFTER update ON item
+CREATE OR REPLACE TRIGGER au_item_trgr AFTER UPDATE ON item
 for each row 
 begin 
 INSERT into item_log VALUES (:old.item_id ,:old.item_name ,:old.item_description ,'DELETE' ,DEFAULT,DEFAULT ); 
@@ -751,7 +751,7 @@ begin
 INSERT into room_items_log VALUES (:new.item_id ,:new.room_number ,:new.floor_number ,:new.building_code ,:new.quantity ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_room_items_trgr AFTER update ON room_items
+CREATE OR REPLACE TRIGGER au_room_items_trgr AFTER UPDATE ON room_items
 for each row 
 begin 
 INSERT into room_items_log VALUES (:old.item_id ,:old.room_number ,:old.floor_number ,:old.building_code ,:old.quantity ,'INSERT' ,DEFAULT,DEFAULT ); 
@@ -779,7 +779,7 @@ begin
 INSERT into study_plan_log VALUES (:new.plan_number ,:new.major_id ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_study_plan_trgr AFTER update ON study_plan
+CREATE OR REPLACE TRIGGER au_study_plan_trgr AFTER UPDATE ON study_plan
 for each row 
 begin 
 INSERT into study_plan_log VALUES (:old.plan_number ,:old.major_id ,'DELETE' ,DEFAULT,DEFAULT ); 
@@ -808,7 +808,7 @@ begin
 INSERT into academic_advice_log VALUES (:new.teacher_id ,:new.student_id ,:new.year ,:new.semester,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_academic_advice_trgr AFTER update ON academic_advice
+CREATE OR REPLACE TRIGGER au_academic_advice_trgr AFTER UPDATE ON academic_advice
 for each row 
 begin
 INSERT into academic_advice_log VALUES (:old.teacher_id ,:old.student_id ,:old.year ,:old.semester,'DELETE' ,DEFAULT ,DEFAULT );
@@ -839,7 +839,7 @@ begin
 INSERT into section_log VALUES (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.teacher_id,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_section_trgr AFTER update ON section
+CREATE OR REPLACE TRIGGER au_section_trgr AFTER UPDATE ON section
 for each row 
 begin
 INSERT into section_log VALUES (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.teacher_id,'DELETE' ,DEFAULT ,DEFAULT );
@@ -872,7 +872,7 @@ begin
 INSERT into enroll_log VALUES (:new.student_id ,:new.course_id ,:new.section_number ,:new.year ,:new.semester ,:new.grade_mid ,:new.grade_final ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_enroll_trgr AFTER update ON enroll
+CREATE OR REPLACE TRIGGER au_enroll_trgr AFTER UPDATE ON enroll
 for each row 
 begin
 INSERT into enroll_log VALUES (:old.student_id ,:old.course_id ,:old.section_number ,:old.year ,:old.semester ,:old.grade_mid ,:old.grade_final ,'DELETE' ,DEFAULT ,DEFAULT );
@@ -908,7 +908,7 @@ begin
 INSERT into section_rooms_log VALUES (:new.section_number ,:new.course_id ,:new.year ,:new.semester ,:new.room_number,:new.floor_number ,:new.building_code ,:new.day ,:new.start_time ,:new.end_time ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_section_rooms_trgr AFTER update ON section_rooms
+CREATE OR REPLACE TRIGGER au_section_rooms_trgr AFTER UPDATE ON section_rooms
 for each row 
 begin
 INSERT into section_rooms_log VALUES (:old.section_number ,:old.course_id ,:old.year ,:old.semester ,:old.room_number,:old.floor_number ,:old.building_code ,:old.day ,:old.start_time ,:old.end_time ,'DELETE' ,DEFAULT ,DEFAULT );
@@ -968,7 +968,7 @@ begin
 INSERT into student_log VALUES (:new.student_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.Nationality ,:new.national_id ,:new.sex ,:new.social_status ,:new.guardian_name ,:new.guardian_national_id ,:new.guardian_relation ,:new.birh_place ,:new.date_of_birth ,:new.religion,:new.health_status ,:new.mother_name ,:new.mother_job ,:new.mother_job_desc ,:new.father_job ,:new.father_job_desc ,:new.parents_status,:new.number_of_family_members ,:new.family_university_students ,:new.social_affairs ,:new.phone ,:new.telephone_home ,:new.emergency_phone ,:new.email ,:new.tawjihi_GPA ,:new.tawjihi_field ,:new.area_name ,:new.city_name ,:new.block_name  ,:new.street_name ,:new.major_id ,:new.balance ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_student_trgr AFTER update ON student
+CREATE OR REPLACE TRIGGER au_student_trgr AFTER UPDATE ON student
 for each row 
 begin
 INSERT into student_log VALUES (:old.student_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality ,:old.national_id ,:old.sex ,:old.social_status ,:old.guardian_name ,:old.guardian_national_id ,:old.guardian_relation ,:old.birh_place ,:old.date_of_birth ,:old.religion,:old.health_status ,:old.mother_name ,:old.mother_job ,:old.mother_job_desc ,:old.father_job ,:old.father_job_desc ,:old.parents_status,:old.number_of_family_members ,:old.family_university_students ,:old.social_affairs ,:old.phone ,:old.telephone_home ,:old.emergency_phone ,:old.email , :old.tawjihi_GPA ,:old.tawjihi_field ,:old.area_name ,:old.city_name ,:old.block_name  ,:old.street_name ,:old.major_id ,:old.balance  ,'DELETE' ,DEFAULT ,DEFAULT );
@@ -994,7 +994,7 @@ begin
 INSERT into Nationality_log VALUES (:new.Nationality ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
-CREATE OR REPLACE TRIGGER au_Nationality_trgr AFTER update ON Nationality
+CREATE OR REPLACE TRIGGER au_Nationality_trgr AFTER UPDATE ON Nationality
 for each row 
 begin 
 INSERT into Nationality_log VALUES (:old.Nationality ,'DELETE' ,DEFAULT,DEFAULT ); 
@@ -1024,7 +1024,7 @@ begin
 INSERT into study_plan_courses_log VALUES (:new.plan_number ,:new.major_id  ,:new.course_id,:new.year ,:new.semester ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
-CREATE OR REPLACE TRIGGER au_study_plan_courses_trgr AFTER update ON study_plan_courses
+CREATE OR REPLACE TRIGGER au_study_plan_courses_trgr AFTER UPDATE ON study_plan_courses
 for each row 
 begin
 INSERT into study_plan_courses_log VALUES (:old.plan_number ,:old.major_id  ,:old.course_id,:old.year ,:old.semester ,'DELETE' ,DEFAULT ,DEFAULT );
