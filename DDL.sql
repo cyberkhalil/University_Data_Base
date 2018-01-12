@@ -1075,18 +1075,6 @@ CREATE ROLE manager_role;
 CREATE ROLE security_role;
 CREATE ROLE secretary_role;
 
--- giving privileges;
-GRANT CREATE SESSION to student_role;
-GRANT SELECT ON UNIVERSITY.Std_dept_and_mjr to student_role;
-GRANT SELECT ON UNIVERSITY.Std_personal to student_role;
-GRANT SELECT ON UNIVERSITY.Std_fmly_status to student_role;
-GRANT SELECT ON UNIVERSITY.Std_contact_and_addrs to student_role;
-GRANT SELECT ON UNIVERSITY.Std_balance to student_role;
-GRANT SELECT ON UNIVERSITY.Std_plan to student_role;
-
-GRANT CREATE SESSION to employee_role;
-GRANT SELECT ON UNIVERSITY.employee to employee_role;
-
 ----------------------------------------------------------------------------------------------------------
 -- creating insertion procedures
 
@@ -1357,7 +1345,7 @@ AS SELECT
     WHERE    c.course_id=en.course_id and s.section_number=en.section_number 
     and e.employee_id= t.teacher_id;
 	 */
-
+	 
 ----------------------------------------------------------------------------------------------------------
 -- insertion operations
 
@@ -1416,6 +1404,20 @@ INSERT INTO major VALUES(3,'Arabic Teacher',101);
 INSERT INTO course VALUES('COMP2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
 INSERT INTO course VALUES('UNIV1122','English',1, 2 ,'DESCRIPTION',100);
 INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'DESCRIPTION',100);
+
+----------------------------------------------------------------------------------------------------------
+-- giving privileges;
+GRANT CREATE SESSION to student_role;
+GRANT SELECT ON UNIVERSITY.Std_dept_and_mjr to student_role;
+GRANT SELECT ON UNIVERSITY.Std_personal to student_role;
+GRANT SELECT ON UNIVERSITY.Std_fmly_status to student_role;
+GRANT SELECT ON UNIVERSITY.Std_contact_and_addrs to student_role;
+GRANT SELECT ON UNIVERSITY.Std_balance to student_role;
+GRANT SELECT ON UNIVERSITY.Std_plan to student_role;
+
+GRANT CREATE SESSION to employee_role;
+GRANT SELECT ON UNIVERSITY.employee to employee_role;
+
 
 ----------------------------------------------------------------------------------------------------------
 -- Insertion by procedures
