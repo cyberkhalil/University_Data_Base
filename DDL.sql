@@ -276,10 +276,6 @@ FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_c
 FOREIGN KEY (section_number , course_id , year , semester ) REFERENCES section (section_number , course_id , year , semester ) ,
 PRIMARY KEY (building_code,floor_number, year , semester, room_number, start_time,day));
 
--- just for testing
-select count(*) from tab;
--- should be 24 if 1st part: table creation (without logs nor triggers) went right
-
 ----------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Address_log (
@@ -1451,7 +1447,7 @@ end;
 
 INSERT INTO item VALUES(001,'PC','Desktop PC');
 INSERT INTO item VALUES(002,'Lap TOP','Lap TOP, a moveable PC');
-INSERT INTO item VALUES(003,'LCD','Tool for presenting computer monitor ON wall or appropriate surface');
+INSERT INTO item VALUES(003,'LCD','Tool for presenting computer monitor on wall or appropriate surface');
 
 INSERT INTO room_items VALUES(001,01,1,'B',8);
 INSERT INTO room_items VALUES(003,01,1,'B',1);
@@ -1491,3 +1487,20 @@ INSERT INTO academic_advice VALUES (320180001,2017,1,120180001);
 INSERT INTO section VALUES (201 , 'COMP2113' , 320180001,2017,1);
 
 INSERT INTO enroll  VALUES (220180002 , 'COMP2113' ,201 , 2017,1 ,35,51);
+
+
+----------------------------------------------------------------------------------------------------------
+-- manually check for creation problem
+
+select count(*) from tab where tabtype='TABLE';
+-- should be 48
+
+select count(*) from tab where tabtype='VIEW';
+-- should be 6
+
+select count(*) from user_triggers;
+-- should be 72
+
+select count(*) from user_procedures where OBJECT_TYPE ='PROCEDURE';
+-- should be 6
+
