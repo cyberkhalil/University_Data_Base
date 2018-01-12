@@ -63,7 +63,7 @@ drop user S120180002;
 -- Dropping students2
 drop user S220180001;
 drop user S220180002;
-
+-- Dropping roles
 DROP ROLE student_role;
 DROP ROLE employee_role;
 DROP ROLE teacher_role;
