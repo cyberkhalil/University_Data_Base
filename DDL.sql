@@ -1040,9 +1040,14 @@ end;
  /
  
 ----------------------------------------------------------------------------------------------------------
--- creating Roles
+-- The Roles
+
 CREATE ROLE student_role;
 CREATE ROLE employee_role;
+CREATE ROLE teacher_role;
+CREATE ROLE manager_role;
+CREATE ROLE security_role;
+CREATE ROLE secretary_role;
 
 -- giving privileges;
 
@@ -1058,8 +1063,10 @@ GRANT CREATE SESSION to employee_role;
 GRANT SELECT ON UNIVERSITY.employee to employee_role;
 
 
--- a Procedure to insert a student and create a user for him as 'S123' where 123 is the sid of the student
+----------------------------------------------------------------------------------------------------------
+-- creating insertion procedures
 
+-- a procedure to insert a student and create a user for him as 'S123' where 123 is the student_id of the student
 CREATE OR REPLACE PROCEDURE insert_std(
 Full_name_ar  VARCHAR2 ,
 Full_name_en  VARCHAR2 ,
