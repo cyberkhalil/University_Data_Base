@@ -300,15 +300,15 @@ end;
 CREATE OR REPLACE TRIGGER au_address_trgr AFTER UPDATE ON address
 for each row 
 begin 
-INSERT into ADDRESS_LOG VALUES (:old.street_name ,:old.block_name ,:old.city_name ,:old.area_name , 'DELETE',DEFAULT,DEFAULT );
-INSERT into ADDRESS_LOG VALUES (:new.street_name ,:new.block_name ,:new.city_name ,:new.area_name , 'INSERT',DEFAULT,DEFAULT ); 
+INSERT INTO ADDRESS_LOG VALUES (:old.street_name ,:old.block_name ,:old.city_name ,:old.area_name , 'DELETE',DEFAULT,DEFAULT );
+INSERT INTO ADDRESS_LOG VALUES (:new.street_name ,:new.block_name ,:new.city_name ,:new.area_name , 'INSERT',DEFAULT,DEFAULT ); 
 end;
  /
  
 CREATE OR REPLACE TRIGGER ad_address_trgr AFTER DELETE ON address 
 for each row 
 begin 
-INSERT into ADDRESS_LOG VALUES (:old.street_name ,:old.block_name ,:old.city_name ,:old.area_name ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO ADDRESS_LOG VALUES (:old.street_name ,:old.block_name ,:old.city_name ,:old.area_name ,'DELETE' ,DEFAULT ,DEFAULT );
 end;
  /
 
@@ -350,14 +350,14 @@ end;
 CREATE OR REPLACE TRIGGER au_employee_trgr AFTER UPDATE ON employee
 for each row 
 begin
-INSERT into employee_log VALUES (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.salary  ,:old.birh_place,:old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members ,:old.phone ,:old.telephone_home ,:old.email , :old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,:old.employment_date ,'DELETE' ,DEFAULT ,DEFAULT );
-INSERT into employee_log VALUES (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.salary  ,:new.birh_place,:new.date_of_birth ,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email , :new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,:new.employment_date ,'INSERT' ,DEFAULT ,DEFAULT );
+INSERT INTO employee_log VALUES (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:new.sex  ,:old.social_status  ,:old.salary  ,:old.birh_place,:old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members ,:old.phone ,:old.telephone_home ,:old.email , :old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  ,:old.employment_date ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO employee_log VALUES (:new.employee_id ,:new.Full_name_ar ,:new.Full_name_en ,:new.nationality  ,:new.national_id,:new.sex  ,:new.social_status  ,:new.salary  ,:new.birh_place,:new.date_of_birth ,:new.religion  ,:new.health_status ,:new.number_of_family_members ,:new.phone ,:new.telephone_home ,:new.email , :new.area_name ,:new.city_name  ,:new.block_name  ,:new.street_name  ,:new.employment_date ,'INSERT' ,DEFAULT ,DEFAULT );
 end;
  /
 CREATE OR REPLACE TRIGGER ad_employee_trgr AFTER DELETE ON employee
 for each row 
 begin 
-INSERT into employee_log VALUES (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:old.sex  ,:old.social_status  ,:old.salary  ,:old.birh_place, :old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  , :old.employment_date ,'DELETE' ,DEFAULT ,DEFAULT );
+INSERT INTO employee_log VALUES (:old.employee_id ,:old.Full_name_ar ,:old.Full_name_en ,:old.nationality  ,:old.national_id,:old.sex  ,:old.social_status  ,:old.salary  ,:old.birh_place, :old.date_of_birth ,:old.religion  ,:old.health_status ,:old.number_of_family_members,:old.phone  ,:old.telephone_home ,:old.email ,:old.area_name ,:old.city_name  ,:old.block_name  ,:old.street_name  , :old.employment_date ,'DELETE' ,DEFAULT ,DEFAULT );
 end;
  /
 CREATE TABLE building_log (
@@ -376,14 +376,14 @@ end;
 CREATE OR REPLACE TRIGGER au_building_trgr AFTER UPDATE ON building
 for each row 
 begin 
-INSERT into building_log VALUES (:old.building_code,:old.building_desc,'DELETE' ,DEFAULT,DEFAULT );
-INSERT into building_log VALUES (:new.building_code,:new.building_desc,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO building_log VALUES (:old.building_code,:old.building_desc,'DELETE' ,DEFAULT,DEFAULT );
+INSERT INTO building_log VALUES (:new.building_code,:new.building_desc,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_building_trgr AFTER DELETE ON building
 FOR each row 
 begin 
-INSERT into building_log VALUES (:old.building_code,:old.building_desc,'DELETE' ,DEFAULT,DEFAULT );
+INSERT INTO building_log VALUES (:old.building_code,:old.building_desc,'DELETE' ,DEFAULT,DEFAULT );
 end;
  /
 
@@ -405,14 +405,14 @@ end;
 CREATE OR REPLACE TRIGGER au_floor_trgr AFTER UPDATE ON floor
 for each row 
 begin 
-INSERT into floor_log VALUES (:old.floor_number ,:old.building_code,:old.floor_desc ,'DELETE' ,DEFAULT,DEFAULT );
-INSERT into floor_log VALUES (:new.floor_number ,:new.building_code,:new.floor_desc ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO floor_log VALUES (:old.floor_number ,:old.building_code,:old.floor_desc ,'DELETE' ,DEFAULT,DEFAULT );
+INSERT INTO floor_log VALUES (:new.floor_number ,:new.building_code,:new.floor_desc ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_floor_trgr AFTER DELETE ON floor
 for each row 
 begin 
-INSERT into floor_log VALUES (:old.floor_number ,:old.building_code,:old.floor_desc,'DELETE' , DEFAULT ,DEFAULT );
+INSERT INTO floor_log VALUES (:old.floor_number ,:old.building_code,:old.floor_desc,'DELETE' , DEFAULT ,DEFAULT );
 end;
  /
  
@@ -435,14 +435,14 @@ end;
 CREATE OR REPLACE TRIGGER au_room_trgr AFTER UPDATE ON room
 for each row 
 begin
-INSERT into room_log VALUES (:old.room_number ,:old.floor_number ,:old.building_code,:old.capacity ,'DELETE' ,DEFAULT,DEFAULT ); 
-INSERT into room_log VALUES (:new.room_number ,:new.floor_number ,:new.building_code,:new.capacity ,'INSERT' ,DEFAULT,DEFAULT ); 
+INSERT INTO room_log VALUES (:old.room_number ,:old.floor_number ,:old.building_code,:old.capacity ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO room_log VALUES (:new.room_number ,:new.floor_number ,:new.building_code,:new.capacity ,'INSERT' ,DEFAULT,DEFAULT ); 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_room_trgr AFTER DELETE ON room
 for each row 
 begin 
-INSERT into room_log VALUES (:old.room_number ,:old.floor_number ,:old.building_code,:old.capacity ,'DELETE' ,DEFAULT,DEFAULT ); 
+INSERT INTO room_log VALUES (:old.room_number ,:old.floor_number ,:old.building_code,:old.capacity ,'DELETE' ,DEFAULT,DEFAULT ); 
 end;
  /
  
@@ -467,14 +467,14 @@ end;
 CREATE OR REPLACE TRIGGER au_Department_trgr AFTER UPDATE ON Department
 for each row 
 begin
-INSERT into Department_log VALUES (:old.Department_id ,:old.Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
-INSERT into Department_log VALUES (:new.Department_id ,:new.Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
+INSERT INTO Department_log VALUES (:old.Department_id ,:old.Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
+INSERT INTO Department_log VALUES (:new.Department_id ,:new.Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_Department_trgr AFTER DELETE ON Department
 for each row 
 begin 
-INSERT into Department_log VALUES (:old.Department_id ,:old.Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
+INSERT INTO Department_log VALUES (:old.Department_id ,:old.Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
 end;
  /
  
@@ -498,14 +498,14 @@ end;
 CREATE OR REPLACE TRIGGER au_Majors_Department_trgr AFTER UPDATE ON Majors_Department
 for each row 
 begin
-INSERT into Majors_Department_log VALUES (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
-INSERT into Majors_Department_log VALUES (:new.Majors_Department_id ,:new.Majors_Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
+INSERT INTO Majors_Department_log VALUES (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
+INSERT INTO Majors_Department_log VALUES (:new.Majors_Department_id ,:new.Majors_Department_name ,:new.room_number,:new.floor_number ,:new.building_code ,'INSERT',DEFAULT,DEFAULT); 
 end;
 /
 CREATE OR REPLACE TRIGGER ad_Majors_Department_trgr AFTER DELETE ON Majors_Department
 for each row 
 begin 
-INSERT into Majors_Department_log VALUES (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
+INSERT INTO Majors_Department_log VALUES (:old.Majors_Department_id ,:old.Majors_Department_name ,:old.room_number,:old.floor_number ,:old.building_code ,'DELETE',DEFAULT,DEFAULT); 
 end;
  /
  
@@ -527,14 +527,14 @@ end;
 CREATE OR REPLACE TRIGGER au_major_trgr AFTER UPDATE ON major
 for each row 
 begin
-INSERT into major_log VALUES (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'DELETE',DEFAULT,DEFAULT); 
-INSERT into major_log VALUES (:new.major_id ,:new.major_name ,:new.Majors_Department_id ,'INSERT',DEFAULT,DEFAULT); 
+INSERT INTO major_log VALUES (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'DELETE',DEFAULT,DEFAULT); 
+INSERT INTO major_log VALUES (:new.major_id ,:new.major_name ,:new.Majors_Department_id ,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_major_trgr AFTER DELETE ON major
 for each row 
 begin 
-INSERT into major_log VALUES (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'DELETE',DEFAULT,DEFAULT); 
+INSERT INTO major_log VALUES (:old.major_id ,:old.major_name ,:old.Majors_Department_id ,'DELETE',DEFAULT,DEFAULT); 
 end;
  /
  
@@ -558,14 +558,14 @@ end;
 CREATE OR REPLACE TRIGGER au_course_trgr AFTER UPDATE ON course
 for each row 
 begin
-INSERT into course_log VALUES (:old.course_id ,:old.course_name ,:old.credit , :old.clevel ,:old.Majors_Department_id,'DELETE',DEFAULT,DEFAULT); 
-INSERT into course_log VALUES (:new.course_id ,:new.course_name ,:new.credit , :new.clevel ,:new.Majors_Department_id,'INSERT',DEFAULT,DEFAULT); 
+INSERT INTO course_log VALUES (:old.course_id ,:old.course_name ,:old.credit , :old.clevel ,:old.Majors_Department_id,'DELETE',DEFAULT,DEFAULT); 
+INSERT INTO course_log VALUES (:new.course_id ,:new.course_name ,:new.credit , :new.clevel ,:new.Majors_Department_id,'INSERT',DEFAULT,DEFAULT); 
 end;
  /
 CREATE OR REPLACE TRIGGER ad_course_trgr AFTER DELETE ON course
 for each row 
 begin 
-INSERT into course_log VALUES (:old.course_id ,:old.course_name ,:old.credit , :old.clevel ,:old.Majors_Department_id,'DELETE',DEFAULT,DEFAULT); 
+INSERT INTO course_log VALUES (:old.course_id ,:old.course_name ,:old.credit , :old.clevel ,:old.Majors_Department_id,'DELETE',DEFAULT,DEFAULT); 
 end;
  /
 
@@ -1075,18 +1075,6 @@ CREATE ROLE manager_role;
 CREATE ROLE security_role;
 CREATE ROLE secretary_role;
 
--- giving privileges;
-GRANT CREATE SESSION to student_role;
-GRANT SELECT ON UNIVERSITY.Std_dept_and_mjr to student_role;
-GRANT SELECT ON UNIVERSITY.Std_personal to student_role;
-GRANT SELECT ON UNIVERSITY.Std_fmly_status to student_role;
-GRANT SELECT ON UNIVERSITY.Std_contact_and_addrs to student_role;
-GRANT SELECT ON UNIVERSITY.Std_balance to student_role;
-GRANT SELECT ON UNIVERSITY.Std_plan to student_role;
-
-GRANT CREATE SESSION to employee_role;
-GRANT SELECT ON UNIVERSITY.employee to employee_role;
-
 ----------------------------------------------------------------------------------------------------------
 -- creating insertion procedures
 
@@ -1151,7 +1139,7 @@ if seq_count = 0 then
 execute immediate 'create sequence '||seq_name|| ' start with '||sex_number||year ||'0001 maxvalue '||sex_number||year ||'9999' ;
 end if;
 
-execute immediate 'SELECT '||seq_name||'.nextval from dual' into student_id;
+execute immediate 'SELECT '||seq_name||'.nextval from dual' INTO student_id;
  
 execute immediate 'INSERT INTO STUDENT VALUES ('||student_id||','''||Full_name_ar  ||''','''||Full_name_en ||''','''||Nationality ||''','||national_id ||','''||sex  ||''','''||social_status  ||''','''|| guardian_name  ||''','||guardian_national_id  ||','''||guardian_relation ||''','''|| birh_place  ||''','''||date_of_birth  ||''','''||religion  ||''','''||health_status  ||''','''||mother_name ||''','''||mother_job  ||''','''|| mother_job_desc  ||''','''||father_job ||''','''||father_job_desc  ||''','''||parents_status  ||''','||number_of_family_members  ||','||family_university_students ||','''|| social_affairs   ||''','||phone  ||','||telephone_home  ||','||emergency_phone ||','''||email ||''','||tawjihi_GPA  ||','''||tawjihi_field ||''','''||area_name ||''','''||city_name  ||''','''||block_name ||''','''||street_name  ||''','||major_id ||','||balance ||')' ;
 execute immediate 'CREATE USER S' ||student_id|| ' IDENTIFIED BY 123456';
@@ -1260,6 +1248,7 @@ dbms_scheduler.create_job(
 END;
 /
 
+
 -- a procedure to insert a security
 CREATE OR REPLACE PROCEDURE insert_security(
 security_id NUMBER ,
@@ -1356,7 +1345,7 @@ AS SELECT
     WHERE    c.course_id=en.course_id and s.section_number=en.section_number 
     and e.employee_id= t.teacher_id;
 	 */
-
+	 
 ----------------------------------------------------------------------------------------------------------
 -- insertion operations
 
@@ -1415,6 +1404,20 @@ INSERT INTO major VALUES(3,'Arabic Teacher',101);
 INSERT INTO course VALUES('COMP2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
 INSERT INTO course VALUES('UNIV1122','English',1, 2 ,'DESCRIPTION',100);
 INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'DESCRIPTION',100);
+
+----------------------------------------------------------------------------------------------------------
+-- giving privileges;
+GRANT CREATE SESSION to student_role;
+GRANT SELECT ON UNIVERSITY.Std_dept_and_mjr to student_role;
+GRANT SELECT ON UNIVERSITY.Std_personal to student_role;
+GRANT SELECT ON UNIVERSITY.Std_fmly_status to student_role;
+GRANT SELECT ON UNIVERSITY.Std_contact_and_addrs to student_role;
+GRANT SELECT ON UNIVERSITY.Std_balance to student_role;
+GRANT SELECT ON UNIVERSITY.Std_plan to student_role;
+
+GRANT CREATE SESSION to employee_role;
+GRANT SELECT ON UNIVERSITY.employee to employee_role;
+
 
 ----------------------------------------------------------------------------------------------------------
 -- Insertion by procedures
