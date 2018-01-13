@@ -47,7 +47,7 @@ building_desc VARCHAR2(100) );
 -- 5
 CREATE TABLE floor (
 floor_number NUMBER(2),
-building_code CHAR(1) REFERENCES building(building_code),
+building_code CHAR(1) NOT NULL REFERENCES building(building_code),
 floor_desc VARCHAR2(100),
 PRIMARY KEY (building_code, floor_number));
 
@@ -55,7 +55,7 @@ PRIMARY KEY (building_code, floor_number));
 CREATE TABLE room (
 room_number NUMBER (2),
 floor_number NUMBER (2),
-building_code CHAR (1),
+building_code CHAR (1) NOT NULL,
 capacity NUMBER (5) NOT NULL,
 FOREIGN KEY (building_code,floor_number) REFERENCES floor(building_code,floor_number),
 PRIMARY KEY (building_code ,floor_number,room_number));
@@ -82,7 +82,7 @@ FOREIGN KEY (building_code,floor_number,room_number) REFERENCES room (building_c
 CREATE TABLE major (
 major_id NUMBER (3) PRIMARY KEY,
 major_name VARCHAR2(30) NOT NULL UNIQUE,
-majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id) );
+majors_department_id NUMBER (3) NOT NULL REFERENCES majors_department (majors_department_id) );
 
 -- 10
 CREATE TABLE course (
@@ -91,20 +91,20 @@ course_name VARCHAR2(30) NOT NULL,
 credit NUMBER (1) NOT NULL,
 clevel NUMBER(1) NOT NULL,
 description LONG, 
-majors_department_id NUMBER (3) REFERENCES Majors_Department (majors_department_id) );
+majors_department_id NUMBER (3) NOT NULL REFERENCES Majors_Department (majors_department_id) );
 
 -- 11
 CREATE TABLE pre_required_courses (
-course_id VARCHAR2(10) REFERENCES course(course_id) ,
-pre_required_course_id VARCHAR2(10) REFERENCES course(course_id),
+course_id VARCHAR2(10) NOT NULL REFERENCES course(course_id) ,
+pre_required_course_id VARCHAR2(10) NOT NULL REFERENCES course(course_id),
 PRIMARY KEY (course_id,pre_required_course_id));
 
 -- 12
 CREATE TABLE teacher (
-teacher_id NUMBER (9) REFERENCES employee(employee_id) ,
+teacher_id NUMBER (9) NOT NULL REFERENCES employee(employee_id) ,
 teacher_start_date DATE DEFAULT sysdate,
 teacher_end_date DATE,
-majors_department_id NUMBER (3) REFERENCES majors_department (majors_department_id),
+majors_department_id NUMBER (3) NOT NULL REFERENCES majors_department (majors_department_id),
 salary NUMBER (8,2) CHECK (salary >=0) ,
 teacher_start_year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate) NOT NULL,
 teacher_start_semester NUMBER(1) NOT NULL,
@@ -113,7 +113,7 @@ CONSTRAINT tchr_strt_smstr_chk CHECK (teacher_start_semester IN (1,2,3)) );
 
 -- 13
 CREATE TABLE manager (
-manager_id NUMBER (9) REFERENCES employee(employee_id),
+manager_id NUMBER (9) NOT NULL REFERENCES employee(employee_id),
 manager_start_date DATE DEFAULT sysdate,
 manager_end_date DATE,
 salary NUMBER (8,2) check (salary >=0),
@@ -128,11 +128,11 @@ CONSTRAINT mngr_dept_chk CHECK ( (majors_department_id IS NULL AND  department_i
 
 -- 14
 CREATE TABLE security (
-security_id NUMBER (9) REFERENCES employee(employee_id) ,
+security_id NUMBER (9) NOT NULL REFERENCES employee(employee_id) ,
 security_start_date DATE DEFAULT sysdate,
 security_end_date DATE,
 salary NUMBER (8,2) CHECK (salary >=0),
-department_id NUMBER (3) REFERENCES department (department_id),
+department_id NUMBER (3) NOT NULL REFERENCES department (department_id),
 security_start_year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate) NOT NULL,
 security_start_semester NUMBER(1) NOT NULL,
 CONSTRAINT security_pk PRIMARY KEY (security_id , security_start_year , security_start_semester ),
@@ -140,7 +140,7 @@ CONSTRAINT security_strt_smstr_chk CHECK (security_start_semester IN (1,2,3)));
 
 -- 15
 CREATE TABLE secretary (
-secretary_id NUMBER (9) REFERENCES employee(employee_id) ,
+secretary_id NUMBER (9) NOT NULL REFERENCES employee(employee_id) ,
 secretary_start_date DATE DEFAULT sysdate,
 secretary_end_date DATE,
 salary NUMBER (8,2) CHECK (salary >=0),
@@ -160,8 +160,8 @@ item_description VARCHAR2(200) NOT NULL);
 
 -- 17
 CREATE TABLE room_items (
-item_id NUMBER (3) REFERENCES item (item_id) ,
-room_number NUMBER (2),
+item_id NUMBER (3) NOT NULL REFERENCES item (item_id) ,
+room_number NUMBER (2) NOT NULL ,
 floor_number NUMBER (2),
 building_code CHAR (1),
 FOREIGN KEY (room_number , floor_number , building_code) REFERENCES room (room_number , floor_number , building_code) ,
@@ -171,14 +171,14 @@ PRIMARY KEY (item_id , room_number , floor_number , building_code));
 -- 18
 CREATE TABLE study_plan (
 plan_number NUMBER (3),
-major_id NUMBER (3) REFERENCES major (major_id) ,
+major_id NUMBER (3) NOT NULL REFERENCES major (major_id) ,
 PRIMARY KEY (plan_number, major_id));
 
 -- 19
 CREATE TABLE study_plan_courses (
-plan_number NUMBER (3),
+plan_number NUMBER (3) NOT NULL ,
 major_id NUMBER (3),
-course_id VARCHAR2(10) REFERENCES course (course_id),
+course_id VARCHAR2(10) NOT NULL REFERENCES course (course_id),
 year NUMBER(4) NOT NULL,
 semester NUMBER (1) ,
 FOREIGN KEY (plan_number, major_id) REFERENCES study_plan (plan_number, major_id),
@@ -229,17 +229,17 @@ CONSTRAINT stdnt_twj_fld_chk CHECK (tawjihi_field  IN ('S' , 'L' )));
 
 -- 21
 CREATE TABLE academic_advice (
-teacher_id NUMBER (9) ,
+teacher_id NUMBER (9) NOT NULL ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1),
-student_id NUMBER(9) REFERENCES student (student_id) ,
+student_id NUMBER(9) NOT NULL REFERENCES student (student_id) ,
 CONSTRAINT acdmic_advc_fk_tchr FOREIGN KEY (teacher_id ,year ,semester) REFERENCES teacher(teacher_id ,teacher_start_year , teacher_start_semester),
 PRIMARY KEY (teacher_id, year, semester, student_id) );
 
 -- 22
 CREATE TABLE section (
 section_number NUMBER (3),
-course_id VARCHAR2(10) REFERENCES course (course_id) ,
+course_id VARCHAR2(10) NOT NULL REFERENCES course (course_id) ,
 teacher_id NUMBER (9) ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1) ,
@@ -249,9 +249,9 @@ CONSTRAINT section_smstr_chk CHECK (semester IN (1,2,3)));
 
 -- 23
 CREATE TABLE enroll (
-student_id NUMBER(9) REFERENCES student (student_id) ,
+student_id NUMBER(9) NOT NULL REFERENCES student (student_id) ,
 course_id VARCHAR2(10) ,
-section_number NUMBER(3) ,
+section_number NUMBER(3) NOT NULL ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER(1) ,
 grade_mid NUMBER (2) DEFAULT NULL ,
@@ -262,13 +262,13 @@ CONSTRAINT eroll_grade_chk CHECK ((grade_final+grade_mid >=40)and (grade_final+g
 
 -- 24
 CREATE TABLE section_rooms (
-section_number NUMBER (3) ,
+section_number NUMBER (3) NOT NULL ,
 course_id VARCHAR2 (10) ,
 year NUMBER(4) DEFAULT EXTRACT (YEAR FROM sysdate), 
 semester NUMBER (1) ,
 room_number NUMBER (2),
 floor_number NUMBER (2),
-building_code CHAR (1),
+building_code CHAR (1) NOT NULL ,
 day DATE NOT NULL,
 start_time DATE ,
 end_time DATE ,
