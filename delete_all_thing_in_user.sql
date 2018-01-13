@@ -72,7 +72,7 @@ DROP ROLE security_role;
 DROP ROLE secretary_role;
 -- Done
 
---drop jobs according to our current insertion
+/* --drop jobs according to our current insertion
 begin
 DBMS_SCHEDULER.DROP_JOB('RVK_MNGR_E320180004_2017_1');
 end;
@@ -116,6 +116,24 @@ end;
 begin
 DBMS_SCHEDULER.DROP_JOB('RVK_TCHR_E320180002_2018_1');
 end;
+/
+*/
+
+begin
+FOR cur_rec IN (select job_name from user_scheduler_jobs)
+   LOOP
+      BEGIN
+            DBMS_SCHEDULER.DROP_JOB(cur_rec.job_name);
+      EXCEPTION
+         WHEN OTHERS
+         THEN
+            DBMS_OUTPUT.put_line ('FAILED: DROP '
+                                  || cur_rec.job_name
+                                  || '"'
+                                 );
+      END;
+   END LOOP;
+END;
 /
 
 clear scr
