@@ -1364,15 +1364,60 @@ from student s , course c , major m , study_plan sp , study_plan_courses spc
 where spc.plan_number=sp.plan_number and  sp.major_id = m.major_id and c.course_id=spc.course_id and s.major_id=m.major_id and s.student_id= substr(USER,2);
 
 
-
-/* CREATE OR REPLACE VIEW All_Courses
+CREATE OR REPLACE VIEW Std_Reg_Courses
 AS SELECT 
     c.course_id,c.course_name,s.section_number,e.full_name_en,c.description
     from teacher t ,employee e ,course c , section s , enroll en
     WHERE    c.course_id=en.course_id and s.section_number=en.section_number 
-    and e.employee_id= t.teacher_id;
-	 */
-	 
+    and e.employee_id= t.teacher_id and student_id = substr(USER,2);
+	
+CREATE OR REPLACE VIEW Teacher_Courses
+AS SELECT 
+    c.course_id,c.course_name,s.section_number,e.full_name_en,c.description
+    from teacher t ,employee e ,course c , section s , enroll en
+    WHERE    c.course_id=en.course_id and s.section_number=en.section_number 
+    and e.employee_id= t.teacher_id and employee_id = substr(USER,2);
+	
+CREATE OR REPLACE VIEW Std_lct_table
+AS SELECT c.course_id,c.course_name,s.section_number,e.FULL_NAME_EN ,b.building_code ,f.floor_number,
+r.room_number ,sr.day ,sr.start_time,sr.end_time
+FROM course c ,section s ,building b ,floor f,room r, section_rooms sr,enroll en, employee e , teacher t
+WHERE c.course_id=en.course_id and s.section_number=sr.section_number and 
+s.section_number=en.section_number and b.building_code=f.building_code and
+f.floor_number=r.floor_number and 
+r.room_number = sr.room_number and e.employee_id = t.teacher_id and student_id = substr(USER,2);
+
+CREATE OR REPLACE VIEW Teacher_lct_table
+AS SELECT c.course_id,c.course_name,s.section_number,e.FULL_NAME_EN ,b.building_code ,f.floor_number,
+r.room_number ,sr.day ,sr.start_time,sr.end_time
+FROM course c ,section s ,building b ,floor f,room r, section_rooms sr,enroll en, employee e , teacher t
+WHERE c.course_id=en.course_id and s.section_number=sr.section_number and 
+s.section_number=en.section_number and b.building_code=f.building_code and
+f.floor_number=r.floor_number and 
+r.room_number = sr.room_number and e.employee_id = t.teacher_id and t.teacher_id = substr(USER,2);
+	
+CREATE OR REPLACE VIEW Std_grades
+AS SELECT std.student_id as Student_Number,std.full_name_en as Student_name,  c.course_id,c.course_name,
+c.credit,en.grade_mid,en.grade_final,
+en.grade_mid+en.grade_final as Total 
+FROM course c , enroll en , student std 
+where c.course_id=en.course_id and std.student_id=en.student_id and std.student_id = substr(USER,2);
+
+CREATE OR REPLACE VIEW Teacher_Stds
+AS SELECT e.employee_id As Teacher_id, e.FULL_NAME_EN as Teacher_Name, s.section_number,c.COURSE_ID,c.COURSE_NAME ,
+std.student_id as Student_Number ,std.FULL_NAME_EN as Student_Name
+FROM  employee e ,teacher t , section s , COURSE c , student std ,enroll en
+where 
+e.employee_id = t.teacher_id and c.course_id = en.course_id and s.section_number = en.section_number 
+and std.student_id = en.student_id and t.teacher_id = s.teacher_id and t.teacher_id = substr(USER,2);
+
+CREATE OR REPLACE VIEW std_and_teacher_section
+AS SELECT  e.employee_id As Teacher_id ,e.full_name_en AS Teacher_Name, c.course_id,c.course_name,s.section_number,
+std.student_id as Student_Number, std.full_name_en as Student_Name
+    from teacher t ,employee e ,course c , section s , student std, enroll en
+    WHERE    c.course_id=en.course_id and s.section_number=en.section_number 
+    and e.employee_id= t.teacher_id and std.student_id=en.student_id and (SELECT count(*) from EMPLOYEE where employee_id = substr(USER,2)) = 1;
+	
 ----------------------------------------------------------------------------------------------------------
 -- insertion operations
 
@@ -1441,10 +1486,17 @@ GRANT SELECT ON UNIVERSITY.Std_fmly_status to student_role;
 GRANT SELECT ON UNIVERSITY.Std_contact_and_addrs to student_role;
 GRANT SELECT ON UNIVERSITY.Std_balance to student_role;
 GRANT SELECT ON UNIVERSITY.Std_plan to student_role;
+GRANT SELECT ON UNIVERSITY.Std_Reg_Courses to student_role;
+GRANT SELECT ON UNIVERSITY.Std_lct_table to student_role;
+GRANT SELECT ON UNIVERSITY.Std_grades to student_role;
 
 GRANT CREATE SESSION to employee_role;
 GRANT SELECT ON UNIVERSITY.employee to employee_role;
 
+GRANT SELECT ON UNIVERSITY.Teacher_Courses to teacher_role;
+GRANT SELECT ON UNIVERSITY.Teacher_lct_table to teacher_role;
+
+GRANT SELECT ON UNIVERSITY.std_and_teacher_section to manager_role;
 
 ----------------------------------------------------------------------------------------------------------
 -- Insertion by procedures
@@ -1526,7 +1578,7 @@ select count(*) from tab where tabtype='TABLE';
 -- should be 48
 
 select count(*) from tab where tabtype='VIEW';
--- should be 6
+-- should be 13
 
 select count(*) from user_triggers;
 -- should be 72
