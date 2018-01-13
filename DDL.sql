@@ -1473,9 +1473,11 @@ INSERT INTO major VALUES(1,'Information Security',100);
 INSERT INTO major VALUES(2,'English Translator',101);
 INSERT INTO major VALUES(3,'Arabic Teacher',101);
 
-INSERT INTO course VALUES('COMP2113','Data Base 1',1, 2 ,'DESCRIPTION',100);
-INSERT INTO course VALUES('UNIV1122','English',1, 2 ,'DESCRIPTION',100);
-INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'DESCRIPTION',100);
+INSERT INTO course VALUES('COMP2113','Data Base 1',1, 2 ,'Teach Data Base Fundemental and introduce basic DML and DDL statements',100);
+INSERT INTO course VALUES('COMP2213','Data Base 2',1, 2 ,'Teach More advanced Data Base DML and DDL statements',100);
+INSERT INTO course VALUES('UNIV1122','English',1, 2 ,'English Language',100);
+INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'Arabic Languge',100);
+INSERT INTO course VALUES('NUR1125','ANTOMY',1, 2 ,'Describes from what the living things consist',100);
 
 ----------------------------------------------------------------------------------------------------------
 -- giving privileges;
@@ -1563,6 +1565,8 @@ end;
 ----------------------------------------------------------------------------------------------------------
 
 INSERT INTO pre_required_courses VALUES ('COMP2113' ,'UNIV1122');
+INSERT INTO pre_required_courses VALUES ('COMP2213' ,'COMP2113');
+INSERT INTO pre_required_courses VALUES ('NUR1125' ,'UNIV1122');
 
 INSERT INTO academic_advice VALUES (320180001,2017,1,120180001);
 
