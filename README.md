@@ -1,4 +1,4 @@
-University_Data_Base
+University_Data_Base [![Build Status](https://travis-ci.org/khalil2535/University_Data_Base.svg)](https://travis-ci.org/khalil2535/University_Data_Base)
 ===================
 
 **This project contains a full data base about an university which you can just copy and use easily ..**
