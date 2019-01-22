@@ -56,6 +56,11 @@ This is a database project made with the sql (DDL , DML) & pl\sql languages (for
   ### PL\SQL ###
   ##### In the triggers & the procedures there is pl\sql language we used it in our project ######
   
+  
+   ### ERD ###
+   ![ERD](https://raw.githubusercontent.com/khalil2535/University_Data_Base/master/documents/Entity%20Relationship%20Diagram/ERD.jpg)
+  
+  
   As a  last word we want to give all the thanks for our god then for our teachers for learning us like these skills in the first subject in our database 
   ### Teachers:- ###
   #### [Dr.Nael Aburas][NaelLink] - [Dr.Rami Lubbad][RamiLink] #### 
