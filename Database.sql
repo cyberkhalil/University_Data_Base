@@ -1072,6 +1072,7 @@ CREATE ROLE security_role;
 CREATE ROLE secretary_role;
 
 ----------------------------------------------------------------------------------------------------------
+-- TODO Replace insertion procedures with normal insert sentences
 -- creating insertion procedures
 
 -- a procedure to insert a student and create a user for him as 'S123' where 123 is the student_id of the student
@@ -1421,63 +1422,31 @@ std.student_id as Student_Number, std.full_name_en as Student_Name
 ----------------------------------------------------------------------------------------------------------
 -- insertion operations
 
-INSERT INTO address VALUES('Gaza Strip','Gaza','Naser','Elgesser');
-INSERT INTO address VALUES('Gaza North','Jabalia','Al Nazlah','Al Saftawy');
-INSERT INTO address VALUES('Rafah','Rafah','Yebna','Kir');
+INSERT INTO address VALUES('Gaza Strip','Gaza','Naser','Elgesser'),('Gaza North','Jabalia','Al Nazlah','Al Saftawy'),('Rafah','Rafah','Yebna','Kir');
 
-INSERT INTO nationality VALUES('Palestinian');
-INSERT INTO nationality VALUES('Egyptian');
-INSERT INTO nationality VALUES('Jordanian');
+INSERT INTO nationality VALUES('Palestinian'),('Egyptian'),('Jordanian');
 
-INSERT INTO building VALUES('A','Management building.');
-INSERT INTO building VALUES('B','Male Students building.');
-INSERT INTO building VALUES('W','Female Students building.');
+INSERT INTO building VALUES('A','Management building.'),('B','Male Students building.'),('W','Female Students building.');
 
-INSERT INTO floor VALUES(1,'A','Management First floor.');
-INSERT INTO floor VALUES(2,'A','Management Computer labs.');
-INSERT INTO floor VALUES(3,'A','Management Electroincs labs.');
+INSERT INTO floor VALUES(1,'A','Management First floor.'),(2,'A','Management Computer labs.'),(3,'A','Management Electroincs labs.');
 
-INSERT INTO floor VALUES(1,'B','Male First floor.');
-INSERT INTO floor VALUES(2,'B','Male Computer labs.');
-INSERT INTO floor VALUES(3,'B','Male Electroincs labs.');
+INSERT INTO floor VALUES(1,'B','Male First floor.'),(2,'B','Male Computer labs.'),(3,'B','Male Electroincs labs.');
 
-INSERT INTO floor VALUES(1,'W','Female First floor.');
-INSERT INTO floor VALUES(2,'W','Female Computer labs.');
-INSERT INTO floor VALUES(3,'W','Female Electroincs labs.');
+INSERT INTO floor VALUES(1,'W','Female First floor.'),(2,'W','Female Computer labs.'),(3,'W','Female Electroincs labs.');
 
-INSERT INTO room VALUES(01,1,'A',30);
-INSERT INTO room VALUES(01,2,'A',20);
-INSERT INTO room VALUES(02,2,'A',45);
-INSERT INTO room VALUES(03,1,'A',30);
-INSERT INTO room VALUES(03,2,'A',20);
-INSERT INTO room VALUES(04,1,'A',45);
-INSERT INTO room VALUES(05,1,'A',45);
+INSERT INTO room VALUES(01,1,'A',30),(01,2,'A',20),(02,2,'A',45),(03,1,'A',30),(03,2,'A',20),(04,1,'A',45),(05,1,'A',45);
 
-INSERT INTO room VALUES(01,1,'B',10);
-INSERT INTO room VALUES(02,1,'B',50);
-INSERT INTO room VALUES(01,2,'B',25);
+INSERT INTO room VALUES(01,1,'B',10),(02,1,'B',50),(01,2,'B',25);
 
-INSERT INTO room VALUES(01,2,'W',15);
-INSERT INTO room VALUES(01,3,'W',30);
-INSERT INTO room VALUES(02,3,'W',65);
+INSERT INTO room VALUES(01,2,'W',15),(01,3,'W',30),(02,3,'W',65);
 
-INSERT INTO department VALUES(100,'Acceptance and Registration',01,1,'A');
-INSERT INTO department VALUES(101,'Studnents Affairs',01,2,'A');
-INSERT INTO department VALUES(102,'Academic Affairs',05,1,'A');
+INSERT INTO department VALUES(100,'Acceptance and Registration',01,1,'A'),(101,'Studnents Affairs',01,2,'A'),(102,'Academic Affairs',05,1,'A');
 
-INSERT INTO majors_department VALUES(100,'Engineering',03,1,'A');
-INSERT INTO majors_department VALUES(101,'Languages',03,2,'A');
-INSERT INTO majors_department VALUES(102,'Nursing',04,1,'A');
+INSERT INTO majors_department VALUES(100,'Engineering',03,1,'A'),(101,'Languages',03,2,'A'),(102,'Nursing',04,1,'A');
 
-INSERT INTO major VALUES(1,'Information Security',100);
-INSERT INTO major VALUES(2,'English Translator',101);
-INSERT INTO major VALUES(3,'Arabic Teacher',101);
+INSERT INTO major VALUES(1,'Information Security',100),(2,'English Translator',101),(3,'Arabic Teacher',101);
 
-INSERT INTO course VALUES('COMP2113','Data Base 1',1, 2 ,'Teach Data Base Fundemental and introduce basic DML and DDL statements',100);
-INSERT INTO course VALUES('COMP2213','Data Base 2',1, 2 ,'Teach More advanced Data Base DML and DDL statements',100);
-INSERT INTO course VALUES('UNIV1122','English',1, 2 ,'English Language',100);
-INSERT INTO course VALUES('UNIV1125','Arabic',1, 2 ,'Arabic Languge',100);
-INSERT INTO course VALUES('NUR1125','ANTOMY',1, 2 ,'Describes from what the living things consist',100);
+INSERT INTO course VALUES('COMP2113','Data Base 1',1, 2 ,'Teach Data Base Fundemental and introduce basic DML and DDL statements',100),('COMP2213','Data Base 2',1, 2 ,'Teach More advanced Data Base DML and DDL statements',100),('UNIV1122','English',1, 2 ,'English Language',100),('UNIV1125','Arabic',1, 2 ,'Arabic Languge',100),('NUR1125','ANTOMY',1, 2 ,'Describes from what the living things consist',100);
 
 ----------------------------------------------------------------------------------------------------------
 -- giving privileges;
@@ -1529,27 +1498,17 @@ end;
 ----------------------------------------------------------------------------------------------------------
 -- insertion operations
 
-INSERT INTO item VALUES(001,'PC','Desktop PC');
-INSERT INTO item VALUES(002,'Lap TOP','Lap TOP, a moveable PC');
-INSERT INTO item VALUES(003,'LCD','Tool for presenting computer monitor on wall or appropriate surface');
+INSERT INTO item VALUES(001,'PC','Desktop PC'),(002,'Lap TOP','Lap TOP, a moveable PC'),(003,'LCD','Tool for presenting computer monitor on wall or appropriate surface');
 
-INSERT INTO room_items VALUES(001,01,1,'B',8);
-INSERT INTO room_items VALUES(003,01,1,'B',1);
+INSERT INTO room_items VALUES(001,01,1,'B',8),(003,01,1,'B',1);
 
-INSERT INTO room_items VALUES(001,01,2,'W',10);
-INSERT INTO room_items VALUES(003,01,2,'W',1);
+INSERT INTO room_items VALUES(001,01,2,'W',10),(003,01,2,'W',1);
 
-INSERT INTO room_items VALUES(002,01,1,'A',15);
-INSERT INTO room_items VALUES(003,01,1,'A',1);
+INSERT INTO room_items VALUES(002,01,1,'A',15),(003,01,1,'A',1);
 
-INSERT INTO study_plan VALUES(101,1);
-INSERT INTO study_plan VALUES(101,2);
-INSERT INTO study_plan VALUES(101,3);
+INSERT INTO study_plan VALUES(101,1),(101,2),(101,3);
 
-INSERT INTO study_plan_courses VALUES (101,1,'COMP2113',2018,1);
-INSERT INTO study_plan_courses VALUES (101,1,'UNIV1122',2018,2);
-INSERT INTO study_plan_courses VALUES (101,2,'UNIV1122',2016,2);
-INSERT INTO study_plan_courses VALUES (101,3,'UNIV1125',2015,1);
+INSERT INTO study_plan_courses VALUES (101,1,'COMP2113',2018,1),(101,1,'UNIV1122',2018,2).(101,2,'UNIV1122',2016,2),(101,3,'UNIV1125',2015,1);
 
 ----------------------------------------------------------------------------------------------------------
 -- Insertion by procedures
@@ -1564,9 +1523,7 @@ end;
 
 ----------------------------------------------------------------------------------------------------------
 
-INSERT INTO pre_required_courses VALUES ('COMP2113' ,'UNIV1122');
-INSERT INTO pre_required_courses VALUES ('COMP2213' ,'COMP2113');
-INSERT INTO pre_required_courses VALUES ('NUR1125' ,'UNIV1122');
+INSERT INTO pre_required_courses VALUES ('COMP2113' ,'UNIV1122'),('COMP2213' ,'COMP2113'),('NUR1125' ,'UNIV1122');
 
 INSERT INTO academic_advice VALUES (320180001,2017,1,120180001);
 
